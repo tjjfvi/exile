@@ -1,0 +1,83 @@
+# λµξ instance rules
+
+x, y, z are arbitrary variables
+a, b, c are arbitrary terms
+both sides must be irreducible terms
+
+a : *
+ iff true
+
+a : !
+ iff false
+
+* : a
+ iff a = *
+
+! : a
+ iff a = *
+
+λ(x: a) b : λ(x: c) d
+ iff c <= a && x : c -> b : d
+
+µ x a : b
+ iff a[x / µ x a] : b
+
+a : µ x b
+ iff a : b[x / µ x b]
+
+ξ x a : b
+ iff x : ξ x a -> a : b
+
+a : ξ x b
+ iff a : b[x / a]
+
+a b : c
+ iff ∀t (∀u b : u <-> t <= u) -> a : λ(x: t) c
+
+a : b c
+  if false
+
+# λµξ subtype rules
+
+x, y, z are arbitrary variables
+a, b, c are arbitrary terms
+both sides must be irreducible terms
+
+a <= *
+ iff true
+
+! <= a
+ iff true
+
+* <= a
+ iff a = *
+
+a <= !
+ iff a = !
+
+λ(x: a) b <= λ(x: c) d
+ iff c <= a && x : c -> b <= d
+
+µ x a <= µ y b
+  iff x <= y -> a <= b
+
+µ x a <= b
+ iff a[x / µ x b] <= b
+
+a <= µ x b
+ iff a <= b[x / µ x b]
+
+ξ x a <= ξ x b
+ iff x : a -> a <= b 
+
+ξ x a <= b
+ iff x : ξ x a -> a <= b
+
+a <= ξ x b
+ iff x : a -> a <= b
+
+a b <= c
+  if false
+
+a <= b c
+  if false

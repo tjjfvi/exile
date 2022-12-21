@@ -1,0 +1,39 @@
+Nat = µ Nat ξ self
+  λ(P: λ(n: Nat) Type)
+  λ(s: λ(n: Nat) λ(p: P n) P (
+    (µ succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
+    n
+  ))
+  λ(z: P (λp λs λz z))
+  P self
+succ = µ succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P (λp λs λz z)) s n (n p s z)
+zero = λp λs λz z
+
+add = λ(x: Nat) λ(y: Nat) x (λ_ Nat) (λ_ succ) y
+
+add_zero
+: λ(x: Nat) Equal Nat (add x zero) x
+= λ(x: Nat) x
+  (λ(x: Nat) Equal Nat (add x zero) x)
+  (λ(x: Nat) λ(h: Equal Nat (add x zero) x)
+    h (λ(n: Nat) Equal Nat (add (succ x) zero) (succ n)) (refl Nat (add (succ x) zero))
+  )
+  (refl Nat zero)
+
+add_succ
+: λ(x: Nat) λ(y: Nat) Equal Nat (add x (succ y)) (succ (add x y))
+= λ(x: Nat) λ(y: Nat) x
+  (λ(x: Nat) Equal Nat (add x (succ y)) (succ (add x y)))
+  (λ(x: Nat) λ(h: Equal Nat (add x (succ y)) (succ (add x y)))
+    h (λ(n: Nat) Equal Nat (add (succ x) (succ y)) (succ n)) (refl Nat (succ (add x (succ y))))
+  )
+  (refl Nat (succ y))
+
+add_comm
+: λ(x: Nat) λ(y: Nat) Equal Nat (add y x) (add x y)
+= λ(x: Nat) λ(y: Nat) x
+  (λ(x: Nat) Equal Nat (add y x) (add x y))
+  (λ(x: Nat) λ(h: Equal Nat (add y x) (add x y))
+    h (λ(n: Nat) Equal Nat (add y (succ x)) (succ n)) (add_succ y x)
+  )
+  (add_zero y)
