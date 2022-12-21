@@ -106,9 +106,12 @@ class Term:
 			return self.as_recursive().as_lambda()
 		
 		return self
+	
+		
+		
 		
 	def flatten(self):
-		return self.apply_subterm(lambda x: x.flatten())
+		return self
 	def apply_flatten(self):
 		return self.apply_from(ForallTerm()).flatten()
 		
@@ -121,6 +124,8 @@ class Term:
 	def compare(self, other):
 		return self == other
 	def to_str(self, depth: int):
+		return "???"
+	def to_hvm(self, depth: int):
 		return "???"
 	def parse(text: str) -> Term:
 		ast = TERM_PARSER.parse(text)
@@ -148,8 +153,13 @@ class LambdaTerm(Term):
 		other = other.normalize()
 		if isinstance(other, TopType):
 			return self
+		if self == Bot:
+			return self
+		if other.unroll() == Top.unroll():
+			return self
 		if isinstance(other, BottomType):
 			return None
+		print(Top.unroll(), "~", other.unroll(), "~", other.unroll() == Top.unroll())
 		other = other.as_lambda()
 		if isinstance(other, LambdaTerm):
 			x = ForallTerm()
@@ -159,13 +169,14 @@ class LambdaTerm(Term):
 		if type(other).is_instance_of == Term.is_instance_of:
 			return False # no infinite looping please
 		return other.is_instance_of(self)
+	def flatten(self):
+		return FlatLambdaTerm(self.type.flatten(), self.body(ForallTerm()).flatten())
 	def normalize(self):
 		if isinstance(self.body(ForallTerm()).normalize(), TopType):
 			return TopType()
 		if isinstance(self.body(ForallTerm()).normalize(), BottomType):
 			return BottomType()
 		return super().normalize()
-	flatten = Term.apply_flatten
 	def is_instance_of(self, other):
 		if isinstance(other, TopType):
 			return other
@@ -188,19 +199,16 @@ class LambdaTerm(Term):
 		return self.body(InstanceBound(other, self.type)).normalize()
 	def apply_subterm(self, f):
 		return LambdaTerm(f(self.type), lambda x: f(self.body(x)))
-	def compare(self, other):
+	def __eq__(self, other):
 		x = ForallTerm()
-		other = other.as_lambda()
-		print(self, "=", other)
-		if not isinstance(other, LambdaTerm):
-			return False
-		return self.type.compare(other.type) and self.body(x).compare(other.body(x))
+		return self.apply_from(x) == other.apply_from(x)
 	def to_str(self, depth):
 		if isinstance(self.type, TopType):
 			return f'λx{depth} {self.body(NamedTerm(f"x{depth}")).to_str(depth + 1)}'
 		return f'λ(x{depth}: {self.type.to_str(depth)}) {self.body(NamedTerm(f"x{depth}")).to_str(depth + 1)}'
-	
-	
+	def to_hvm(self, depth):
+		return f'(Checker.eval (Term.lam {self.type.to_hvm(depth)} λx{depth} {self.body(NamedTerm(f"x{depth}")).to_hvm(depth + 1)}))'
+
 @dataclass
 class RecursiveTerm(Term):
 	body: Callable[[Term], Term]
@@ -209,12 +217,21 @@ class RecursiveTerm(Term):
 	def is_type_of(self, other: Term) -> Term:
 		return self.unroll().is_type_of(other)
 	def is_supertype_of(self, other: Term) -> Term:
-		if self.compare(other):
+		if self == other:
 			return True
 		return self.unroll().is_supertype_of(other)
+		
 	def is_subtype_of(self, other: Term) -> Term:
-		if self.compare(other):
+		if other == Top.as_recursive():
 			return True
+		if self == other:
+			return True
+		if self == Bot:
+			return True
+		if isinstance(other, RecursiveTerm):
+			y = ForallTerm()
+			x = SubtypeBound(ForallTerm(), y)
+			self.body(x).is_subtype_of(other.body(y))
 		return self.unroll().is_subtype_of(other)
 	def unroll(self):
 		return self.body(self)
@@ -223,21 +240,23 @@ class RecursiveTerm(Term):
 		# A term μ x body can be rolled into μ x body 
 		pass
 		
-	def compare(self, other):
+	def __eq__(self, other):
 		if isinstance(other, RecursiveTerm):
 			x = ForallTerm()
-			return self.body(x).compare(other.body(x))
-		return self.unroll().compare(other)
+			return self.body(other.body(x)) == other.body(self.body(x))
+		return self.body(self) == other
 	def normalize(self):
 		return self
 	
 	def flatten(self):
-		return self.body(ForallTerm()).flatten()
+		return self
 		
 	def apply_subterm(self, f):
 		return RecursiveTerm(lambda x: f(self.body(x)))
 	def to_str(self, depth):
 		return f'μx{depth} {self.body(NamedTerm(f"x{depth}")).to_str(depth + 1)}'
+	def to_hvm(self, depth):
+		return f'(Term.rec λx{depth} {self.body(NamedTerm(f"x{depth}")).to_hvm(depth + 1)})'
 
 @dataclass	
 class SelfTerm(Term):
@@ -249,17 +268,31 @@ class SelfTerm(Term):
 	def apply_from(self, other):
 		return self.body(InstanceBound(other, self))
 	def flatten(self):
-		return self.apply_flatten().flatten()
+		return FlatSelfTerm(self.body(ForallTerm()).flatten())
 	def apply_subterm(self, f):
 		return SelfTerm(lambda x: f(self.body(x)))
-	def compare(self, other):
+	def __eq__(self, other):
 		x = ForallTerm()
 		if not isinstance(other, SelfTerm):
 			return False
-		return self.body(x).compare(other.body(x))
+		return self.body(x) == other.body(x)
 	def to_str(self, depth):
 		return f'ξx{depth} {self.body(NamedTerm(f"x{depth}")).to_str(depth + 1)}'
+	def to_hvm(self, depth):
+		return f'(Term.self λx{depth} {self.body(NamedTerm(f"x{depth}")).to_hvm(depth + 1)})'
+		
+@dataclass
+class FlatSelfTerm(Term):
+	body: Term
+	def to_str(self, depth):
+		return f'#ξ# {self.body}'
 
+@dataclass
+class FlatLambdaTerm(Term):
+	type: Term
+	body: Term
+	def to_str(self, depth):
+		return f'#@#({self.type}) {self.body}'
 @dataclass
 class ForallTerm(Term):
 	identifier: object = field(default_factory=object)
@@ -273,11 +306,10 @@ class InstanceBound(Term):
 	instance: Term
 	type: Term
 	def is_instance_of(self, typ):
-		print(self, ":", typ)
-		print(self.type, "<=", typ)
-		print(self.type.is_subtype_of(typ))
+		print(self, typ)
 		return self.type.is_subtype_of(typ) or self.instance.is_instance_of(typ)
 	def is_subtype_of(self, supertype):
+		print(self, supertype)
 		return self == supertype or self.instance == supertype or self.instance.is_subtype_of(supertype)
 	def to_str(self, depth):
 		return f'({self.instance.to_str(depth)} :: {self.type.to_str(depth)})'
@@ -285,6 +317,8 @@ class InstanceBound(Term):
 		return InstanceBound(self.instance.normalize(), self.type.normalize())
 	def compare(self, other):
 		return self.instance.compare(other.instance) and self.type.compare(other.type) 
+	def apply_subterm(self, f):
+		return InstanceBound(f(self.instance), f(self.type))
 
 @dataclass
 class SubtypeBound(Term):
@@ -293,11 +327,13 @@ class SubtypeBound(Term):
 	def is_subtype_of(self, supertype):
 		return self.supertype.is_subtype_of(supertype) or self.subtype.is_subtype_of(supertype)
 	def to_str(self, depth):
-		return f'{self.instance.to_str(depth)} <= {self.type.to_str(depth)}'
+		return f'{self.subtype.to_str(depth)} <= {self.supertype.to_str(depth)}'
 	def normalize(self):
 		return SubtypeBound(self.subtype.normalize(), self.supertype.normalize())
 	def compare(self, other):
 		return self.subtype.compare(other.subtype) and self.supertype.compare(other.supertype) 
+	def apply_subterm(self, f):
+		return InstanceBound(f(self.subtype), f(self.supertype))
 
 @dataclass
 class ApplyTerm(Term):
@@ -323,9 +359,23 @@ class ApplyTerm(Term):
 		return other.is_supertype_of(self)
 	def compare(self, other):
 		return self.function.compare(other.function) and self.argument.compare(other.argument) 
+	def apply_subterm(self, f):
+		return ApplyTerm(f(self.function), f(self.argument))
+	def to_hvm(self, depth):
+		return f'(Term.apply {self.function.to_hvm(depth)} {self.argument.to_hvm(depth)})'
+
+class SpecialRecursiveTerm(Term):
+	def unroll(self):
+		return self.as_recursive().unroll()
+	def mcompare(self, other):
+		return self.as_recursive().mcompare(other)
+	def as_lambda(self):
+		return self.unroll().as_lambda()
+	def __eq__(self, other):
+		return self.mcompare(other)
 
 @dataclass
-class BottomType(Term):
+class BottomType(SpecialRecursiveTerm):
 	def is_subtype_of(self, other):
 		return True
 	def is_type_of(self, other):
@@ -335,9 +385,11 @@ class BottomType(Term):
 		return RecursiveTerm(lambda bot: LambdaTerm(Top, lambda _: bot))
 	def to_str(self, depth):
 		return '!'
+	def to_hvm(self, depth):
+		return f'(Term.bot)'
 
 @dataclass
-class TopType(Term):
+class TopType(SpecialRecursiveTerm):
 	def is_supertype_of(self, other):
 		return True
 	def is_type_of(self, other):
@@ -348,11 +400,15 @@ class TopType(Term):
 		return self.as_recursive().as_lambda().apply_from(other)
 	def to_str(self, depth):
 		return '*'
+	def to_hvm(self, depth):
+		return f'(Term.top)'
 		
 @dataclass
 class NamedTerm(Term):
 	name: str
 	def to_str(self, depth):
+		return self.name
+	def to_hvm(self, depth):
 		return self.name
 
 Bot = BottomType()
@@ -381,10 +437,13 @@ Equal_refl_Bool_true = ApplyTerm(ApplyTerm(Equal_refl, Bool), Bool_true).normali
 
 def test():
 	#print(Bool)
-	#print(Bool.unroll().compare(Bool.unroll()))
+	#print(Bot.as_recursive().unroll().unroll().unroll().unroll().unroll().mcompare(Bot.unroll().unroll()))
 	#return
-	# assert Equal_refl_Bool_true.is_instance_of(Equal_Bool_true)
+	assert Equal_refl.is_instance_of(Equal_refl_type)
+	#assert Equal_refl_Bool_true.is_instance_of(Equal_Bool_true)
 	
+	print(Bool.unroll().flatten())
+	return
 	type_ = ForallTerm()
 	term = InstanceBound(ForallTerm(), type_)
 
@@ -401,4 +460,12 @@ def test():
 	assert not Bool_true.is_instance_of(Unit)
 	assert Equal_refl.is_instance_of(Equal_refl_type)
 	
-test()
+# test()
+def write_data():
+	with open("data.hvm", "w") as f:
+		f.write(f'Test.Bool.true = {Bool_true.to_hvm(0)}\n')
+		f.write(f'Test.Bool = {Bool.to_hvm(0)}\n')
+		f.write(f'Test.Unit.new = {Unit_new.to_hvm(0)}\n')
+		f.write(f'Test.Unit = {Unit.to_hvm(0)}\n')
+
+write_data()
