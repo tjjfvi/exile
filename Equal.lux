@@ -1,12 +1,12 @@
-Equal = λT λ(x: T) λ(y: T) λ(P: λ(x: T) Type) λ(a: P x) P y
-refl = λT λ(x: T) λ(P: λ(x: T) Type) λ(a: P x) a
+Equal = λT λ(x: T) λ(y: T) λ(P: λ(x: T) Type) λ(a: P x) (P y)
+Equal.refl = λT λ(x: T) λ(P: λ(x: T) Type) λ(a: P x) a
 
-equal_comm
+Equal.comm
 : λT λ(x: T) λ(y: T) λ(p: Equal T x y) Equal T y x
 = λT λ(x: T) λ(y: T) λ(p: Equal T x y)
-  p (λ(n: T) Equal T n x) (refl T x)
+  p (λ(n: T) Equal T n x) (Equal.refl T x)
 
-equal_trans
-: λT λ(x: T) λ(y: T) λ(z: T) λ(p: Equal T x y) λ(q: Equal T y z) Equal T x z
+Equal.trans
+: λT λ(x: T) λ(y: T) λ(z: T) λ(p: Equal T x y) λ(q: Equal T y z) (Equal T x z)
 = λT λ(x: T) λ(y: T) λ(z: T) λ(p: Equal T x y) λ(q: Equal T y z)
-  q (λ(n: T) Equal T x n) p
+  (q (λ(n: T) Equal T x n) p)

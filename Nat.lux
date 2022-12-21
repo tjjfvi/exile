@@ -1,39 +1,39 @@
 Nat = µ Nat ξ self
   λ(P: λ(n: Nat) Type)
   λ(s: λ(n: Nat) λ(p: P n) P (
-    (µ succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
+    (µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
     n
   ))
   λ(z: P (λp λs λz z))
   P self
-succ = µ succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P (λp λs λz z)) s n (n p s z)
-zero = λp λs λz z
+Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z)
+Nat.zero = λp λs λz z
 
-add = λ(x: Nat) λ(y: Nat) x (λ_ Nat) (λ_ succ) y
+Nat.add = λ(x: Nat) λ(y: Nat) x (λ_ Nat) (λ_ Nat.succ) y
 
-add_zero
-: λ(x: Nat) Equal Nat (add x zero) x
+Nat.add_zero
+: λ(x: Nat) Equal Nat (Nat.add x Nat.zero) x
 = λ(x: Nat) x
-  (λ(x: Nat) Equal Nat (add x zero) x)
-  (λ(x: Nat) λ(h: Equal Nat (add x zero) x)
-    h (λ(n: Nat) Equal Nat (add (succ x) zero) (succ n)) (refl Nat (add (succ x) zero))
+  (λ(x: Nat) Equal Nat (Nat.add x Nat.zero) x)
+  (λ(x: Nat) λ(h: Equal Nat (Nat.add x Nat.zero) x)
+    h (λ(n: Nat) Equal Nat (Nat.add (Nat.succ x) Nat.zero) (Nat.succ n)) (Equal.refl Nat (Nat.add (Nat.succ x) Nat.zero))
   )
-  (refl Nat zero)
+  (Equal.refl Nat Nat.zero)
 
-add_succ
-: λ(x: Nat) λ(y: Nat) Equal Nat (add x (succ y)) (succ (add x y))
+Nat.add_succ
+: λ(x: Nat) λ(y: Nat) Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y))
 = λ(x: Nat) λ(y: Nat) x
-  (λ(x: Nat) Equal Nat (add x (succ y)) (succ (add x y)))
-  (λ(x: Nat) λ(h: Equal Nat (add x (succ y)) (succ (add x y)))
-    h (λ(n: Nat) Equal Nat (add (succ x) (succ y)) (succ n)) (refl Nat (succ (add x (succ y))))
+  (λ(x: Nat) Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y)))
+  (λ(x: Nat) λ(h: Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y)))
+    h (λ(n: Nat) Equal Nat (Nat.add (Nat.succ x) (Nat.succ y)) (Nat.succ n)) (Equal.refl Nat (Nat.succ (Nat.add x (Nat.succ y))))
   )
-  (refl Nat (succ y))
+  (Equal.refl Nat (Nat.succ y))
 
-add_comm
-: λ(x: Nat) λ(y: Nat) Equal Nat (add y x) (add x y)
+Nat.add_comm
+: λ(x: Nat) λ(y: Nat) Equal Nat (Nat.add y x) (Nat.add x y)
 = λ(x: Nat) λ(y: Nat) x
-  (λ(x: Nat) Equal Nat (add y x) (add x y))
-  (λ(x: Nat) λ(h: Equal Nat (add y x) (add x y))
-    h (λ(n: Nat) Equal Nat (add y (succ x)) (succ n)) (add_succ y x)
+  (λ(x: Nat) Equal Nat (Nat.add y x) (Nat.add x y))
+  (λ(x: Nat) λ(h: Equal Nat (Nat.add y x) (Nat.add x y))
+    h (λ(n: Nat) Equal Nat (Nat.add y (Nat.succ x)) (Nat.succ n)) (Nat.add_succ y x)
   )
-  (add_zero y)
+  (Nat.add_zero y)
