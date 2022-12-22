@@ -1,4 +1,5 @@
 Equal = λT λ(x: T) λ(y: T) λ(P: λ(x: T) Type) λ(a: P x) (P y)
+
 Equal.refl = λT λ(x: T) λ(P: λ(x: T) Type) λ(a: P x) a
 
 Equal.comm

@@ -6,7 +6,9 @@ Nat = µ Nat ξ self
   ))
   λ(z: P (λp λs λz z))
   P self
+
 Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z)
+
 Nat.zero = λp λs λz z
 
 Nat.add = λ(x: Nat) λ(y: Nat) x (λ_ Nat) (λ_ Nat.succ) y
