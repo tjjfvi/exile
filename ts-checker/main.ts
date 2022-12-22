@@ -5,7 +5,7 @@ console.log(
   "Program =\n" + writeTerm(parse([
     await Deno.readTextFile("Equal.xil"),
     await Deno.readTextFile("Bool.xil"),
-    // await Deno.readTextFile("Nat.xil"),
-    Deno.args[0] || "Bool.and Bool.true",
+    await Deno.readTextFile("Nat.xil"),
+    Deno.args[0] || "Bool.and Nat.zero",
   ].join("\n\n"))),
 );
