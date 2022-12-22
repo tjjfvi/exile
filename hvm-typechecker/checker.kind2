@@ -50,10 +50,17 @@ Checker.Result.or l  (Checker.Result.ok t u) =  (Checker.Result.ok t u)
 Checker.Result.or l r = l
 
 Checker.Result.to_string <t> (l: Checker.Result t): String
+Checker.Result.to_string t (Checker.Result.ok Term u) = String.flatten ["Checking successful, " (Term.show State.empty u)]
+Checker.Result.to_string t (Checker.Result.ok String u) = String.flatten ["Checking successful, " u]
 Checker.Result.to_string t (Checker.Result.ok _ u) = "Checking successful"
 Checker.Result.to_string (Checker.Result.err st) = String.flatten ["Checking not successful. Traceback: " String.newline 
 	(State.print_traceback st)
 ]
+
+Checker.Result.pure <t> (a: t): Checker.Result t { Checker.Result.ok a } 
+Checker.Result.bind <a> <b> (result: Checker.Result a) (cont: a -> (Checker.Result b)): Checker.Result b
+Checker.Result.bind a b (Checker.Result.ok val) cont = (cont val)
+Checker.Result.bind a b (Checker.Result.err err) cont = (Checker.Result.err err)
 
 Judgement: Type
 Judgement.Instance (a: Term) (b: Term): Judgement
@@ -147,8 +154,6 @@ Checker.instance (st: State) (term: Term) (type: Term): Checker.Result Unit {
 
 Checker.instance.go (st: State) (term: Term) (type: Term): Checker.Result Unit
 Checker.instance.go st term Term.top = Checker.Result.ok Unit.new
-Checker.instance.go st a (Term.apply b c) = Checker.reduce_app b c (t => Checker.instance st a t) (Checker.Result.err st)
-Checker.instance.go st (Term.apply a b) c = Checker.reduce_app a b (t => Checker.instance st t c) (Checker.Result.err st)
 Checker.instance.go st (Term.instance_bound _ a) b = Checker.subtype st a b
 Checker.instance.go st term Term.bot = 
 	State.with_comment st "No term is an instance of the bottom type" st =>
@@ -186,6 +191,7 @@ Checker.instance.go st term (Term.self body)  =
 		(body term)
 	)
 
+
 	
 // Extra cases for checker terms
 Checker.instance.go st (Term.instance_bound instance subtype) supertype = Checker.Result.or (Checker.subtype st subtype supertype) (Checker.instance st instance supertype)
@@ -200,6 +206,12 @@ Checker.instance.go st a (Term.apply b c) =
 	State.with_comment st "Can't decide if a term is an instance of an application" st =>
 	Checker.Result.err st
 
+Checker.instance.go st a (Term.apply b c) = Checker.reduce_app b c (t => Checker.instance st a t) (
+	State.with_comment st "I don't know what this case is for but this is likely not true" st =>
+	Checker.Result.err st)
+Checker.instance.go st (Term.apply a b) c = Checker.reduce_app a b (t => Checker.instance st t c) (
+	State.with_comment st "I don't know what this case is for but this is likely not true" st =>
+	Checker.Result.err st)
 // Checker.instance.go st a b = (HVM.log b Bool.false)
 
 Checker.subtype (st: State) (term: Term) (type: Term): Checker.Result Unit {
@@ -218,8 +230,12 @@ Checker.subtype.go st a (Term.supertype_bound _ b) = Checker.subtype st a b
 Checker.subtype.go st (Term.typeof_bound a) b = Checker.instance st a b
 Checker.subtype.go st (Term.supertype_bound a _) b = Checker.subtype st a b
 Checker.subtype.go st a (Term.subtype_bound b _) = Checker.subtype st a b
-Checker.subtype.go st term Term.bot = Checker.Result.err st // otherwise we would have already covered it
-Checker.subtype.go st Term.top x = Checker.Result.err st
+Checker.subtype.go st term Term.bot = 
+	State.with_comment st "! is the supertype of only !" st =>
+	Checker.Result.err st
+Checker.subtype.go st Term.top x = 
+	State.with_comment st "* is only an instance of the top term" st =>
+	Checker.Result.err st
 Checker.subtype.go st (Term.lam t.type t.body) (Term.lam y.type y.body) = 
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x y.type)
@@ -315,8 +331,12 @@ Checker.equal.go st (Term.instance_bound l.instance l.type) (Term.instance_bound
 	)
 Checker.equal.go st Term.top Term.top = Checker.Result.ok Unit.new
 Checker.equal.go st Term.bot Term.bot = Checker.Result.ok Unit.new
-Checker.equal.go st Term.top Term.bot = Checker.Result.err st
-Checker.equal.go st Term.bot Term.top = Checker.Result.err st
+Checker.equal.go st Term.top Term.bot = 
+	State.with_comment st "top not bot" st =>
+	Checker.Result.err st
+Checker.equal.go st Term.bot Term.top = 
+	State.with_comment st "top not bot" st =>
+	Checker.Result.err st
 Checker.equal.go st Term.top a = Checker.equal st Term.top_as_rec a
 Checker.equal.go st a Term.top = Checker.equal st a Term.top_as_rec
 Checker.equal.go st Term.bot a = Checker.equal st Term.bot_as_rec a
@@ -331,6 +351,66 @@ Checker.equal.go st (Term.rec l.body) b =
 Checker.equal.go st a b =
 	State.with_comment st "Terms are not equal (or the code for checking this was not implemented)" st =>
 	Checker.Result.err st
+
+	
+Checker.normalize_check.app (st: State) (function: Term) (argument: Term): Checker.Result Term
+Checker.normalize_check.app st (Term.lam type body) argument = 
+	do Checker.Result {
+		ask check = (Checker.instance st argument type)
+		Checker.normalize_check st (body (Term.instance_bound argument type))
+	}
+Checker.normalize_check.app st (Term.rec body) argument = 
+	(Checker.normalize_check.app st (body (Term.rec body)) argument)
+Checker.normalize_check.app st body argument = Checker.Result.ok (Term.apply body argument)
+
+Checker.normalize_check (st: State) (term: Term): Checker.Result Term {
+	State.with_traceback st (Judgement.Check term) st =>
+	(Checker.normalize_check.go st term)
+}
+Checker.normalize_check.go (st: State) (term: Term): Checker.Result Term
+Checker.normalize_check.go st (Term.apply function argument) = do Checker.Result {
+	ask function = (Checker.normalize_check st function)
+	ask argument = (Checker.normalize_check st argument)
+	(Checker.normalize_check.app st function argument)
+}
+Checker.normalize_check.go st (Term.lam type body) = 
+	State.new_forall st st => x =>
+	do Checker.Result {
+		ask type = (Checker.normalize_check st type)
+		// First we prove that it works forall x
+		ask body_check = (Checker.normalize_check st (body (Term.instance_bound x type)))
+		return (Term.lam type arg => (Checker.eval (body arg)))
+	}
+Checker.normalize_check.go st (Term.rec body) = 
+	State.new_forall st st => x =>
+	do Checker.Result {
+		// First we prove that it works forall x
+		ask body_check = (Checker.normalize_check st (body x))
+		return (Term.rec arg => (Checker.eval (body arg)))
+	}
+Checker.normalize_check.go st (Term.self body) = 
+	State.new_forall st st => x =>
+	do Checker.Result {
+		// First we prove that it works forall x
+		ask body_check = (Checker.normalize_check st (body x))
+		return (Term.self arg => (Checker.eval (body arg)))
+	}
+Checker.normalize_check.go st (Term.instance_bound a Term.top) = (Checker.normalize_check.go st a)
+Checker.normalize_check.go st (Term.subtype_bound a Term.top) = (Checker.normalize_check.go st a)
+Checker.normalize_check.go st (Term.instance_bound a b) = do Checker.Result {
+	ask a = (Checker.normalize_check st a)
+	ask b = (Checker.normalize_check st b)
+	return (Term.instance_bound a b)
+}
+Checker.normalize_check.go st (Term.subtype_bound a b) = do Checker.Result {
+	ask a = (Checker.normalize_check st a)
+	ask b = (Checker.normalize_check st b)
+	return (Term.instance_bound a b)
+}
+Checker.normalize_check.go st Term.top = Checker.Result.ok Term.top
+Checker.normalize_check.go st Term.bot = Checker.Result.ok Term.bot
+Checker.normalize_check.go st (Term.forall n) = Checker.Result.ok (Term.forall n)
+//Checker.normalize_check.go st a = Checker.Result.ok a
 // TODO implement top unrolling
 
 
@@ -458,7 +538,8 @@ Term.show st (Term.typeof_bound term) = String.flatten [
 
 
 Program: Term
+CheckProgram: Checker.Result Unit
 
 Main {
-	(Checker.Result.to_string (Checker.check State.empty (Checker.eval Program)))
+	 (Checker.Result.to_string CheckProgram)
 }
