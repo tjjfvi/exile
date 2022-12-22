@@ -41,10 +41,9 @@ Checker.instance (Term.self body) type =
 		type
 	)
 Checker.instance term (Term.self body)  = 
-	let x = (Term.instance_bound term (Term.self body))
 	(Checker.instance
 		term
-		(body x)
+		(body term)
 	)
 
 	
@@ -53,6 +52,7 @@ Checker.instance (Term.instance_bound instance subtype) supertype = Bool.or (Che
 Checker.instance instance (Term.instance_bound type typetype)  = (Checker.instance instance type)
 // Checker.instance (Term.apply function arg) type =
 // todo
+Checker.instance (Term.forall _) type = Bool.false // Nope
 
 Checker.instance a (Term.apply b c) = 
 	Bool.false
@@ -82,14 +82,20 @@ Checker.subtype term (Term.rec sp.body) =
 	(Checker.subtype term (sp.body (Term.rec sp.body)))
 
 // Extra rules for compiler terms
-// a: b <= c 
-//	iff c: b or a <= c
+// (a: b) <= c 
+// then (a: b) -> (a: c)
+// then a <= c
+// the reverse is trivially true since (a: b) only restricts a
 Checker.subtype (Term.instance_bound a b) c = 
-	Bool.or (Checker.instance c b) (Checker.subtype a c)
+	(Checker.subtype a c)
 
 // Endcase rules
+// (a b): c
+// (a b): (x: T) (a: x)
+// a = (x: T) (a x)
 Checker.subtype (Term.apply a b) c = 
-	Bool.false
+	(Checker.equal (Term.apply a b) (HVM.log (HVM.log a (HVM.log b c)) c))
+
 
 
 
@@ -105,9 +111,31 @@ Checker.eval (Term.apply f arg) = Checker.eval.app (Checker.eval f) (Checker.eva
 Checker.eval (Term.lam type body) = (Term.lam (Checker.eval type) (arg => (Checker.eval (body arg))))
 Checker.eval (Term.rec body) = (Term.rec (arg => (Checker.eval (body arg))))
 Checker.eval (Term.self body) = (Term.self (arg => (Checker.eval (body arg))))
+Checker.eval (Term.instance_bound a Term.top) = (Checker.eval a)
+Checker.eval (Term.subtype_bound a Term.top) = (Checker.eval a)
 Checker.eval (Term.instance_bound a b) = (Term.instance_bound (Checker.eval a) (Checker.eval b))
 Checker.eval (Term.subtype_bound a b) = (Term.subtype_bound (Checker.eval a) (Checker.eval b))
 Checker.eval e = e
+
+Checker.equal (left: Term) (right: Term): Bool
+Checker.equal (Term.apply a b) (Term.apply c d) = Bool.and (Checker.equal a c) (Checker.equal b d) 
+Checker.equal (Term.forall a) (Term.forall b) = (U60.if (== a b) Bool.true Bool.false)
+// Two lambdas are equal if they're equal for all x, and their types are equal.
+Checker.equal (Term.lam l.type l.body) (Term.lam r.type r.body) = 
+	let x = Checker.new_forall
+	(Bool.and
+		(Checker.equal l.type r.type)
+		(Checker.equal (l.body x) (r.body x))
+	)
+Checker.equal (Term.self l.body) (Term.self r.body) = 
+	let x = Checker.new_forall
+	(Checker.equal (l.body x) (r.body x))
+Checker.equal Term.top Term.top = Bool.true
+Checker.equal Term.bot Term.bot = Bool.true
+Checker.equal (Term.rec l.body) (Term.rec r.body) = 
+	let x = Checker.new_forall
+	Checker.equal (l.body (r.body x)) (r.body (l.body x))
+// TODO implement top unrolling
 
 
 Bool: Type
@@ -147,9 +175,12 @@ Test.Bool: Term
 Test.Unit.new: Term
 Test.Unit: Term
 
-Main {
+Main3 {
 	(Checker.instance
-		Test.Unit.new
+		Test.Bool.true
 		Test.Bool
 	)
 }
+
+Main { Main3 }
+// needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid

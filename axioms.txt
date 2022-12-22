@@ -77,7 +77,7 @@ a <= ξ x b
  iff x : a -> a <= b
 
 a b <= c
-  if false
+  if a b == c
 
 a <= b c
-  if false
+  if a == b c

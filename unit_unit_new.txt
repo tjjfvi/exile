@@ -1,0 +1,10 @@
+proof that Unit.new: Unit
+
+ λp λnew new : µ Unit ξ unit λ(P: λ(b: Unit) Type) λ(new: P (λp λnew new)) (P unit)
+ λp λnew new : ξ unit λ(P: λ(b: Unit) Type) λ(new: P (λp λnew new)) (P unit)
+ λp λnew new : λ(P: λ(b: Unit) Type) λ(new: (P :: λ(b: Unit) Type) (λp λnew new)) ((P :: λ(b: Unit) Type) λp λnew new)
+ λnew new : λ(new: (P :: λ(b: Unit) Type) (λp λnew new)) ((P :: λ(b: Unit) Type) λp λnew new)
+ (new : (P :: λ(b: Unit) Type) (λp λnew new)) : ((P :: λ(b: Unit) Type) λp λnew new)
+ (P :: λ(b: Unit) Type) (λp λnew new) <= ((P :: λ(b: Unit) Type) λp λnew new)
+ is true
+

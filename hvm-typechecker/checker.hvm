@@ -7,9 +7,10 @@
 (Checker.instance (Term.rec body) t) = (Checker.instance (body (Term.rec body)) t)
 (Checker.instance t (Term.rec body)) = (Checker.instance t (body (Term.rec body)))
 (Checker.instance (Term.self body) type) = let x = (Term.instance_bound (Checker.new_forall) (Term.self body)); (Checker.instance (body x) type)
-(Checker.instance term (Term.self body)) = let x = (Term.instance_bound term (Term.self body)); (Checker.instance term (body x))
+(Checker.instance term (Term.self body)) = (Checker.instance term (body term))
 (Checker.instance (Term.instance_bound instance subtype) supertype) = (Bool.or (Checker.subtype subtype supertype) (Checker.instance instance supertype))
 (Checker.instance instance (Term.instance_bound type typetype)) = (Checker.instance instance type)
+(Checker.instance (Term.forall x0_) type) = (Bool.false)
 (Checker.instance a (Term.apply b c)) = (Bool.false)
 
 // Checker.subtype (term: (Term)) (type: (Term)) : (Bool)
@@ -22,8 +23,8 @@
 (Checker.subtype (Term.rec st.body) (Term.rec sp.body)) = let y = (Checker.new_forall); let x = (Term.subtype_bound (Checker.new_forall) y); (Checker.subtype (st.body x) (sp.body y))
 (Checker.subtype (Term.rec st.body) type) = (Checker.subtype (st.body (Term.rec st.body)) type)
 (Checker.subtype term (Term.rec sp.body)) = (Checker.subtype term (sp.body (Term.rec sp.body)))
-(Checker.subtype (Term.instance_bound a b) c) = (Bool.or (Checker.instance c b) (Checker.subtype a c))
-(Checker.subtype (Term.apply a b) c) = (Bool.false)
+(Checker.subtype (Term.instance_bound a b) c) = (Checker.subtype a c)
+(Checker.subtype (Term.apply a b) c) = (Checker.equal (Term.apply a b) (HVM.log (HVM.log a (HVM.log b c)) c))
 
 // Checker.eval.app (fn: (Term)) (arg: (Term)) : (Term)
 (Checker.eval.app (Term.lam t f) arg) = (Checker.eval (f arg))
@@ -36,9 +37,20 @@
 (Checker.eval (Term.lam type body)) = (Term.lam (Checker.eval type) @arg (Checker.eval (body arg)))
 (Checker.eval (Term.rec body)) = (Term.rec @arg (Checker.eval (body arg)))
 (Checker.eval (Term.self body)) = (Term.self @arg (Checker.eval (body arg)))
+(Checker.eval (Term.instance_bound a (Term.top))) = (Checker.eval a)
+(Checker.eval (Term.subtype_bound a (Term.top))) = (Checker.eval a)
 (Checker.eval (Term.instance_bound a b)) = (Term.instance_bound (Checker.eval a) (Checker.eval b))
 (Checker.eval (Term.subtype_bound a b)) = (Term.subtype_bound (Checker.eval a) (Checker.eval b))
 (Checker.eval e) = e
+
+// Checker.equal (left: (Term)) (right: (Term)) : (Bool)
+(Checker.equal (Term.apply a b) (Term.apply c d)) = (Bool.and (Checker.equal a c) (Checker.equal b d))
+(Checker.equal (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
+(Checker.equal (Term.lam l.type l.body) (Term.lam r.type r.body)) = let x = (Checker.new_forall); (Bool.and (Checker.equal l.type r.type) (Checker.equal (l.body x) (r.body x)))
+(Checker.equal (Term.self l.body) (Term.self r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body x) (r.body x))
+(Checker.equal (Term.top) (Term.top)) = (Bool.true)
+(Checker.equal (Term.bot) (Term.bot)) = (Bool.true)
+(Checker.equal (Term.rec l.body) (Term.rec r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body (r.body x)) (r.body (l.body x)))
 
 // Bool.if -(p: Type) (a: (Bool)) (t: p) (f: p) : p
 (Bool.if (Bool.true) t f) = t
@@ -60,8 +72,11 @@
 // Main2 : _
 (Main2) = let t = (Checker.new_forall); let u = (Checker.new_forall); let v = (Term.instance_bound (Checker.new_forall) u); (Checker.instance (Term.lam t @x v) (Term.lam t @x u))
 
+// Main3 : _
+(Main3) = (Checker.instance (Test.Bool.true) (Test.Bool))
+
 // Main : _
-(Main) = (Checker.instance (Test.Unit.new) (Test.Bool))
+(Main) = (Main3)
 
 Test.Bool.true = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam (Term.top) λx1 (Checker.eval (Term.lam (Term.top) λx2 x1))))))
 Test.Bool = (Term.rec λx0 (Term.self λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx3 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 x4))))))) λx3 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 (Checker.eval (Term.lam (Term.top) λx6 x5))))))) λx4 (Term.apply x2 x1)))))))))

@@ -463,6 +463,7 @@ def test():
 # test()
 def write_data():
 	with open("data.hvm", "w") as f:
+		
 		f.write(f'Test.Bool.true = {Bool_true.to_hvm(0)}\n')
 		f.write(f'Test.Bool = {Bool.to_hvm(0)}\n')
 		f.write(f'Test.Unit.new = {Unit_new.to_hvm(0)}\n')
