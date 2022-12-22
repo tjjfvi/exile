@@ -1,3 +1,9 @@
+// Term.top_as_rec : _
+(Term.top_as_rec) = (Term.rec @top (Term.lam (Term.bot) @x top))
+
+// Term.bot_as_rec : _
+(Term.bot_as_rec) = (Term.rec @bot (Term.lam (Term.top) @x bot))
+
 // Checker.Result.to_bool (l: (Checker.Result)) : (Bool)
 (Checker.Result.to_bool (Checker.Result.ok)) = (Bool.true)
 (Checker.Result.to_bool b) = (Bool.false)
@@ -112,6 +118,12 @@
 (Checker.equal.go st (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type)) = (Checker.Result.and (Checker.equal st l.instance r.instance) (Checker.equal st l.type r.type))
 (Checker.equal.go st (Term.top) (Term.top)) = (Checker.Result.ok)
 (Checker.equal.go st (Term.bot) (Term.bot)) = (Checker.Result.ok)
+(Checker.equal.go st (Term.top) (Term.bot)) = (Checker.Result.err "* != !")
+(Checker.equal.go st (Term.bot) (Term.top)) = (Checker.Result.err "* != !")
+(Checker.equal.go st (Term.top) a) = (Checker.equal st (Term.top_as_rec) a)
+(Checker.equal.go st a (Term.top)) = (Checker.equal st a (Term.top_as_rec))
+(Checker.equal.go st (Term.bot) a) = (Checker.equal st (Term.bot_as_rec) a)
+(Checker.equal.go st a (Term.bot)) = (Checker.equal st a (Term.bot_as_rec))
 (Checker.equal.go st (Term.rec l.body) (Term.rec r.body)) = (State.new_forall st @st @x (Checker.equal.go st (l.body (r.body x)) (r.body (l.body x))))
 (Checker.equal.go st a (Term.rec r.body)) = (Checker.equal.go st a (r.body (Term.rec r.body)))
 (Checker.equal.go st (Term.rec l.body) b) = (Checker.equal.go st (l.body (Term.rec l.body)) b)
@@ -170,10 +182,13 @@
 (Main2) = let st = (State.empty); (State.new_forall st @st @t (State.new_forall st @st @u (State.new_forall st @st @v let v = (Term.instance_bound v u); (Checker.instance st (Term.lam t @x v) (Term.lam t @x u)))))
 
 // DebugCheck (a: (Term)) (b: (Term)) : (String)
-(DebugCheck a b) = let st = (State.empty); (String.flatten (List.nil))
+(DebugCheck a b) = let st = (State.empty); (String.flatten (List.cons (Term.show st a) (List.cons ": " (List.cons (Term.show st b) (List.cons " = " (List.cons (Checker.Result.to_string (Checker.instance st (Checker.eval a) (Checker.eval b))) (List.nil)))))))
+
+// DebugEqual (a: (Term)) (b: (Term)) : (String)
+(DebugEqual a b) = let st = (State.empty); (String.flatten (List.cons (Term.show st a) (List.cons " == " (List.cons (Term.show st b) (List.cons " = " (List.cons (Checker.Result.to_string (Checker.equal st (Checker.eval a) (Checker.eval b))) (List.nil)))))))
 
 // Sample : _
-(Sample) = let st = (State.empty); (String.flatten (List.cons (DebugCheck (Test.Bool.true) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Bool.true) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Equal.refl) (Test.Equal.refl.type)) (List.cons (String.newline) (List.nil))))))))))))
+(Sample) = let st = (State.empty); (String.flatten (List.cons (DebugCheck (Test.Bool.true) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Bool.true) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Equal.refl) (Test.Equal.refl.type)) (List.cons (String.newline) (List.cons (DebugEqual (Term.top) (Term.top_as_rec)) (List.cons (String.newline) (List.nil))))))))))))))
 
 // Main3 : _
 (Main3) = let st = (State.empty); (State.new_forall st @st @typ (State.new_forall st @st @t (State.new_forall st @st @u let t = (Term.instance_bound t typ); let t = (Term.instance_bound u typ); (Checker.instance (State.empty) (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) u))))))
@@ -181,8 +196,11 @@
 // Main4 : _
 (Main4) = (Checker.Result.to_string (Checker.instance.go (State.empty) (Test.Bool.true) (Test.Unit)))
 
+// Main5 : _
+(Main5) = (Sample)
+
 // Main : _
-(Main) = (Main4)
+(Main) = (DebugEqual (Term.top) (Term.top_as_rec))
 
 Test.Bool.true = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam (Term.top) λx1 (Checker.eval (Term.lam (Term.top) λx2 x1))))))
 Test.Bool = (Term.rec λx0 (Term.self λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx3 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 x4))))))) λx3 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 (Checker.eval (Term.lam (Term.top) λx6 x5))))))) λx4 (Term.apply x2 x1)))))))))
