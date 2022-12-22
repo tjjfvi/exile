@@ -1,6 +1,6 @@
-Equal = λT λ(x: T) λ(y: T) λ(P: λ(x: T) Type) λ(a: P x) (P y)
+Equal = λT λ(x: T) λ(y: T) λ(P: λ(x: T) *) λ(a: P x) (P y)
 
-Equal.refl = λT λ(x: T) λ(P: λ(x: T) Type) λ(a: P x) a
+Equal.refl = λT λ(x: T) λ(P: λ(x: T) *) λ(a: P x) a
 
 Equal.comm
 : λT λ(x: T) λ(y: T) λ(p: Equal T x y) Equal T y x

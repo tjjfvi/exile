@@ -1,4 +1,4 @@
-Bool = µ Bool ξ self λ(P: λ(b: Bool) Type) λ(t: P (λp λt λf t)) λ(f: P (λp λt λf f)) (P self)
+Bool = µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: P (λp λt λf t)) λ(f: P (λp λt λf f)) (P self)
 
 Bool.true = λp λt λf t
 
@@ -10,12 +10,12 @@ Bool.and = λ(x: Bool) λ(y: Bool) (x (λ_ Bool) y Bool.false)
 
 Bool.or = λ(x: Bool) λ(y: Bool) (x (λ_ Bool) Bool.true y)
 
-Bool.not_not = λ(x: Bool) (x (λ(x: Bool) Equal (not (not x)) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
+Bool.not_not = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.not (Bool.not x)) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
 
-Bool.and_true = λ(x: Bool) (x (λ(x: Bool) Equal (and x Bool.true) x) (Equal.refl Bool Bool.true) (Equal.refl BoolBool.false))
+Bool.and_true = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.and x Bool.true) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
 
-Bool.or_false = λ(x: Bool) (x (λ(x: Bool) Equal (or x Bool.false) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
+Bool.or_false = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.or x Bool.false) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
 
-Bool.and_false = λ(x: Bool) (x (λ(x: Bool) Equal (and x Bool.false) Bool.false) (Equal.refl Bool Bool.false) (Equal.refl Bool Bool.false))
+Bool.and_false = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.and x Bool.false) Bool.false) (Equal.refl Bool Bool.false) (Equal.refl Bool Bool.false))
 
-Bool.or_true = λ(x: Bool) (x (λ(x: Bool) Equal (or x Bool.true) Bool.true) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.true))
+Bool.or_true = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.or x Bool.true) Bool.true) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.true))

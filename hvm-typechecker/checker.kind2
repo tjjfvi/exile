@@ -18,6 +18,7 @@ Term.bot: Term
 Term.forall (id: U60): Term
 Term.instance_bound (instance: Term) (type: Term): Term
 Term.subtype_bound (instance: Term) (type: Term): Term
+Term.supertype_bound (instance: Term) (type: Term): Term
 Term.typeof_bound (instance: Term): Term // Necessary?
 Term.error (term: String): Term
 Term.attach <t> (term: Term) (data: t): Term
@@ -49,11 +50,13 @@ Judgement: Type
 Judgement.Instance (a: Term) (b: Term): Judgement
 Judgement.Equal (a: Term) (b: Term): Judgement
 Judgement.Subtype (a: Term) (b: Term): Judgement
+Judgement.Check (a: Term): Judgement
 
 Judgement.show (j: Judgement): String
 Judgement.show (Judgement.Instance term type) = String.flatten [ (Term.show State.empty term) " : " (Term.show State.empty type) ] 
 Judgement.show (Judgement.Equal l r) = String.flatten [ (Term.show State.empty l) " == " (Term.show State.empty r) ] 
 Judgement.show (Judgement.Subtype sub sup) = String.flatten [ (Term.show State.empty sub) " <= " (Term.show State.empty sup) ] 
+Judgement.show (Judgement.Check term) = String.flatten [ "check: " (Term.show State.empty term) ] 
 
 State.Traceback.Entry: Type
 State.Traceback.Entry.comment (err: String): State.Traceback.Entry
@@ -74,16 +77,19 @@ State.set_depth (State.new depth tb) new_depth = (State.new new_depth tb)
 State.get_depth (st: State): U60
 State.get_depth (State.new depth tb) = depth
 
-State.add_traceback (st: State) (entry: State.Traceback.Entry): State
-State.add_traceback (State.new depth traceback) entry = (State.new depth (List.append traceback entry))
+State.add_traceback (st: State) (entry: State.Traceback.Entry) (cont: State -> Checker.Result): Checker.Result 
+State.add_traceback (State.new depth traceback) entry cont = (U60.if (> (List.len traceback) 10)
+	(Checker.Result.err (State.new depth (List.append traceback (State.Traceback.Entry.comment "// depth limit exceeded"))))
+ (cont (State.new depth (List.append traceback entry)))
+)
 
-State.with_traceback <t> (st: State) (judgement: Judgement) (cont: State -> t): t
-State.with_traceback t st judgement cont =
-	(cont (State.add_traceback st (State.Traceback.Entry.judgement judgement)))
+State.with_traceback (st: State) (judgement: Judgement) (cont: State -> Checker.Result): Checker.Result
+State.with_traceback st judgement cont =
+	(State.add_traceback st (State.Traceback.Entry.judgement judgement) cont)
 	
 State.with_comment <t> (st: State) (err: String) (cont: State -> t): t
 State.with_comment t st err cont =
-	(cont (State.add_traceback st (State.Traceback.Entry.comment err)))
+	(State.add_traceback st (State.Traceback.Entry.comment err) cont)
 
 State.print_traceback (st: State): String
 State.print_traceback (State.new _ List.nil) = ""
@@ -100,6 +106,33 @@ State.new_forall <t> (st: State) (cont: State -> Term -> t): t {
 	(cont new_state (Term.forall old_depth))
 }
 
+Checker.check (st: State) (term: Term): Checker.Result {
+	State.with_traceback st (Judgement.Check term) st =>
+	(Checker.check.go st term)
+}
+
+Checker.check.go (st: State) (term: Term): Checker.Result
+Checker.check.go st Term.top = Checker.Result.ok
+Checker.check.go st Term.bot = Checker.Result.ok
+Checker.check.go st (Term.apply a b) = (Checker.Result.and
+	(Checker.Result.and (Checker.check st a) (Checker.check st b))
+	(Checker.instance st a (Term.lam (Term.typeof_bound b) _ => Term.top))
+)
+Checker.check.go st (Term.lam t body) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x t)
+	(Checker.check st (body x))
+Checker.check.go st (Term.rec body) = 
+	State.new_forall st st => x =>
+	let x = (Term.supertype_bound x (Term.rec body))
+	(Checker.check st (body x))
+Checker.check.go st (Term.self body) = 
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self body))
+	(Checker.check st (body x))
+Checker.check.go st _ = Bool.true
+
+
 
 Checker.instance (st: State) (term: Term) (type: Term): Checker.Result {
 	State.with_traceback st (Judgement.Instance term type) st =>
@@ -107,7 +140,10 @@ Checker.instance (st: State) (term: Term) (type: Term): Checker.Result {
 }
 
 Checker.instance.go (st: State) (term: Term) (type: Term): Checker.Result
-Checker.instance.go st term Term.top = Checker.Result.ok
+Checker.instance.go st term Term.top = Bool.true
+Checker.instance.go st a (Term.apply b c) = Checker.reduce_app b c (t => Checker.instance st a t) (Checker.Result.err st)
+Checker.instance.go st (Term.apply a b) c = Checker.reduce_app a b (t => Checker.instance st t c) (Checker.Result.err st)
+Checker.instance.go st (Term.instance_bound _ a) b = Checker.subtype st a b
 Checker.instance.go st term Term.bot = 
 	State.with_comment st "No term is an instance of the bottom type" st =>
 	Checker.Result.err st
@@ -124,8 +160,11 @@ Checker.instance.go st (Term.lam t.type t.body) (Term.lam y.type y.body) =
 		(Checker.subtype st y.type t.type) 
 		(Checker.instance st (t.body x) (y.body x))
 	)
-Checker.instance.go st (Term.rec body) t = Checker.instance.go st (body (Term.rec body)) t
-Checker.instance.go st t (Term.rec body) = Checker.instance.go st t (body (Term.rec body))
+Checker.instance.go st (Term.rec body) t = Checker.instance st (body (Term.rec body)) t
+Checker.instance.go st t (Term.rec body) =
+	State.new_forall st st => x =>
+	let x = (Term.supertype_bound x (Term.rec body))
+	Checker.instance st t (body x)
 Checker.instance.go st (Term.self body) type = 
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x (Term.self body))
@@ -166,10 +205,15 @@ Checker.subtype.go (st: State) (term: Term) (type: Term): Checker.Result
 Checker.subtype.go st (Term.forall a) (Term.forall b) = (U60.if (== a b) Checker.Result.ok 
 	(State.with_comment st "These two terms are not equal, so they're not a subtype of each other every time" st =>
 	(Checker.Result.err st)))
-Checker.subtype.go st term Term.top = Checker.Result.ok
-Checker.subtype.go st Term.bot x = Checker.Result.ok
-Checker.subtype.go st term Term.bot = Checker.Result.err st // otherwise we would have already covered it
-Checker.subtype.go st Term.top x = Checker.Result.err st 
+Checker.subtype.go st term Term.top = Bool.true
+Checker.subtype.go st Term.bot x = Bool.true
+Checker.subtype.go st (Term.subtype_bound _ a) b = Checker.subtype st a b
+Checker.subtype.go st a (Term.supertype_bound _ b) = Checker.subtype st a b
+Checker.subtype.go st (Term.typeof_bound a) b = Checker.instance st a b
+Checker.subtype.go st (Term.supertype_bound a _) b = Checker.subtype st a b
+Checker.subtype.go st a (Term.subtype_bound b _) = Checker.subtype st a b
+Checker.subtype.go st term Term.bot = Bool.false // otherwise we would have already covered it
+Checker.subtype.go st Term.top x = Bool.false 
 Checker.subtype.go st (Term.lam t.type t.body) (Term.lam y.type y.body) = 
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x y.type)
@@ -180,12 +224,23 @@ Checker.subtype.go st (Term.lam t.type t.body) (Term.lam y.type y.body) =
 Checker.subtype.go st (Term.rec st.body) (Term.rec sp.body) =
 	State.new_forall st st => y =>
 	State.new_forall st st => x =>
-	let x = (Term.subtype_bound x y)
-	(Checker.subtype st (st.body x) (sp.body y))
+	(Checker.subtype st (st.body (Term.subtype_bound x y)) (sp.body (Term.supertype_bound y x)))
 Checker.subtype.go st (Term.rec st.body) type =
 	(Checker.subtype st (st.body (Term.rec st.body)) type)
 Checker.subtype.go st term (Term.rec sp.body) =
 	(Checker.subtype st term (sp.body (Term.rec sp.body)))
+Checker.subtype.go st (Term.self a) (Term.self b) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st (a x) (b x))
+Checker.subtype.go st (Term.self a) b =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st (a x) b)
+Checker.subtype.go st a (Term.self b) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st a (b x))
 Checker.subtype.go st (Term.forall a) b = 
 	State.with_comment st "Only the top type is the supertype of all types" st =>
 	Checker.Result.err st
@@ -207,18 +262,17 @@ Checker.subtype.go st (Term.apply a b) c =
 	(Checker.equal st (Term.apply a b) c)
 		
 
-
-
-
-Checker.eval.app (fn: Term) (arg: Term): Term
-Checker.eval.app (Term.lam t f) arg = Checker.eval (f arg)
-//Checker.eval.app (Term.self f) arg = Checker.eval (f arg)
-Checker.eval.app (Term.rec f) arg = Checker.eval (Term.apply (f (Term.rec f)) arg)
-Checker.eval.app (Term.instance_bound a b) arg = Checker.eval (Term.instance_bound (Checker.eval (Term.apply a arg)) (Checker.eval (Term.apply b arg)))
-Checker.eval.app f arg = (Term.apply f arg)
+Checker.reduce_app <t> (fn: Term) (arg: Term) (yay: Term -> t) (nay: t): t
+Checker.reduce_app t (Term.lam _ f) arg yay nay = yay (f arg)
+Checker.reduce_app t (Term.rec f) arg yay nay = (Checker.reduce_app (f (Term.rec f)) arg yay nay)
+Checker.reduce_app (Term.instance_bound a b) arg yay nay = yay (Term.instance_bound (Term.apply a arg) (Term.apply b arg))
+Checker.reduce_app f arg yay nay = nay
 
 Checker.eval (x: Term): Term
-Checker.eval (Term.apply f arg) = Checker.eval.app (Checker.eval f) (Checker.eval arg)
+Checker.eval (Term.apply f arg) =
+	let f = (Checker.eval f)
+	let arg = (Checker.eval arg)
+	Checker.reduce_app f arg (t => Checker.eval t) (Term.apply f arg)
 Checker.eval (Term.lam type body) = (Term.lam (Checker.eval type) (arg => (Checker.eval (body arg))))
 Checker.eval (Term.rec body) = (Term.rec (arg => (Checker.eval (body arg))))
 Checker.eval (Term.self body) = (Term.self (arg => (Checker.eval (body arg))))
@@ -304,6 +358,11 @@ List.append <t> (list: List t) (item: t): List t
 List.append t List.nil item = List.cons item List.nil
 List.append t (List.cons head tail) item = List.cons head (List.append t tail item)
 
+List.len <t> (list: List t): U60
+List.len t List.nil = 0
+List.len t (List.cons _ l) = (+ (List.len l) 1)
+
+
 String.concat (a: String) (b: String): String
 String.concat (String.cons a b) c = (String.cons a (String.concat b c))
 String.concat String.nil c = c
@@ -378,6 +437,12 @@ Term.show st (Term.instance_bound term type) = String.flatten [
 Term.show st (Term.subtype_bound sub sup) = String.flatten [
 	(Term.show sub sup) " <= " (Term.show sub sup)
 ]
+Term.show st (Term.supertype_bound sub sup) = String.flatten [
+	(Term.show sub sup) " >= " (Term.show sub sup)
+]
+Term.show st (Term.typeof_bound term) = String.flatten [
+	"typeof " (Term.show st term)
+]
 
 
 	
@@ -438,3 +503,10 @@ Main4 {
 	(Checker.Result.to_string (Checker.instance.go State.empty Test.Bool.true Test.Unit))
 }
 
+Program: Term
+
+Main {
+	(Checker.Result.to_string (Checker.check State.empty Program))
+}
+
+// needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid

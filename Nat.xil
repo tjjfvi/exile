@@ -1,13 +1,13 @@
 Nat = µ Nat ξ self
-  λ(P: λ(n: Nat) Type)
+  λ(P: λ(n: Nat) *)
   λ(s: λ(n: Nat) λ(p: P n) P (
-    (µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
+    (µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
     n
   ))
   λ(z: P (λp λs λz z))
   P self
 
-Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) Type) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z)
+Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n P s z)
 
 Nat.zero = λp λs λz z
 
