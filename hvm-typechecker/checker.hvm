@@ -68,6 +68,9 @@
 (Checker.equal st (Term.top) (Term.top)) = (Bool.true)
 (Checker.equal st (Term.bot) (Term.bot)) = (Bool.true)
 (Checker.equal st (Term.rec l.body) (Term.rec r.body)) = (State.new_forall st @st @x (Checker.equal st (l.body (r.body x)) (r.body (l.body x))))
+(Checker.equal st a (Term.rec r.body)) = (Checker.equal st a (r.body (Term.rec r.body)))
+(Checker.equal st (Term.rec l.body) b) = (Checker.equal st (l.body (Term.rec l.body)) b)
+(Checker.equal st a b) = (Bool.false)
 
 // Bool.if -(p: Type) (a: (Bool)) (t: p) (f: p) : p
 (Bool.if (Bool.true) t f) = t
@@ -83,14 +86,48 @@
 // Bool.or (a: (Bool)) (b: (Bool)) : _
 (Bool.or a b) = (Bool.if a (Bool.true) b)
 
+// U60.to_string (n: U60) : (String)
+(U60.to_string n) = (U60.if (< n 10) (String.cons (+ 48 n) "") (String.concat (U60.to_string (/ n 10)) (String.cons (+ 48 (% n 10)) "")))
+
+// Bool.to_string (a: (Bool)) : (String)
+(Bool.to_string (Bool.true)) = "Bool.true"
+(Bool.to_string (Bool.false)) = "Bool.false"
+
+// String.newline : _
+(String.newline) = (String.cons 10 "")
+
+// String.concat (a: (String)) (b: (String)) : (String)
+(String.concat (String.cons a b) c) = (String.cons a (String.concat b c))
+(String.concat "" c) = c
+
+// String.flatten (a: (List (String))) : (String)
+(String.flatten (List.cons a (List.cons b c))) = (String.flatten (List.cons (String.concat a b) c))
+(String.flatten (List.cons a (List.nil))) = a
+(String.flatten (List.nil)) = ""
+
+// Term.show (st: (State)) (term: (Term)) : (String)
+(Term.show st (Term.lam type body)) = let type_s = (Term.show st type); let var = (String.flatten (List.cons "x" (List.cons (U60.to_string (State.get_depth st)) (List.nil)))); (State.new_forall st @st @x let x = (Term.attach x var); (Bool.if (Checker.equal st type (Term.top)) (String.flatten (List.cons (String.cons 955 "") (List.cons var (List.cons " " (List.cons (Term.show st (body x)) (List.nil)))))) (String.flatten (List.cons (String.cons 955 "(") (List.cons var (List.cons ": " (List.cons type_s (List.cons ") " (List.cons (Term.show st (body x)) (List.nil))))))))))
+(Term.show st (Term.rec body)) = let var = (String.flatten (List.cons "x" (List.cons (U60.to_string (State.get_depth st)) (List.nil)))); (State.new_forall st @st @x let x = (Term.attach x var); (String.flatten (List.cons (String.cons 181 "") (List.cons var (List.cons " " (List.cons (Term.show st (body x)) (List.nil)))))))
+(Term.show st (Term.self body)) = let var = (String.flatten (List.cons "x" (List.cons (U60.to_string (State.get_depth st)) (List.nil)))); (State.new_forall st @st @x let x = (Term.attach x var); (String.flatten (List.cons (String.cons 958 "") (List.cons var (List.cons " " (List.cons (Term.show st (body x)) (List.nil)))))))
+(Term.show st (Term.attach (Term.forall a) s)) = s
+(Term.show st (Term.top)) = "*"
+(Term.show st (Term.bot)) = "!"
+(Term.show st (Term.apply a b)) = (String.flatten (List.cons "(" (List.cons (Term.show st a) (List.cons " " (List.cons (Term.show st b) (List.cons ")" (List.nil)))))))
+
 // Main2 : _
 (Main2) = let st = (State.new); (State.new_forall st @st @t (State.new_forall st @st @u (State.new_forall st @st @v let v = (Term.instance_bound v u); (Checker.instance st (Term.lam t @x v) (Term.lam t @x u)))))
 
+// DebugCheck (a: (Term)) (b: (Term)) : _
+(DebugCheck a b) = let st = (State.new); (String.flatten (List.cons (Term.show st a) (List.cons ": " (List.cons (Term.show st b) (List.cons " = " (List.cons (Bool.to_string (Checker.instance st (Checker.eval a) (Checker.eval b))) (List.nil)))))))
+
+// Sample : _
+(Sample) = let st = (State.new); (String.flatten (List.cons (DebugCheck (Test.Bool.true) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Bool.true) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Equal.refl) (Test.Equal.refl.type)) (List.cons (String.newline) (List.nil))))))))))))
+
 // Main3 : _
-(Main3) = let st = (State.new); (State.new_forall st @st @typ (State.new_forall st @st @t let t = (Term.instance_bound t typ); (Checker.instance (State.new) (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) t)))))
+(Main3) = let st = (State.new); (State.new_forall st @st @typ (State.new_forall st @st @t (State.new_forall st @st @u let t = (Term.instance_bound t typ); let t = (Term.instance_bound u typ); (Checker.instance (State.new) (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) u))))))
 
 // Main : _
-(Main) = (Main3)
+(Main) = (Sample)
 
 Test.Bool.true = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam (Term.top) λx1 (Checker.eval (Term.lam (Term.top) λx2 x1))))))
 Test.Bool = (Term.rec λx0 (Term.self λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx3 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 x4))))))) λx3 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 (Checker.eval (Term.lam (Term.top) λx6 x5))))))) λx4 (Term.apply x2 x1)))))))))

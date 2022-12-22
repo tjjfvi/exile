@@ -20,6 +20,7 @@ Term.instance_bound (instance: Term) (type: Term): Term
 Term.subtype_bound (instance: Term) (type: Term): Term
 Term.typeof_bound (instance: Term): Term // Necessary?
 Term.error (term: String): Term
+Term.attach <t> (term: Term) (data: t): Term
 
 State { U60 }
 State.set_depth (st: State) (d: U60) { d }
@@ -159,6 +160,11 @@ Checker.equal st Term.bot Term.bot = Bool.true
 Checker.equal st (Term.rec l.body) (Term.rec r.body) = 
 	State.new_forall st st => x =>
 	Checker.equal st (l.body (r.body x)) (r.body (l.body x))
+Checker.equal st a (Term.rec r.body) = 
+	Checker.equal st a (r.body (Term.rec r.body))
+Checker.equal st (Term.rec l.body) b =  
+	Checker.equal st (l.body (Term.rec l.body)) b
+Checker.equal st a b = Bool.false
 // TODO implement top unrolling
 
 
@@ -173,12 +179,95 @@ U60.if p 0 t f = f
 U60.if p x t f = t
 Bool.and (a: Bool) (b: Bool) { Bool.if a b Bool.false } 
 Bool.or (a: Bool) (b: Bool) { Bool.if a Bool.true b }
+U60.to_string (n: U60): String
+U60.to_string n = (U60.if
+	(< n 10)
+	(String.cons (+ '0' n) String.nil)
+	(String.concat (U60.to_string (/ n 10)) (String.cons (+ '0' (% n 10)) String.nil))
+)
+Bool.to_string (a: Bool): String
+Bool.to_string Bool.true = "Bool.true"
+Bool.to_string Bool.false = "Bool.false"
+String.newline { String.cons 10 String.nil }
+
+
 
 String: Type
 String.cons (a: U60) (b: String): String
 String.nil: String
 
+List <t>: Type
+List.cons <t> (a: t) (b: List t): List t
+List.nil <t>: List t
 
+String.concat (a: String) (b: String): String
+String.concat (String.cons a b) c = (String.cons a (String.concat b c))
+String.concat String.nil c = c
+
+String.flatten (a: List String): String
+String.flatten (List.cons a (List.cons b c)) = (String.flatten (List.cons (String.concat a b) c))
+String.flatten (List.cons a List.nil) = a
+String.flatten List.nil = ""
+
+Term.show (st: State) (term: Term): String
+Term.show st (Term.lam type body) = 
+	let type_s = (Term.show st type)
+	let var = String.flatten [ "x" (U60.to_string (State.get_depth st)) ]
+	State.new_forall st st => x =>
+	let x = (Term.attach x var)
+	(Bool.if
+		(Checker.equal st type Term.top)
+		(String.flatten [
+			"λ"
+			var
+			" "
+			(Term.show st (body x))
+		])
+		(String.flatten [
+			"λ("
+			var
+			": "
+			type_s
+			") "
+			(Term.show st (body x))
+		])
+	)
+
+Term.show st (Term.rec body) = 
+	let var = String.flatten [ "x" (U60.to_string (State.get_depth st)) ]
+	State.new_forall st st => x =>
+	let x = (Term.attach x var)
+	String.flatten [
+		"µ"
+		var
+		" "
+		(Term.show st (body x))
+	]
+	
+Term.show st (Term.self body) = 
+	let var = String.flatten [ "x" (U60.to_string (State.get_depth st)) ]
+	State.new_forall st st => x =>
+	let x = (Term.attach x var)
+	String.flatten [
+		"ξ"
+		var
+		" "
+		(Term.show st (body x))
+	]
+
+Term.show st (Term.attach String (Term.forall a) s) = s
+Term.show st Term.top = "*"
+Term.show st Term.bot = "!"
+Term.show st (Term.apply a b) = String.flatten [
+	"("
+	(Term.show st a)
+	" "
+	(Term.show st b)
+	")"
+]
+
+
+	
 Main2 {
 	let st = State.new
 	State.new_forall st st => t =>
@@ -200,17 +289,38 @@ Test.Equal: Term
 Test.Equal.refl: Term
 Test.Equal.refl.type: Term
 
+DebugCheck (a: Term) (b: Term) {
+	let st = State.new
+	String.flatten [
+		(Term.show st a) ": " (Term.show st b) " = " (Bool.to_string (Checker.instance st (Checker.eval a) (Checker.eval b)))
+	]
+}
+Sample {
+	let st = State.new
+
+	String.flatten [
+		(DebugCheck Test.Bool.true Test.Bool) String.newline
+		(DebugCheck Test.Bool.true Test.Unit) String.newline
+		(DebugCheck Test.Unit.new Test.Unit) String.newline
+		(DebugCheck Test.Unit.new Test.Bool) String.newline
+		(DebugCheck Test.Equal.refl Test.Equal.refl.type) String.newline
+	]
+}
+
 Main3 {
 	let st = State.new
 	State.new_forall st st => typ =>
 	State.new_forall st st => t =>
+	State.new_forall st st => u =>
 	let t = (Term.instance_bound t typ)
+	let t = (Term.instance_bound u typ)
 	(Checker.instance
 		State.new
 		(Checker.eval (Term.apply (Term.apply Test.Equal.refl typ) t))
-		(Checker.eval (Term.apply (Term.apply (Term.apply Test.Equal typ) t) t))
+		(Checker.eval (Term.apply (Term.apply (Term.apply Test.Equal typ) t) u))
 	)
 }
 
-Main { Main3 }
+
+Main { Sample }
 // needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid
