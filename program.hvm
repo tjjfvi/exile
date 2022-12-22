@@ -35,7 +35,7 @@
 (State.get_depth (State.new depth tb)) = depth
 
 // State.add_traceback (st: (State)) (entry: (State.Traceback.Entry)) (cont: (_: (State)) (Checker.Result)) : (Checker.Result)
-(State.add_traceback (State.new depth traceback) entry cont) = (U60.if (> (List.len traceback) 10) (Checker.Result.err (State.new depth (List.append traceback (State.Traceback.Entry.comment "// depth limit exceeded")))) (cont (State.new depth (List.append traceback entry))))
+(State.add_traceback (State.new depth traceback) entry cont) = (cont (State.new depth (List.append traceback entry)))
 
 // State.with_traceback (st: (State)) (judgement: (Judgement)) (cont: (_: (State)) (Checker.Result)) : (Checker.Result)
 (State.with_traceback st judgement cont) = (State.add_traceback st (State.Traceback.Entry.judgement judgement) cont)
@@ -60,7 +60,7 @@
 (Checker.check.go st (Term.lam t body)) = (State.new_forall st @st @x let x = (Term.instance_bound x t); (Checker.check st (body x)))
 (Checker.check.go st (Term.rec body)) = (State.new_forall st @st @x let x = (Term.supertype_bound x (Term.rec body)); (Checker.check st (body x)))
 (Checker.check.go st (Term.self body)) = (State.new_forall st @st @x let x = (Term.instance_bound x (Term.self body)); (Checker.check st (body x)))
-(Checker.check.go st x0_) = (Bool.true)
+(Checker.check.go st x0_) = (Checker.Result.ok)
 
 // Checker.instance (st: (State)) (term: (Term)) (type: (Term)) : (Checker.Result)
 (Checker.instance st term type) = (State.with_traceback st (Judgement.Instance term type) @st (Checker.instance.go st term type))
@@ -212,7 +212,7 @@
 (Main4) = (Checker.Result.to_string (Checker.instance.go (State.empty) (Test.Bool.true) (Test.Unit)))
 
 // Main : _
-(Main) = (Checker.Result.to_string (Checker.check (State.empty) (Program)))
+(Main) = (Checker.Result.to_string (Checker.check (State.empty) (Checker.eval (Program))))
 
 Program =
 let vEqual = (Term.apply (Term.lam Term.top @v v) (Term.lam Term.top @vT (Term.lam vT @vx (Term.lam vT @vy (Term.lam (Term.lam vT @vx Term.top) @vP (Term.lam (Term.apply vP vx) @va (Term.apply vP vy)))))));
@@ -230,4 +230,4 @@ let vBool.and_true = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (T
 let vBool.or_false = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.or vx) vBool.false)) vx))) (Term.apply (Term.apply vEqual.refl vBool) vBool.true)) (Term.apply (Term.apply vEqual.refl vBool) vBool.false))));
 let vBool.and_false = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.and vx) vBool.false)) vBool.false))) (Term.apply (Term.apply vEqual.refl vBool) vBool.false)) (Term.apply (Term.apply vEqual.refl vBool) vBool.false))));
 let vBool.or_true = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.or vx) vBool.true)) vBool.true))) (Term.apply (Term.apply vEqual.refl vBool) vBool.true)) (Term.apply (Term.apply vEqual.refl vBool) vBool.true))));
-(Term.apply vBool.and vBool.true)
+(Term.apply vBool.and vEqual.refl)

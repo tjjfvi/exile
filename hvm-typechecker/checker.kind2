@@ -78,10 +78,7 @@ State.get_depth (st: State): U60
 State.get_depth (State.new depth tb) = depth
 
 State.add_traceback (st: State) (entry: State.Traceback.Entry) (cont: State -> Checker.Result): Checker.Result 
-State.add_traceback (State.new depth traceback) entry cont = (U60.if (> (List.len traceback) 10)
-	(Checker.Result.err (State.new depth (List.append traceback (State.Traceback.Entry.comment "// depth limit exceeded"))))
- (cont (State.new depth (List.append traceback entry)))
-)
+State.add_traceback (State.new depth traceback) entry cont = (cont (State.new depth (List.append traceback entry)))
 
 State.with_traceback (st: State) (judgement: Judgement) (cont: State -> Checker.Result): Checker.Result
 State.with_traceback st judgement cont =
@@ -122,7 +119,7 @@ Checker.check.go st (Term.lam t body) =
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x t)
 	(Checker.check st (body x))
-Checker.check.go st (Term.rec body) = 
+Checker.check.go st (Term.rec body) =
 	State.new_forall st st => x =>
 	let x = (Term.supertype_bound x (Term.rec body))
 	(Checker.check st (body x))
@@ -130,7 +127,7 @@ Checker.check.go st (Term.self body) =
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x (Term.self body))
 	(Checker.check st (body x))
-Checker.check.go st _ = Bool.true
+Checker.check.go st _ = Checker.Result.ok
 
 
 
@@ -506,7 +503,7 @@ Main4 {
 Program: Term
 
 Main {
-	(Checker.Result.to_string (Checker.check State.empty Program))
+	(Checker.Result.to_string (Checker.check State.empty (Checker.eval Program)))
 }
 
 // needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid

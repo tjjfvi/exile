@@ -6,6 +6,6 @@ console.log(
     await Deno.readTextFile("Equal.xil"),
     await Deno.readTextFile("Bool.xil"),
     // await Deno.readTextFile("Nat.xil"),
-    "Bool.and Bool.true",
+    Deno.args[0] || "Bool.and Unit.new",
   ].join("\n\n"))),
 );
