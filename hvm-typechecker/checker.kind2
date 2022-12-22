@@ -12,7 +12,9 @@ HVM.log <a: Type> <r: Type> (logged: a) (result: r) {
 
 // Alias terms
 Term.top: Term
+Term.top_as_rec { Term.rec top => (Term.lam Term.bot x => top) }
 Term.bot: Term
+Term.bot_as_rec { Term.rec bot => (Term.lam Term.top x => bot) }
 
 // Checker terms
 Term.forall (id: U60): Term
@@ -22,6 +24,9 @@ Term.supertype_bound (instance: Term) (type: Term): Term
 Term.typeof_bound (instance: Term): Term // Necessary?
 Term.error (term: String): Term
 Term.attach <t> (term: Term) (data: t): Term
+
+
+
 
 Checker.Result: Type
 Checker.Result.ok: Checker.Result
@@ -306,6 +311,12 @@ Checker.equal.go st (Term.instance_bound l.instance l.type) (Term.instance_bound
 	)
 Checker.equal.go st Term.top Term.top = Checker.Result.ok
 Checker.equal.go st Term.bot Term.bot = Checker.Result.ok
+Checker.equal.go st Term.top Term.bot = Checker.Result.err "* != !"
+Checker.equal.go st Term.bot Term.top = Checker.Result.err "* != !"
+Checker.equal.go st Term.top a = Checker.equal st Term.top_as_rec a
+Checker.equal.go st a Term.top = Checker.equal st a Term.top_as_rec
+Checker.equal.go st Term.bot a = Checker.equal st Term.bot_as_rec a
+Checker.equal.go st a Term.bot = Checker.equal st a Term.bot_as_rec
 Checker.equal.go st (Term.rec l.body) (Term.rec r.body) = 
 	State.new_forall st st => x =>
 	Checker.equal.go st (l.body (r.body x)) (r.body (l.body x))
@@ -442,68 +453,8 @@ Term.show st (Term.typeof_bound term) = String.flatten [
 ]
 
 
-	
-Main2 {
-	let st = State.empty
-	State.new_forall st st => t =>
-	State.new_forall st st => u =>
-	State.new_forall st st => v =>
-	let v = (Term.instance_bound v u)
-	(Checker.instance
-		st
-		(Term.lam t (x => v))
-		(Term.lam t (x => u))
-	)
-}
-
-Test.Bool.true: Term
-Test.Bool: Term
-Test.Unit.new: Term
-Test.Unit: Term
-Test.Equal: Term
-Test.Equal.refl: Term
-Test.Equal.refl.type: Term
-
-DebugCheck (a: Term) (b: Term): String {
-	let st = State.empty
-	String.flatten [
-		//(Term.show st a) ": " (Term.show st b) " = " (Checker.Result (Checker.instance st (Checker.eval a) (Checker.eval b)))
-	]
-}
-Sample {
-	let st = State.empty
-
-	String.flatten [
-		(DebugCheck Test.Bool.true Test.Bool) String.newline
-		(DebugCheck Test.Bool.true Test.Unit) String.newline
-		(DebugCheck Test.Unit.new Test.Unit) String.newline
-		(DebugCheck Test.Unit.new Test.Bool) String.newline
-		(DebugCheck Test.Equal.refl Test.Equal.refl.type) String.newline
-	]
-}
-
-Main3 {
-	let st = State.empty
-	State.new_forall st st => typ =>
-	State.new_forall st st => t =>
-	State.new_forall st st => u =>
-	let t = (Term.instance_bound t typ)
-	let t = (Term.instance_bound u typ)
-	(Checker.instance
-		State.empty
-		(Checker.eval (Term.apply (Term.apply Test.Equal.refl typ) t))
-		(Checker.eval (Term.apply (Term.apply (Term.apply Test.Equal typ) t) u))
-	)
-}
-
-Main4 {
-	(Checker.Result.to_string (Checker.instance.go State.empty Test.Bool.true Test.Unit))
-}
-
 Program: Term
 
 Main {
 	(Checker.Result.to_string (Checker.check State.empty (Checker.eval Program)))
 }
-
-// needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid

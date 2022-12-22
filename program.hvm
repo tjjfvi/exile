@@ -1,3 +1,9 @@
+// Term.top_as_rec : _
+(Term.top_as_rec) = (Term.rec @top (Term.lam (Term.bot) @x top))
+
+// Term.bot_as_rec : _
+(Term.bot_as_rec) = (Term.rec @bot (Term.lam (Term.top) @x bot))
+
 // Checker.Result.to_bool (l: (Checker.Result)) : (Bool)
 (Checker.Result.to_bool (Checker.Result.ok)) = (Bool.true)
 (Checker.Result.to_bool b) = (Bool.false)
@@ -136,6 +142,12 @@
 (Checker.equal.go st (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type)) = (Checker.Result.and (Checker.equal st l.instance r.instance) (Checker.equal st l.type r.type))
 (Checker.equal.go st (Term.top) (Term.top)) = (Checker.Result.ok)
 (Checker.equal.go st (Term.bot) (Term.bot)) = (Checker.Result.ok)
+(Checker.equal.go st (Term.top) (Term.bot)) = (Checker.Result.err "* != !")
+(Checker.equal.go st (Term.bot) (Term.top)) = (Checker.Result.err "* != !")
+(Checker.equal.go st (Term.top) a) = (Checker.equal st (Term.top_as_rec) a)
+(Checker.equal.go st a (Term.top)) = (Checker.equal st a (Term.top_as_rec))
+(Checker.equal.go st (Term.bot) a) = (Checker.equal st (Term.bot_as_rec) a)
+(Checker.equal.go st a (Term.bot)) = (Checker.equal st a (Term.bot_as_rec))
 (Checker.equal.go st (Term.rec l.body) (Term.rec r.body)) = (State.new_forall st @st @x (Checker.equal.go st (l.body (r.body x)) (r.body (l.body x))))
 (Checker.equal.go st a (Term.rec r.body)) = (Checker.equal.go st a (r.body (Term.rec r.body)))
 (Checker.equal.go st (Term.rec l.body) b) = (Checker.equal.go st (l.body (Term.rec l.body)) b)
@@ -196,21 +208,6 @@
 (Term.show st (Term.supertype_bound sub sup)) = (String.flatten (List.cons (Term.show sub sup) (List.cons " >= " (List.cons (Term.show sub sup) (List.nil)))))
 (Term.show st (Term.typeof_bound term)) = (String.flatten (List.cons "typeof " (List.cons (Term.show st term) (List.nil))))
 
-// Main2 : _
-(Main2) = let st = (State.empty); (State.new_forall st @st @t (State.new_forall st @st @u (State.new_forall st @st @v let v = (Term.instance_bound v u); (Checker.instance st (Term.lam t @x v) (Term.lam t @x u)))))
-
-// DebugCheck (a: (Term)) (b: (Term)) : (String)
-(DebugCheck a b) = let st = (State.empty); (String.flatten (List.nil))
-
-// Sample : _
-(Sample) = let st = (State.empty); (String.flatten (List.cons (DebugCheck (Test.Bool.true) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Bool.true) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Unit)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Unit.new) (Test.Bool)) (List.cons (String.newline) (List.cons (DebugCheck (Test.Equal.refl) (Test.Equal.refl.type)) (List.cons (String.newline) (List.nil))))))))))))
-
-// Main3 : _
-(Main3) = let st = (State.empty); (State.new_forall st @st @typ (State.new_forall st @st @t (State.new_forall st @st @u let t = (Term.instance_bound t typ); let t = (Term.instance_bound u typ); (Checker.instance (State.empty) (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) u))))))
-
-// Main4 : _
-(Main4) = (Checker.Result.to_string (Checker.instance.go (State.empty) (Test.Bool.true) (Test.Unit)))
-
 // Main : _
 (Main) = (Checker.Result.to_string (Checker.check (State.empty) (Checker.eval (Program))))
 
@@ -230,4 +227,4 @@ let vBool.and_true = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (T
 let vBool.or_false = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.or vx) vBool.false)) vx))) (Term.apply (Term.apply vEqual.refl vBool) vBool.true)) (Term.apply (Term.apply vEqual.refl vBool) vBool.false))));
 let vBool.and_false = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.and vx) vBool.false)) vBool.false))) (Term.apply (Term.apply vEqual.refl vBool) vBool.false)) (Term.apply (Term.apply vEqual.refl vBool) vBool.false))));
 let vBool.or_true = (Term.apply (Term.lam Term.top @v v) (Term.lam vBool @vx (Term.apply (Term.apply (Term.apply vx (Term.lam vBool @vx (Term.apply (Term.apply vEqual (Term.apply (Term.apply vBool.or vx) vBool.true)) vBool.true))) (Term.apply (Term.apply vEqual.refl vBool) vBool.true)) (Term.apply (Term.apply vEqual.refl vBool) vBool.true))));
-(Term.apply vBool.and vEqual.refl)
+(Term.apply vBool.and vBool.true)
