@@ -18,6 +18,7 @@ Term.bot: Term
 Term.forall (id: U60): Term
 Term.instance_bound (instance: Term) (type: Term): Term
 Term.subtype_bound (instance: Term) (type: Term): Term
+Term.supertype_bound (instance: Term) (type: Term): Term
 Term.typeof_bound (instance: Term): Term // Necessary?
 Term.error (term: String): Term
 
@@ -31,12 +32,33 @@ State.new_forall <t> (st: State) (cont: State -> Term -> t): t {
 	(cont new_state (Term.forall old_depth))
 }
 
-
+Checker.check (st: State) (term: Term): Bool
+Checker.check st Term.top = Bool.true
+Checker.check st Term.bot = Bool.false
+Checker.check st (Term.apply a b) = (Bool.and
+	(Bool.and (Checker.check st a) (Checker.check st b))
+	(Checker.instance st a (Term.lam (Term.typeof_bound b) _ => Term.top))
+)
+Checker.check st (Term.lam t body) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x t)
+	(Checker.check st (body x))
+Checker.check st (Term.rec body) = 
+	State.new_forall st st => x =>
+	let x = (Term.supertype_bound x (Term.rec body))
+	(Checker.check st (body x))
+Checker.check st (Term.self body) = 
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self body))
+	(Checker.check st (body x))
+Checker.check st _ = Bool.true
 
 Checker.instance (st: State) (term: Term) (type: Term): Bool
 Checker.instance st term Term.top = Bool.true
 Checker.instance st term Term.bot = Bool.false
-Checker.instance st Term.top x = Bool.false // otherwise we would have already covered it
+Checker.instance st a (Term.apply b c) = Checker.reduce_app b c (t => Checker.instance st a t) Bool.false
+Checker.instance st (Term.apply a b) c = Checker.reduce_app a b (t => Checker.instance st t c) Bool.false
+Checker.instance st Term.top x = Bool.false
 Checker.instance st Term.bot x = Bool.false 
 Checker.instance st (Term.lam t.type t.body) (Term.lam y.type y.body) = 
 	State.new_forall st st => x =>
@@ -46,7 +68,10 @@ Checker.instance st (Term.lam t.type t.body) (Term.lam y.type y.body) =
 		(Checker.instance st (t.body x) (y.body x))
 	)
 Checker.instance st (Term.rec body) t = Checker.instance st (body (Term.rec body)) t
-Checker.instance st t (Term.rec body) = Checker.instance st t (body (Term.rec body))
+Checker.instance st t (Term.rec body) =
+	State.new_forall st st => x =>
+	let x = (Term.supertype_bound x (Term.rec body))
+	Checker.instance st t (body x)
 Checker.instance st (Term.self body) type = 
 	State.new_forall st st => x =>
 	let x = (Term.instance_bound x (Term.self body))
@@ -80,6 +105,11 @@ Checker.subtype (st: State) (term: Term) (type: Term): Bool
 Checker.subtype st (Term.forall a) (Term.forall b) = (U60.if (== a b) Bool.true Bool.false)
 Checker.subtype st term Term.top = Bool.true
 Checker.subtype st Term.bot x = Bool.true
+Checker.subtype st (Term.subtype_bound _ a) b = Checker.subtype st a b
+Checker.subtype st a (Term.supertype_bound _ b) = Checker.subtype st a b
+Checker.subtype st (Term.typeof_bound a) b = Checker.instance st a b
+Checker.subtype st (Term.supertype_bound a _) b = Checker.subtype st a b
+Checker.subtype st a (Term.subtype_bound b _) = Checker.subtype st a b
 Checker.subtype st term Term.bot = Bool.false // otherwise we would have already covered it
 Checker.subtype st Term.top x = Bool.false 
 Checker.subtype st (Term.lam t.type t.body) (Term.lam y.type y.body) = 
@@ -92,12 +122,23 @@ Checker.subtype st (Term.lam t.type t.body) (Term.lam y.type y.body) =
 Checker.subtype st (Term.rec st.body) (Term.rec sp.body) =
 	State.new_forall st st => y =>
 	State.new_forall st st => x =>
-	let x = (Term.subtype_bound x y)
-	(Checker.subtype st (st.body x) (sp.body y))
+	(Checker.subtype st (st.body (Term.subtype_bound x y)) (sp.body (Term.supertype_bound y x)))
 Checker.subtype st (Term.rec st.body) type =
 	(Checker.subtype st (st.body (Term.rec st.body)) type)
 Checker.subtype st term (Term.rec sp.body) =
 	(Checker.subtype st term (sp.body (Term.rec sp.body)))
+Checker.subtype st (Term.self a) (Term.self b) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st (a x) (b x))
+Checker.subtype st (Term.self a) b =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st (a x) b)
+Checker.subtype st a (Term.self b) =
+	State.new_forall st st => x =>
+	let x = (Term.instance_bound x (Term.self a))
+	(Checker.subtype st a (b x))
 Checker.subtype st (Term.forall a) b = Bool.false
 
 // Extra rules for compiler terms
@@ -115,18 +156,17 @@ Checker.subtype st (Term.instance_bound a b) c =
 Checker.subtype st (Term.apply a b) c = 
 	(Checker.equal st (Term.apply a b) c)
 
-
-
-
-Checker.eval.app (fn: Term) (arg: Term): Term
-Checker.eval.app (Term.lam t f) arg = Checker.eval (f arg)
-//Checker.eval.app (Term.self f) arg = Checker.eval (f arg)
-Checker.eval.app (Term.rec f) arg = Checker.eval (Term.apply (f (Term.rec f)) arg)
-Checker.eval.app (Term.instance_bound a b) arg = Checker.eval (Term.instance_bound (Checker.eval (Term.apply a arg)) (Checker.eval (Term.apply b arg)))
-Checker.eval.app f arg = (Term.apply f arg)
+Checker.reduce_app <t> (fn: Term) (arg: Term) (yay: Term -> t) (nay: t): t
+Checker.reduce_app t (Term.lam _ f) arg yay nay = yay (f arg)
+Checker.reduce_app t (Term.rec f) arg yay nay = (Checker.reduce_app (f (Term.rec f)) arg yay nay)
+Checker.reduce_app (Term.instance_bound a b) arg yay nay = yay (Term.instance_bound (Term.apply a arg) (Term.apply b arg))
+Checker.reduce_app f arg yay nay = nay
 
 Checker.eval (x: Term): Term
-Checker.eval (Term.apply f arg) = Checker.eval.app (Checker.eval f) (Checker.eval arg)
+Checker.eval (Term.apply f arg) =
+	let f = (Checker.eval f)
+	let arg = (Checker.eval arg)
+	Checker.reduce_app f arg (t => Checker.eval t) (Term.apply f arg)
 Checker.eval (Term.lam type body) = (Term.lam (Checker.eval type) (arg => (Checker.eval (body arg))))
 Checker.eval (Term.rec body) = (Term.rec (arg => (Checker.eval (body arg))))
 Checker.eval (Term.self body) = (Term.self (arg => (Checker.eval (body arg))))
@@ -171,46 +211,23 @@ Bool.if p Bool.false t f = f
 U60.if <p> (a: U60) (t: p) (f: p): p
 U60.if p 0 t f = f
 U60.if p x t f = t
-Bool.and (a: Bool) (b: Bool) { Bool.if a b Bool.false } 
-Bool.or (a: Bool) (b: Bool) { Bool.if a Bool.true b }
+
+Bool.and (a: Bool) (b: Bool): Bool
+Bool.and Bool.true Bool.true = Bool.true
+Bool.and a b = Bool.false
+
+Bool.or (a: Bool) (b: Bool): Bool
+Bool.or Bool.false Bool.false = Bool.false
+Bool.or a b = Bool.true
 
 String: Type
 String.cons (a: U60) (b: String): String
 String.nil: String
 
+Program: Term
 
-Main2 {
-	let st = State.new
-	State.new_forall st st => t =>
-	State.new_forall st st => u =>
-	State.new_forall st st => v =>
-	let v = (Term.instance_bound v u)
-	(Checker.instance
-		st
-		(Term.lam t (x => v))
-		(Term.lam t (x => u))
-	)
+Main {
+	(Checker.check State.new Program)
 }
 
-Test.Bool.true: Term
-Test.Bool: Term
-Test.Unit.new: Term
-Test.Unit: Term
-Test.Equal: Term
-Test.Equal.refl: Term
-Test.Equal.refl.type: Term
-
-Main3 {
-	let st = State.new
-	State.new_forall st st => typ =>
-	State.new_forall st st => t =>
-	let t = (Term.instance_bound t typ)
-	(Checker.instance
-		State.new
-		(Checker.eval (Term.apply (Term.apply Test.Equal.refl typ) t))
-		(Checker.eval (Term.apply (Term.apply (Term.apply Test.Equal typ) t) t))
-	)
-}
-
-Main { Main3 }
 // needs HVM from https://github.com/FranchuFranchu/HVM/tree/nodeid
