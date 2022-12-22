@@ -23,8 +23,9 @@
 (Checker.subtype (Term.rec st.body) (Term.rec sp.body)) = let y = (Checker.new_forall); let x = (Term.subtype_bound (Checker.new_forall) y); (Checker.subtype (st.body x) (sp.body y))
 (Checker.subtype (Term.rec st.body) type) = (Checker.subtype (st.body (Term.rec st.body)) type)
 (Checker.subtype term (Term.rec sp.body)) = (Checker.subtype term (sp.body (Term.rec sp.body)))
+(Checker.subtype (Term.forall a) b) = (Bool.false)
 (Checker.subtype (Term.instance_bound a b) c) = (Checker.subtype a c)
-(Checker.subtype (Term.apply a b) c) = (Checker.equal (Term.apply a b) (HVM.log (HVM.log a (HVM.log b c)) c))
+(Checker.subtype (Term.apply a b) c) = (Checker.equal (Term.apply a b) c)
 
 // Checker.eval.app (fn: (Term)) (arg: (Term)) : (Term)
 (Checker.eval.app (Term.lam t f) arg) = (Checker.eval (f arg))
@@ -48,6 +49,7 @@
 (Checker.equal (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
 (Checker.equal (Term.lam l.type l.body) (Term.lam r.type r.body)) = let x = (Checker.new_forall); (Bool.and (Checker.equal l.type r.type) (Checker.equal (l.body x) (r.body x)))
 (Checker.equal (Term.self l.body) (Term.self r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body x) (r.body x))
+(Checker.equal (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type)) = (Bool.and (Checker.equal l.instance r.instance) (Checker.equal l.type r.type))
 (Checker.equal (Term.top) (Term.top)) = (Bool.true)
 (Checker.equal (Term.bot) (Term.bot)) = (Bool.true)
 (Checker.equal (Term.rec l.body) (Term.rec r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body (r.body x)) (r.body (l.body x)))
@@ -67,13 +69,13 @@
 (Bool.or a b) = (Bool.if a (Bool.true) b)
 
 // Checker.new_forall : _
-(Checker.new_forall) = (Term.forall (HVM.node_id @a a))
+(Checker.new_forall) = (Term.forall (HVM.uid))
 
 // Main2 : _
 (Main2) = let t = (Checker.new_forall); let u = (Checker.new_forall); let v = (Term.instance_bound (Checker.new_forall) u); (Checker.instance (Term.lam t @x v) (Term.lam t @x u))
 
 // Main3 : _
-(Main3) = (Checker.instance (Test.Bool.true) (Test.Bool))
+(Main3) = let typ = (Checker.new_forall); let t = (Term.instance_bound (Checker.new_forall) typ); (Checker.instance (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) t)))
 
 // Main : _
 (Main) = (Main3)
@@ -82,3 +84,6 @@ Test.Bool.true = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam
 Test.Bool = (Term.rec λx0 (Term.self λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx3 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 x4))))))) λx3 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx4 (Checker.eval (Term.lam (Term.top) λx5 (Checker.eval (Term.lam (Term.top) λx6 x5))))))) λx4 (Term.apply x2 x1)))))))))
 Test.Unit.new = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam (Term.top) λx1 x1))))
 Test.Unit = (Term.rec λx0 (Term.self λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 (Checker.eval (Term.lam (Term.top) λx3 (Checker.eval (Term.lam (Term.top) λx4 x4))))) λx3 (Term.apply x2 x1)))))))
+Test.Equal = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam x0 λx1 (Checker.eval (Term.lam x0 λx2 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx3 (Term.top))) λx3 (Checker.eval (Term.lam (Term.apply x3 x1) λx4 (Term.apply x3 x2)))))))))))
+Test.Equal.refl = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam x0 λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 x1) λx3 x3))))))))
+Test.Equal.refl.type = (Checker.eval (Term.lam (Term.top) λx0 (Checker.eval (Term.lam x0 λx1 (Checker.eval (Term.lam (Checker.eval (Term.lam x0 λx2 (Term.top))) λx2 (Checker.eval (Term.lam (Term.apply x2 x1) λx3 (Term.apply x2 x1)))))))))

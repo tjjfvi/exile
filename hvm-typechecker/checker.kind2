@@ -80,6 +80,7 @@ Checker.subtype (Term.rec st.body) type =
 	(Checker.subtype (st.body (Term.rec st.body)) type)
 Checker.subtype term (Term.rec sp.body) =
 	(Checker.subtype term (sp.body (Term.rec sp.body)))
+Checker.subtype (Term.forall a) b = Bool.false
 
 // Extra rules for compiler terms
 // (a: b) <= c 
@@ -94,7 +95,7 @@ Checker.subtype (Term.instance_bound a b) c =
 // (a b): (x: T) (a: x)
 // a = (x: T) (a x)
 Checker.subtype (Term.apply a b) c = 
-	(Checker.equal (Term.apply a b) (HVM.log (HVM.log a (HVM.log b c)) c))
+	(Checker.equal (Term.apply a b) c)
 
 
 
@@ -130,6 +131,11 @@ Checker.equal (Term.lam l.type l.body) (Term.lam r.type r.body) =
 Checker.equal (Term.self l.body) (Term.self r.body) = 
 	let x = Checker.new_forall
 	(Checker.equal (l.body x) (r.body x))
+Checker.equal (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type) = 
+	(Bool.and
+		(Checker.equal l.instance r.instance)
+		(Checker.equal l.type r.type)
+	)
 Checker.equal Term.top Term.top = Bool.true
 Checker.equal Term.bot Term.bot = Bool.true
 Checker.equal (Term.rec l.body) (Term.rec r.body) = 
@@ -154,10 +160,10 @@ String: Type
 String.cons (a: U60) (b: String): String
 String.nil: String
 
-HVM.node_id <t> (cont: U60 -> t): t
+HVM.uid: U60
 
 Checker.new_forall {
-	(Term.forall (HVM.node_id (a => a)))
+	(Term.forall HVM.uid)
 }
 
 Main2 {
@@ -174,11 +180,16 @@ Test.Bool.true: Term
 Test.Bool: Term
 Test.Unit.new: Term
 Test.Unit: Term
+Test.Equal: Term
+Test.Equal.refl: Term
+Test.Equal.refl.type: Term
 
 Main3 {
+	let typ = Checker.new_forall
+	let t = (Term.instance_bound Checker.new_forall typ)
 	(Checker.instance
-		Test.Bool.true
-		Test.Bool
+		(Checker.eval (Term.apply (Term.apply Test.Equal.refl typ) t))
+		(Checker.eval (Term.apply (Term.apply (Term.apply Test.Equal typ) t) t))
 	)
 }
 

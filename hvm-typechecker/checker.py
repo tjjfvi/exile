@@ -468,5 +468,8 @@ def write_data():
 		f.write(f'Test.Bool = {Bool.to_hvm(0)}\n')
 		f.write(f'Test.Unit.new = {Unit_new.to_hvm(0)}\n')
 		f.write(f'Test.Unit = {Unit.to_hvm(0)}\n')
+		f.write(f'Test.Equal = {Equal.to_hvm(0)}\n')
+		f.write(f'Test.Equal.refl = {Equal_refl.to_hvm(0)}\n')
+		f.write(f'Test.Equal.refl.type = {Equal_refl_type.to_hvm(0)}\n')
 
 write_data()
