@@ -1,31 +1,46 @@
-// Checker.instance (term: (Term)) (type: (Term)) : (Bool)
-(Checker.instance term (Term.top)) = (Bool.true)
-(Checker.instance term (Term.bot)) = (Bool.false)
-(Checker.instance (Term.top) x) = (Bool.false)
-(Checker.instance (Term.bot) x) = (Bool.false)
-(Checker.instance (Term.lam t.type t.body) (Term.lam y.type y.body)) = let x = (Term.instance_bound (Checker.new_forall) y.type); (Bool.and (Checker.subtype y.type t.type) (Checker.instance (t.body x) (y.body x)))
-(Checker.instance (Term.rec body) t) = (Checker.instance (body (Term.rec body)) t)
-(Checker.instance t (Term.rec body)) = (Checker.instance t (body (Term.rec body)))
-(Checker.instance (Term.self body) type) = let x = (Term.instance_bound (Checker.new_forall) (Term.self body)); (Checker.instance (body x) type)
-(Checker.instance term (Term.self body)) = (Checker.instance term (body term))
-(Checker.instance (Term.instance_bound instance subtype) supertype) = (Bool.or (Checker.subtype subtype supertype) (Checker.instance instance supertype))
-(Checker.instance instance (Term.instance_bound type typetype)) = (Checker.instance instance type)
-(Checker.instance (Term.forall x0_) type) = (Bool.false)
-(Checker.instance a (Term.apply b c)) = (Bool.false)
+// State : _
+(State) = 0
 
-// Checker.subtype (term: (Term)) (type: (Term)) : (Bool)
-(Checker.subtype (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
-(Checker.subtype term (Term.top)) = (Bool.true)
-(Checker.subtype (Term.bot) x) = (Bool.true)
-(Checker.subtype term (Term.bot)) = (Bool.false)
-(Checker.subtype (Term.top) x) = (Bool.false)
-(Checker.subtype (Term.lam t.type t.body) (Term.lam y.type y.body)) = let x = (Term.instance_bound (Checker.new_forall) y.type); (Bool.and (Checker.subtype y.type t.type) (Checker.subtype (t.body x) (y.body x)))
-(Checker.subtype (Term.rec st.body) (Term.rec sp.body)) = let y = (Checker.new_forall); let x = (Term.subtype_bound (Checker.new_forall) y); (Checker.subtype (st.body x) (sp.body y))
-(Checker.subtype (Term.rec st.body) type) = (Checker.subtype (st.body (Term.rec st.body)) type)
-(Checker.subtype term (Term.rec sp.body)) = (Checker.subtype term (sp.body (Term.rec sp.body)))
-(Checker.subtype (Term.forall a) b) = (Bool.false)
-(Checker.subtype (Term.instance_bound a b) c) = (Checker.subtype a c)
-(Checker.subtype (Term.apply a b) c) = (Checker.equal (Term.apply a b) c)
+// State.set_depth (st: (State)) (d: U60) : _
+(State.set_depth st d) = d
+
+// State.get_depth (st: (State)) : U60
+(State.get_depth st) = st
+
+// State.new : (State)
+(State.new) = 0
+
+// State.new_forall -(t: Type) (st: (State)) (cont: (_: (State)) (_: (Term)) t) : t
+(State.new_forall st cont) = let old_depth = (State.get_depth st); let new_state = (State.set_depth st (+ old_depth 1)); ((cont new_state) (Term.forall old_depth))
+
+// Checker.instance (st: (State)) (term: (Term)) (type: (Term)) : (Bool)
+(Checker.instance st term (Term.top)) = (Bool.true)
+(Checker.instance st term (Term.bot)) = (Bool.false)
+(Checker.instance st (Term.top) x) = (Bool.false)
+(Checker.instance st (Term.bot) x) = (Bool.false)
+(Checker.instance st (Term.lam t.type t.body) (Term.lam y.type y.body)) = (State.new_forall st @st @x let x = (Term.instance_bound x y.type); (Bool.and (Checker.subtype st y.type t.type) (Checker.instance st (t.body x) (y.body x))))
+(Checker.instance st (Term.rec body) t) = (Checker.instance st (body (Term.rec body)) t)
+(Checker.instance st t (Term.rec body)) = (Checker.instance st t (body (Term.rec body)))
+(Checker.instance st (Term.self body) type) = (State.new_forall st @st @x let x = (Term.instance_bound x (Term.self body)); (Checker.instance st (body x) type))
+(Checker.instance st term (Term.self body)) = (Checker.instance st term (body term))
+(Checker.instance st (Term.instance_bound instance subtype) supertype) = (Bool.or (Checker.subtype st subtype supertype) (Checker.instance st instance supertype))
+(Checker.instance st instance (Term.instance_bound type typetype)) = (Checker.instance st instance type)
+(Checker.instance st (Term.forall x0_) type) = (Bool.false)
+(Checker.instance st a (Term.apply b c)) = (Bool.false)
+
+// Checker.subtype (st: (State)) (term: (Term)) (type: (Term)) : (Bool)
+(Checker.subtype st (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
+(Checker.subtype st term (Term.top)) = (Bool.true)
+(Checker.subtype st (Term.bot) x) = (Bool.true)
+(Checker.subtype st term (Term.bot)) = (Bool.false)
+(Checker.subtype st (Term.top) x) = (Bool.false)
+(Checker.subtype st (Term.lam t.type t.body) (Term.lam y.type y.body)) = (State.new_forall st @st @x let x = (Term.instance_bound x y.type); (Bool.and (Checker.subtype st y.type t.type) (Checker.subtype st (t.body x) (y.body x))))
+(Checker.subtype st (Term.rec st.body) (Term.rec sp.body)) = (State.new_forall st @st @y (State.new_forall st @st @x let x = (Term.subtype_bound x y); (Checker.subtype st (st.body x) (sp.body y))))
+(Checker.subtype st (Term.rec st.body) type) = (Checker.subtype st (st.body (Term.rec st.body)) type)
+(Checker.subtype st term (Term.rec sp.body)) = (Checker.subtype st term (sp.body (Term.rec sp.body)))
+(Checker.subtype st (Term.forall a) b) = (Bool.false)
+(Checker.subtype st (Term.instance_bound a b) c) = (Checker.subtype st a c)
+(Checker.subtype st (Term.apply a b) c) = (Checker.equal st (Term.apply a b) c)
 
 // Checker.eval.app (fn: (Term)) (arg: (Term)) : (Term)
 (Checker.eval.app (Term.lam t f) arg) = (Checker.eval (f arg))
@@ -44,15 +59,15 @@
 (Checker.eval (Term.subtype_bound a b)) = (Term.subtype_bound (Checker.eval a) (Checker.eval b))
 (Checker.eval e) = e
 
-// Checker.equal (left: (Term)) (right: (Term)) : (Bool)
-(Checker.equal (Term.apply a b) (Term.apply c d)) = (Bool.and (Checker.equal a c) (Checker.equal b d))
-(Checker.equal (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
-(Checker.equal (Term.lam l.type l.body) (Term.lam r.type r.body)) = let x = (Checker.new_forall); (Bool.and (Checker.equal l.type r.type) (Checker.equal (l.body x) (r.body x)))
-(Checker.equal (Term.self l.body) (Term.self r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body x) (r.body x))
-(Checker.equal (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type)) = (Bool.and (Checker.equal l.instance r.instance) (Checker.equal l.type r.type))
-(Checker.equal (Term.top) (Term.top)) = (Bool.true)
-(Checker.equal (Term.bot) (Term.bot)) = (Bool.true)
-(Checker.equal (Term.rec l.body) (Term.rec r.body)) = let x = (Checker.new_forall); (Checker.equal (l.body (r.body x)) (r.body (l.body x)))
+// Checker.equal (st: (State)) (left: (Term)) (right: (Term)) : (Bool)
+(Checker.equal st (Term.apply a b) (Term.apply c d)) = (Bool.and (Checker.equal st a c) (Checker.equal st b d))
+(Checker.equal st (Term.forall a) (Term.forall b)) = (U60.if (== a b) (Bool.true) (Bool.false))
+(Checker.equal st (Term.lam l.type l.body) (Term.lam r.type r.body)) = (State.new_forall st @st @x (Bool.and (Checker.equal st l.type r.type) (Checker.equal st (l.body x) (r.body x))))
+(Checker.equal st (Term.self l.body) (Term.self r.body)) = (State.new_forall st @st @x (Checker.equal st (l.body x) (r.body x)))
+(Checker.equal st (Term.instance_bound l.instance l.type) (Term.instance_bound r.instance r.type)) = (Bool.and (Checker.equal st l.instance r.instance) (Checker.equal st l.type r.type))
+(Checker.equal st (Term.top) (Term.top)) = (Bool.true)
+(Checker.equal st (Term.bot) (Term.bot)) = (Bool.true)
+(Checker.equal st (Term.rec l.body) (Term.rec r.body)) = (State.new_forall st @st @x (Checker.equal st (l.body (r.body x)) (r.body (l.body x))))
 
 // Bool.if -(p: Type) (a: (Bool)) (t: p) (f: p) : p
 (Bool.if (Bool.true) t f) = t
@@ -68,14 +83,11 @@
 // Bool.or (a: (Bool)) (b: (Bool)) : _
 (Bool.or a b) = (Bool.if a (Bool.true) b)
 
-// Checker.new_forall : _
-(Checker.new_forall) = (Term.forall (HVM.uid))
-
 // Main2 : _
-(Main2) = let t = (Checker.new_forall); let u = (Checker.new_forall); let v = (Term.instance_bound (Checker.new_forall) u); (Checker.instance (Term.lam t @x v) (Term.lam t @x u))
+(Main2) = let st = (State.new); (State.new_forall st @st @t (State.new_forall st @st @u (State.new_forall st @st @v let v = (Term.instance_bound v u); (Checker.instance st (Term.lam t @x v) (Term.lam t @x u)))))
 
 // Main3 : _
-(Main3) = let typ = (Checker.new_forall); let t = (Term.instance_bound (Checker.new_forall) typ); (Checker.instance (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) t)))
+(Main3) = let st = (State.new); (State.new_forall st @st @typ (State.new_forall st @st @t let t = (Term.instance_bound t typ); (Checker.instance (State.new) (Checker.eval (Term.apply (Term.apply (Test.Equal.refl) typ) t)) (Checker.eval (Term.apply (Term.apply (Term.apply (Test.Equal) typ) t) t)))))
 
 // Main : _
 (Main) = (Main3)
