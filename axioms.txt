@@ -1,83 +1,74 @@
-# λµξ instance rules
+# λµξ reduction rules
 
 x, y, z are arbitrary variables
 a, b, c are arbitrary terms
-both sides must be irreducible terms
 
-a : *
- iff true
+[ (λx a) b ]
+  let x = b
+  a
 
-a : !
- iff false
+[ (λ(x : a) b) c ]
+  let x = c
+  b
 
-* : a
- iff a = *
+[ * : a ]
+  [ * : [ a ] ]
 
-! : a
- iff a = *
+[ * : * ]
+  *
 
-λ(x: a) b : λ(x: c) d
- iff c <= a && x : c -> b : d
+[ * : a ]
+  !
 
-µ x a : b
- iff a[x / µ x a] : b
+[ λx a : * ]
+  λx a
 
-a : µ x b
- iff a : b[x / µ x b]
+[ λ(x : a) b : * ]
+  λ(x : a)
+    let x = (x : a)
+    [ b : * ]
 
-ξ x a : b
- iff x : ξ x a -> a : b
+[ a : λx b ]
+  [ a : λ(x : *) b ]
 
-a : ξ x b
- iff a : b[x / a]
+[ λx a : λ(x : b) c ]
+  λ(x : b)
+    let x = (x : b)
+    [ a : c ]
 
-a b : c
- iff ∀t (∀u b : u <-> t <= u) -> a : λ(x: t) c
+[ λ(x : a) b : λ(x : c) d ]
+  λ[ (x : c) : a ]
+    let x = (x : c)
+    [ b : d ]
 
-a : b c
-  if false
+[ a b : c ]
+  [ [ a : λ(_ : {b}) c ] b ]
 
-# λµξ subtype rules
+[ a : µ x b ]
+  let x = (x >= µ x b)
+  [ a : b ]
 
-x, y, z are arbitrary variables
-a, b, c are arbitrary terms
-both sides must be irreducible terms
+[ a : ξ x b ]
+  let x = a
+  [ a : b ]
 
-a <= *
- iff true
+[ a : (x >= b) ]
+  [ a : b ]
 
-! <= a
- iff true
+[ (x >= a) : b ]
+  [ (x >= a) : [ b ] ]
 
-* <= a
- iff a = *
+[ (x >= a) : * ]
+  (x >= a)
 
-a <= !
- iff a = !
+[ (x >= a) : b ]
+  !
 
-λ(x: a) b <= λ(x: c) d
- iff c <= a && x : c -> b <= d
+[ (a : b) : * ]
+  [ a : b ]
 
-µ x a <= µ y b
-  iff x <= y -> a <= b
+[ (a : b) : c ]
+  [ [ a : b ] : c ]
 
-µ x a <= b
- iff a[x / µ x b] <= b
-
-a <= µ x b
- iff a <= b[x / µ x b]
-
-ξ x a <= ξ x b
- iff x : a -> a <= b 
-
-ξ x a <= b
- iff x : ξ x a -> a <= b
-
-a <= ξ x b
- iff x : a -> a <= b
-
-a b <= c
-  if a b == c
-
-a <= b c
-  if a == b c
+[ (a : λ(x : b) c) : λ(x : d) e ]
+  [ a : λ[ (x : d) : b ] [ c : e ] ]

@@ -1,0 +1,141 @@
+
+succ = λn λp λs λz s n (n p s z)
+zero = λp λs λz z
+Nat = µ Nat ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self
+
+zero : Nat
+λp λs λz z : µ Nat ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self
+let Nat >= µ Nat ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self
+λp λs λz z : ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self
+λp λs λz z : λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P λp λs λz z
+let P : λ(n: Nat) *
+λs λz z : λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P λp λs λz z
+s: λ(n: Nat) λ(p: P n) P (succ n)
+λz z : λ(z: P zero) P λp λs λz z
+let z: P zero
+z : P λp λs λz z
+P zero <= P λp λs λz z
+P zero == P λp λs λz z
+true
+
+succ : λ(n: Nat) Nat
+λn λp λs λz s n (n p s z) : λ(n: Nat) Nat
+let n : Nat
+λp λs λz s n (n p s z) : µ Nat ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self
+let Nat2 >= Nat
+λp λs λz s n (n p s z) : ξ self λ(P: λ(n: Nat2) *) λ(s: λ(n: Nat2) λ(p: P n) P (succ n)) λ(z: P zero) P self
+λp λs λz s n (n p s z) : λ(P: λ(n: Nat2) *) λ(s: λ(n: Nat2) λ(p: P n) P (succ n)) λ(z: P zero) P λp λs λz s n (n p s z)
+let P : λ(n: Nat2) *
+λs λz s n (n P s z) : λ(s: λ(n: Nat2) λ(p: P n) P (succ n)) λ(z: P zero) P λp λs λz s n (n p s z)
+let s : λ(n: Nat2) λ(p: P n) P (succ n)
+λz s n (n P s z) : λ(z: P zero) P λp λs λz s n (n p s z)
+let z : P zero
+s n (n P s z) : P λp λs λz s n (n p s z)
+s n : λ(x: {n P s z}) P λp λs λz s n (n p s z)
+s : λ(y: {n}) λ(x: {n P s z}) P λp λs λz s n (n p s z)
+λ(n: Nat2) λ(p: P n) P (succ n) <= λ(_: {n}) λ(_: {n P s z}) P λp λs λz s n (n p s z)
+λ(n: Nat2) λ(p: P n) P (succ n) <= λ(_: {n}) λ(_: {n P s z}) P λp λs λz s n (n p s z)
+  {n} <= Nat2
+  n : Nat2
+  n : Nat
+  true
+// let n : {n}
+λ(p: P n) P (succ n) <= λ(_: {n P s z}) P λp λs λz s n (n p s z)
+  {n P s z} <= P n
+  n P s z : P n
+  n P s : λ(_: {z}) P n
+  n P : λ(_: {s}) λ(_: {z}) P n
+  n : λ(_: {P}) λ(_: {s}) λ(_: {z}) P n
+  <n> Nat <= λ(_: {P}) λ(_: {s}) λ(_: {z}) P n
+  <n> µ Nat ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self <= λ(_: {P}) λ(_: {s}) λ(_: {z}) P n
+  <n> ξ self λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P self <= λ(_: {P}) λ(_: {s}) λ(_: {z}) P n
+  // let self = n
+  λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P n <= λ(_: {P}) λ(_: {s}) λ(_: {z}) P n
+    {P} <= λ(n: Nat) *
+    P : λ(n: Nat) *
+    λ(n: Nat2) * <= λ(n: Nat) *
+      Nat <= Nat2
+      Nat <= Nat
+      true
+    * <= *
+    true
+  // let P : {P}
+  λ(s: λ(n: Nat) λ(p: P n) P (succ n)) λ(z: P zero) P n <= λ(_: {s}) λ(_: {z}) P n
+    {s} <= λ(n: Nat) λ(p: P n) P (succ n)
+    s : λ(n: Nat) λ(p: P n) P (succ n)
+    λ(n: Nat2) λ(p: P n) P (succ n) <= λ(n: Nat) λ(p: P n) P (succ n)
+      Nat <= Nat2
+      Nat <= Nat
+      true
+    λ(p: P n) P (succ n) <= λ(p: P n) P (succ n)
+    true
+  // let s : {s}
+  λ(z: P zero) P n <= λ(_: {z}) P n
+    {z} <= P zero
+    z : P zero
+    P zero <= P zero
+    true
+  P n <= P n
+  true
+// let p : {n P s z}
+P (succ n) <= P λp λs λz s n (n p s z)
+P (succ n) == P λp λs λz s n (n p s z)
+true
+  
+pair = λt λu λp λf f t u
+Pair = µ Pair λ(T: *) λ(U: *) ξ self λ(P: λ(v: Pair T U) T) λ(f: λ(t: T) λ(u: U) P (pair t u)) P self
+
+pair a b : Pair A B
+λp λf f a b : (µ Pair λ(T: *) λ(U: *) ξ self λ(P: λ(v: Pair T U) T) λ(f: λ(t: T) λ(u: U) P (pair t u)) P self) A B
+let Pair2 >= Pair
+λp λf f a b : (λ(T: *) λ(U: *) ξ self λ(P: λ(v: Pair2 T U) T) λ(f: λ(t: T) λ(u: U) P (pair t u)) P self) A B
+λp λf f a b : (λ(U: *) ξ self λ(P: λ(v: Pair2 A U) T) λ(f: λ(t: A) λ(u: U) P (pair t u)) P self) B
+λp λf f a b : ξ self λ(P: λ(v: Pair2 A B) T) λ(f: λ(t: A) λ(u: B) P (pair t u)) P self
+λp λf f a b : λ(P: λ(v: Pair2 A B) T) λ(f: λ(t: A) λ(u: B) P (pair t u)) P λp λf f a b
+λp λf f a b : λ(P: λ(v: Pair2 A B) T) λ(f: λ(t: A) λ(u: B) P (pair t u)) P λp λf f a b
+let P : λ(v: Pair2 A B) T
+λf f a b : λ(f: λ(t: A) λ(u: B) P (pair t u)) P λp λf f a b
+let f : λ(t: A) λ(u: B) P (pair t u)
+f a b : P λp λf f a b
+f a : λ(_: {b}) P λp λf f a b
+f : λ(_: {a}) λ(_: {b}) P λp λf f a b
+λ(t: A) λ(u: B) P (pair t u) <= λ(_: {a}) λ(_: {b}) P λp λf f a b
+  {a} <= A
+  a : A
+  true
+// let t : {a}
+λ(u: B) P (pair a u) <= λ(_: {b}) P λp λf f a b
+  {b} <= B
+  b : B
+  true
+// let u : {b}
+P (pair a b) <= P λp λf f a b
+P (pair a b) == P λp λf f a b
+true
+
+
+for some t
+for some u
+(λ(x:t) x x) (λ(y:u) y y) : *
+λ(x:t) x x : λ(_: {λ(y:u) y y}) *
+λ(x:t) x x : λ(_: {λ(y:u) y y}) *
+  {λ(y:u) y y} <= t
+  assume
+λ(x:t) x x : λ(_: {λ(y:u) y y}) *
+// let x: {λ(y:u) y y}
+(λ(y:u) y y) (λ(y:u) y y) : *
+λ(y:u) y y : λ(_: {λ(y:u) y y}) *
+  {λ(y:u) y y} <= u
+  λ(y:u) y y : u
+  for some v <= u
+  λ(y:u) y y : λ(y:v) u y
+    v <= u
+    true
+  let y : v
+  y y : u y
+  y : λ(_: {y}) u y
+  v <= λ(_: {y}) u y
+  
+
+
+
