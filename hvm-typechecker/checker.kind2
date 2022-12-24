@@ -1,41 +1,41 @@
 Term: Type
-
-// Real terms
-Term.lam (type: Term) (body: TermBody): Term
+Term.top: Term
+Term.lam (type: Option Term) (body: TermBody): Term
 Term.rec (body: TermBody): Term
 Term.self (body: TermBody): Term
 Term.apply (fn: Term) (argument: Term): Term
+Term.check (instance: Term) (type: Term): Term
+Term.var (id: U60): Term
+Term.typeof (instance: Term): Term
+Term.error: Term
+// Term.attach <t> (term: Term) (data: t): Term
 
 HVM.log <a: Type> <r: Type> (logged: a) (result: r) {
   result
 }
 
-Unit: Type
-Unit.new: Unit
-
-// Alias terms
-Term.top: Term
-// Term.top_as_rec { Term.rec top => (Term.lam Term.bot x => top) }
+Term.replace (term: Term) (var: U60) (val: Term): Term
+Term.uses (term: Term) (var: U60): Bool
+Term.max_var (term: Term): U60
 
 TermBody: Type
-TermBody.new (idx: U60) (body: Term): TermBody
-TermBody.replace (body: TermBody) (with: Term): Term
-TermBody.discard_var (body: TermBody): Term
-TermBody.clone_with (body: TermBody) (with: TermBody): TermBody
-TermBody.clone (body: TermBody): TermBody { TermBody.clone_with body body } 
+TermBody.new (var: U60) (term: Term): TermBody
 
-// Checker terms
-Term.forall (id: U60): Term
-Term.instance_bound (instance: Term) (type: Term): Term
-Term.reduce (term: Term): Term
-Term.var (id: U60): Term
-Term.typeof_bound (instance: Term): Term
-Term.error: Term
-Term.attach <t> (term: Term) (data: t): Term
+TermBody.apply (body: TermBody) (val: Term): Term
+TermBody.apply (TermBody.new body.var body.term) val = Term.replace body.term body.var val
 
-Term.is_not_error (term: Term): Bool
-Term.is_not_error Term.error = Bool.false
-Term.is_not_error a = Bool.true
+TermBody.replace (body: TermBody) (var: U60) (val: Term): TermBody
+TermBody.replace (TermBody.new body.var body.term) var val =
+  (U60.if (== body.var var)
+    (TermBody.new body.var body.term) // shadowed
+    (Bool.if (Term.uses val body.var)
+      ( // alpha conversion
+        let new_var = (+ 1 (U60.max var (U60.max (Term.max_var body.term) (Term.max_var val))));
+        (TermBody.new new_var (Term.replace (Term.replace body.term body.var new_var) var val))
+      )
+      (TermBody.new body.var (Term.replace body.term var val))
+    )
+  )
 
 Judgement: Type
 Judgement.equal (l: Term) (r: Term): Judgement
@@ -71,9 +71,9 @@ Checker.equal (checker: Checker) (l: Term) (r: Term): CheckResult
 Checker.get_depth (checker: Checker): U60
 Checker.new_forall <t> (checker: Checker) (cont: Checker -> Term -> t): t
 
-Util.is_equal (l: Term) (r: Term): Bool {
-	Term.is_not_error (CheckResult.get_term (Checker.equal Checker.empty l r))
-}
+// Util.is_equal (l: Term) (r: Term): Bool {
+// 	Term.is_not_error (CheckResult.get_term (Checker.equal Checker.empty l r))
+// }
 
 Bool: Type
 Bool.true: Bool
@@ -84,6 +84,8 @@ Bool.if p Bool.false t f = f
 U60.if <p> (a: U60) (t: p) (f: p): p
 U60.if p 0 t f = f
 U60.if p x t f = t
+U60.max (a: U60) (b: U60): U60
+U60.max a b = (U60.if (> a b) a b)
 Bool.and (a: Bool) (b: Bool) { Bool.if a b Bool.false } 
 Bool.or (a: Bool) (b: Bool) { Bool.if a Bool.true b }
 U60.to_string (n: U60): String
@@ -97,6 +99,17 @@ Bool.to_string Bool.true = "Bool.true"
 Bool.to_string Bool.false = "Bool.false"
 String.newline { String.cons 10 String.nil }
 
+Option <t>: Type
+Option.some <t> (value: t) : Option t
+Option.none <t> : Option t
+
+Option.map <t> (opt: Option t) (fn: t -> t) : Option t
+Option.map t (Option.some val) fn = Option.some (fn val)
+Option.map t Option.none fn = Option.none
+
+Option.unwrap_or <t> (opt: Option t) (val: t) : t
+Option.unwrap_or t (Option.some val) _ = val
+Option.unwrap_or t Option.none val = val
 
 String: Type
 String.cons (a: U60) (b: String): String
@@ -124,70 +137,42 @@ String.flatten (List.cons a (List.cons b c)) = (String.flatten (List.cons (Strin
 String.flatten (List.cons a List.nil) = a
 String.flatten List.nil = ""
 
-Term.show (st: Checker) (term: Term): String
-Term.show st (Term.lam type body) = 
-	let type_s = (Term.show st type)
-	let var = String.flatten [ "x" (U60.to_string (Checker.get_depth st)) ]
-	Checker.new_forall st st => x =>
-	let x = (Term.attach x var)
-	(Bool.if
-		(Util.is_equal type Term.top)
-		(String.flatten [
-			"λ"
-			var
-			" "
-			(Term.show st (TermBody.replace body x))
-		])
-		(String.flatten [
-			"λ("
-			var
-			": "
-			type_s
-			") "
-			(Term.show st (TermBody.replace body x))
-		])
-	)
-
-Term.show st (Term.rec body) = 
-	let var = String.flatten [ "x" (U60.to_string (Checker.get_depth st)) ]
-	Checker.new_forall st st => x =>
-	let x = (Term.attach x var)
-	String.flatten [
-		"µ"
-		var
+Term.show (term: Term): String
+Term.show (Term.lam type (TermBody.new body.var body.term)) = 
+	let var = String.flatten [ "x" (U60.to_string body.var) ]
+  String.flatten [
+		(String.flatten (Option.unwrap_or
+			(Option.map type x => [ "λ(" var ": " (Term.show x) ")" ])
+			[ "λ" var ]
+		))
 		" "
-		(Term.show st (TermBody.replace body x))
-	]
+		(Term.show body.term)
+  ]
+
+Term.show (Term.rec (TermBody.new body.var body.term)) = 
+	let var = String.flatten [ "x" (U60.to_string body.var) ]
+	String.flatten [ "µ" var " " (Term.show body.term) ]
 	
-Term.show st (Term.self body) = 
-	let var = String.flatten [ "x" (U60.to_string (Checker.get_depth st)) ]
-	Checker.new_forall st st => x =>
-	let x = (Term.attach x var)
-	String.flatten [
-		"ξ"
-		var
-		" "
-		(Term.show st (TermBody.replace body x))
-	]
+Term.show (Term.self (TermBody.new body.var body.term)) = 
+	let var = String.flatten [ "x" (U60.to_string body.var) ]
+	String.flatten [ "ξ" var " " (Term.show body.term) ]
 
-Term.show st (Term.attach String (Term.forall a) s) = s
-Term.show st Term.top = "*"
-Term.show st Term.error = "!"
-Term.show st (Term.apply a b) = String.flatten [
+// Term.show st (Term.attach String (Term.forall a) s) = s
+Term.show (Term.var n) = String.flatten [ "x" (U60.to_string n) ]
+Term.show Term.top = "*"
+Term.show Term.error = "!"
+Term.show (Term.apply a b) = String.flatten [
 	"("
-	(Term.show st a)
+	(Term.show a)
 	" "
-	(Term.show st b)
+	(Term.show b)
 	")"
 ]
-Term.show st (Term.forall uid) = String.flatten [
-	"any" (U60.to_string uid)
+Term.show (Term.check term type) = String.flatten [
+	(Term.show term) " : " (Term.show type)
 ]
-Term.show st (Term.instance_bound term type) = String.flatten [
-	(Term.show st term) " :: " (Term.show st type)
-]
-Term.show st (Term.typeof_bound term) = String.flatten [
-	"typeof " (Term.show st term)
+Term.show (Term.typeof term) = String.flatten [
+	"{" (Term.show term) "}"
 ]
 
 
@@ -195,5 +180,6 @@ Program: Term
 // CheckProgram: Checker.Result Unit
 
 Main {
-	 0 //(Checker.Result.to_string CheckProgram)
+	Term.show (Term.lam (Option.some Term.top) (TermBody.new 0 (Term.var 0)))
+	//  0 //(Checker.Result.to_string CheckProgram)
 }
