@@ -3,10 +3,10 @@ Term.top: Term
 Term.lam (type: Option Term) (body: TermBody): Term
 Term.rec (body: TermBody): Term
 Term.self (body: TermBody): Term
-Term.apply (fn: Term) (argument: Term): Term
+Term.apply (fn: Term) (arg: Term): Term
 Term.check (instance: Term) (type: Term): Term
-Term.var (id: U60): Term
 Term.typeof (instance: Term): Term
+Term.var (id: U60): Term
 Term.error: Term
 // Term.attach <t> (term: Term) (data: t): Term
 
@@ -16,7 +16,23 @@ HVM.log <a: Type> <r: Type> (logged: a) (result: r) {
 
 Term.replace (term: Term) (var: U60) (val: Term): Term
 Term.uses (term: Term) (var: U60): Bool
-Term.max_var (term: Term): U60
+
+Term.next_var (term: Term): U60
+Term.next_var Term.top = 0
+Term.next_var (Term.lam type body) = (U60.max
+	(Option.unwrap_or (Option.map type x => (Term.next_var x)) 0)
+	(TermBody.next_var body)
+)
+Term.next_var (Term.rec body) = (TermBody.next_var body)
+Term.next_var (Term.self body) = (TermBody.next_var body)
+Term.next_var (Term.apply a b) = (U60.max (TermBody.next_var a) (TermBody.next_var b))
+Term.next_var (Term.check a b) = (U60.max (TermBody.next_var a) (TermBody.next_var b))
+Term.next_var (Term.typeof a) = (Term.next_var a)
+Term.next_var (Term.var id) = (+ id 1)
+Term.next_var Term.error = 0
+
+TermBody.next_var (body: TermBody): U60
+TermBody.next_var (TermBody.new body.var body.term) = (U60.max body.var (Term.next_var body.term))
 
 TermBody: Type
 TermBody.new (var: U60) (term: Term): TermBody
@@ -30,7 +46,7 @@ TermBody.replace (TermBody.new body.var body.term) var val =
     (TermBody.new body.var body.term) // shadowed
     (Bool.if (Term.uses val body.var)
       ( // alpha conversion
-        let new_var = (+ 1 (U60.max var (U60.max (Term.max_var body.term) (Term.max_var val))));
+        let new_var = (U60.max (+ 1 var) (U60.max (Term.next_var body.term) (Term.next_var val)));
         (TermBody.new new_var (Term.replace (Term.replace body.term body.var new_var) var val))
       )
       (TermBody.new body.var (Term.replace body.term var val))
