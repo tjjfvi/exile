@@ -1,17 +1,23 @@
 use std::{any::Any, fmt::Display};
 
+use std::rc::Rc;
 use crate::traceback::TracebackStack;
 
+#[derive(Clone)]
 pub enum Term {
 	Top,
-	Lambda { typ: Box<Term>, body: Box<dyn Fn(Term) -> Term>},
-	Recursive { body: Box<dyn Fn(Term) -> Term>},
-	SelfType { body: Box<dyn Fn(Term) -> Term>},
+	Lambda { typ: Box<Term>, body: Rc<dyn Fn(Term) -> Term>},
+	Recursive { body: Rc<dyn Fn(Term) -> Term>},
+	SelfType { body: Rc<dyn Fn(Term) -> Term>},
 	Apply { function: Box<Term>, argument: Box<Term> },
 	Forall { id: usize },
 	InstanceBound { instance: Box<Term>, typ: Box<Term> },
 	TypeofBound { value: Box<Term> },
-	Attach { value: Box<Term>, metadata: Box<dyn Any> },
+	Attach { value: Box<Term>, metadata: Rc<dyn Any> },
+	
+	Reduce { term: Box<Term>  },
+	
+	Error,
 	
 	ReplaceVar { id: usize },
 }
@@ -26,7 +32,7 @@ impl<T: Fn(&mut core::fmt::Formatter) -> Result<(), core::fmt::Error>> Display f
 
 
 impl Term {
-	fn show(&self, mut fmt: &mut core::fmt::Formatter, depth: usize) -> Result<(), core::fmt::Error> {
+	pub fn show(&self, mut fmt: &mut core::fmt::Formatter, depth: usize) -> Result<(), core::fmt::Error> {
 		match self {
 		    Term::Top => fmt.write_str("*"),
 		    Term::Lambda { typ, body } => fmt.write_fmt(format_args!(
@@ -35,7 +41,7 @@ impl Term {
 		    	DisplayWrapper(|fmt| typ.show(fmt, depth)),
 		    	DisplayWrapper(|fmt| body(Term::Attach { 
 		    		value: Box::new(Term::Forall { id: depth }),
-		    		metadata: Box::new(format!("x{}", depth)),
+		    		metadata: Rc::new(format!("x{}", depth)),
 		    	}).show(fmt, depth)),
 		    )),
 		    Term::SelfType { body } => fmt.write_fmt(format_args!(
@@ -43,7 +49,7 @@ impl Term {
 		    	depth,
 		    	DisplayWrapper(|fmt| body(Term::Attach { 
 		    		value: Box::new(Term::Forall { id: depth }),
-		    		metadata: Box::new(format!("x{}", depth)),
+		    		metadata: Rc::new(format!("x{}", depth)),
 		    	}).show(fmt, depth)),
 		    )),
 		    Term::Recursive { body } => fmt.write_fmt(format_args!(
@@ -51,7 +57,7 @@ impl Term {
 		    	depth,
 		    	DisplayWrapper(|fmt| body(Term::Attach { 
 		    		value: Box::new(Term::Forall { id: depth }),
-		    		metadata: Box::new(format!("x{}", depth)),
+		    		metadata: Rc::new(format!("x{}", depth)),
 		    	}).show(fmt, depth)),
 		    )),
 		    Term::Apply { function, argument } => fmt.write_fmt(format_args!(
@@ -79,6 +85,10 @@ impl Term {
 		    		value.show(fmt, depth)
 		    	}
 		    },
+		    Term::Error => {
+		    	fmt.write_str("!")
+		    }
+		    
 		    _ => fmt.write_str("???")
 		}
 	}
@@ -88,6 +98,12 @@ impl Term {
 }
 
 impl core::fmt::Display for Term {
+	fn fmt(&self, mut fmt: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
+		self.show(fmt, 0)
+	}
+}
+
+impl core::fmt::Debug for Term {
 	fn fmt(&self, mut fmt: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
 		self.show(fmt, 0)
 	}

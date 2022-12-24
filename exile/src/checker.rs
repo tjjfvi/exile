@@ -6,21 +6,28 @@ pub struct Checker {
 	forall_meta: Vec<()>,
 }
 
-pub type Result<T> = core::result::Result<(T, TracebackTree), TracebackTree>;
+#[derive(Debug)]
+pub struct ReduceResult(Term, TracebackTree);
 
-pub fn result_get_tb<T>(res: Result<T>) -> (Option<T>, TracebackTree) {
-	match res {
-	    Ok((t, tb)) => (Some(t), tb),
-	    Err(tb) => (None, tb),
+impl ReduceResult {
+	fn with_entry(mut self, entry: TracebackEntry) ->Self {
+		self.1 = TracebackBranch::Single(entry, Box::new(std::mem::take(&mut self.1)));
+		self
+	}
+	fn with_comment(self, s: impl ToString) -> Self {
+		self.with_entry(TracebackEntry::Comment(s.to_string()))
+	}
+	fn with_judgement(self, j: Judgement) -> Self {
+		self.with_entry(TracebackEntry::Judgement(j))
+	}
+	fn from_term(term: Term) -> Self {
+		Self(term.clone(), TracebackBranch::Leaf(term))
+	}
+	fn error() -> Self {
+		Self::from_term(Term::Error)
 	}
 }
 
-pub fn map_tb<T>(res: &mut Result<T>, f: impl FnOnce(&mut TracebackBranch)) {
-	match res {
-	    Ok((t, tb)) => f(tb),
-	    Err(tb) => f(tb),
-	}
-}
 impl Checker {
 	fn new_forall<T>(&mut self, f: impl FnOnce(&mut Self, Term) -> T) -> T {
 		let forall = Term::Forall { id: self.forall_meta.len() };
@@ -29,65 +36,10 @@ impl Checker {
 		self.forall_meta.pop();
 		ret
 	}
-	fn with_comment<T>(&mut self, s: impl ToString, f: impl FnOnce(&mut Self) -> Result<T>) -> Result<T> {
-		let entry = TracebackEntry::Comment(s.to_string());
-		let mut ret = f(self);
-		map_tb(&mut ret, |tb| {
-			let a = std::mem::take(tb);
-			*tb = TracebackBranch::Single(entry, Some(Box::new(a)));
-		});
-		ret
-	}
-	fn with_judgement<T>(&mut self, judgement: Judgement, f: impl FnOnce(&mut Self) -> Result<T>) -> Result<T> {
-		let entry = TracebackEntry::Judgement(judgement);
-		let mut ret = f(self);
-		map_tb(&mut ret, |tb| {
-			let a = std::mem::take(tb);
-			*tb = TracebackBranch::Single(entry, Some(Box::new(a)));
-		});
-		ret
-	}
-	fn result_and<R, L, T>(&mut self,
-		left: impl FnOnce(&mut Self) -> Result<L>,
-		right: impl FnOnce(&mut Self) -> Result<R>,
-		combine: impl FnOnce(L, R) -> T
-	) -> Result<T> {
-		let (left_res, left_tb) = result_get_tb(left(self));
-		let (right_res, right_tb) = result_get_tb(right(self));
-		
-		let new_tb = TracebackBranch::And(Box::new(left_tb), Box::new(right_tb));
-		
-		if let Some((l, r)) = left_res.map(|x| Some((x, right_res?))).flatten() {
-			Result::Ok((combine(l, r), new_tb))
-		} else {
-			Result::Err(new_tb)
+	
+	pub fn reduce(&mut self, term: Term) -> ReduceResult {
+		match term {
+			_ => ReduceResult::error().with_comment("I don't know how to reduce this")
 		}
-	}
-	
-	fn error<T>(&mut self) -> Result<T> {
-		Result::Err(TracebackBranch::default())
-	}
-	
-	pub fn instance(&mut self, term: Term, typ: Term) -> Result<()> {
-		self.with_judgement(crate::traceback::Judgement::Instance(term, typ), |this|
-			match this {
-				_ => {
-					this.with_comment("Can't check term", |this| {
-						this.error()
-					})
-				}
-			}
-		)
-	}
-	pub fn compare(&mut self, term: Term, typ: Term)  -> Result<()>{
-		self.with_judgement(crate::traceback::Judgement::Equal(term, typ), |this|
-			match this {
-				_ => {
-					this.with_comment("Can't check term", |this| {
-						this.error()
-					})
-				}
-			}
-		)
 	}
 }

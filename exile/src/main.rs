@@ -9,6 +9,6 @@ pub mod traceback;
 
 fn main() {
     let mut checker = Checker::default();
-    let t = checker.instance(Term::Top, Term::Top);
+    let t = checker.reduce(Term::Top);
     println!("{:?}", t);
 }

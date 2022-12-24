@@ -32,11 +32,11 @@ fn parse_var<'a>(table: Rc<RefCell<ParserState>>, state: State<'a>) -> Answer<'a
     Ok((state, term))
 }
 
-fn parse_body(table: Rc<RefCell<ParserState>>, state: State) -> Answer<Box<dyn Fn(Term) -> Term>> {
+fn parse_body(table: Rc<RefCell<ParserState>>, state: State) -> Answer<Rc<dyn Fn(Term) -> Term>> {
     let (state, name) = name1(state)?;
     let idx = table.borrow_mut().register_var(name);
     let (state, body) = parse_term(table.clone(), state)?;
-    let body = Box::new(move |arg| body.replace_var(idx, arg));
+    let body = Rc::new(move |arg| body.replace_var(idx, arg));
     table.borrow_mut().pop_var();
     Ok((state, body))
 }
@@ -56,8 +56,8 @@ fn parse_rec_self(table: Rc<RefCell<ParserState>>, state: State) -> Answer<Term>
         _ => {
             todo!();
          
-    }
         }
+    }
 }
 
 pub fn make_parser<'a, T: 'static>(table: Rc<RefCell<ParserState>>, f: fn(Rc<RefCell<ParserState>>, State) -> Answer<T>) -> Parser<'a, Option<T>> {

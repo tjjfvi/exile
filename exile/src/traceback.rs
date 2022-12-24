@@ -40,7 +40,8 @@ impl TracebackEntry {
 pub type TracebackStack = Vec<TracebackEntry>;
 
 pub enum TracebackBranch {
-	Single(TracebackEntry, Option<Box<TracebackTree>>),
+	Leaf(Term),
+	Single(TracebackEntry, Box<TracebackTree>),
 	Or(Box<TracebackTree>, Box<TracebackTree>),
 	And(Box<TracebackTree>, Box<TracebackTree>),
 }
@@ -52,10 +53,8 @@ impl TracebackBranch {
 		    TracebackBranch::Single(entry, tree) => {
 		    	entry.show(fmt, depth)?;
 		    	fmt.write_str("\n")?;
-		    	if let Some(tree) = tree {
-		    		tree.show(fmt, depth + 1)?;
-		    		fmt.write_str("\n")?;
-		    	}
+	    		tree.show(fmt, depth + 1)?;
+	    		fmt.write_str("\n")?;
 		    },
 		    TracebackBranch::Or(l, r) => {
 		    	fmt.write_str(&depth_s)?;
@@ -74,6 +73,9 @@ impl TracebackBranch {
 		    	r.show(fmt, depth + 1)?;
 		    	fmt.write_str("\n")?;
 		    },
+		    TracebackBranch::Leaf(term) => {
+		    	term.show(fmt, 0)?;
+		    }
 		};
 		Ok(())
 	}
@@ -81,7 +83,7 @@ impl TracebackBranch {
 
 impl Default for TracebackBranch {
 	fn default() -> Self {
-		TracebackBranch::Single(TracebackEntry::Comment(String::from("Default")), None)
+		TracebackBranch::Leaf(Term::Error)
 	}
 }
 
