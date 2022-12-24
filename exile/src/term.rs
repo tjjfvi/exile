@@ -11,7 +11,9 @@ pub enum Term {
 	Forall { id: usize },
 	InstanceBound { instance: Box<Term>, typ: Box<Term> },
 	TypeofBound { value: Box<Term> },
-	Attach { value: Box<Term>, metadata: Box<dyn Any> }
+	Attach { value: Box<Term>, metadata: Box<dyn Any> },
+	
+	ReplaceVar { id: usize },
 }
 
 pub struct DisplayWrapper<T: Fn(&mut core::fmt::Formatter) -> Result<(), core::fmt::Error>>(T);
@@ -77,7 +79,11 @@ impl Term {
 		    		value.show(fmt, depth)
 		    	}
 		    },
+		    _ => fmt.write_str("???")
 		}
+	}
+	pub fn replace_var(&self, idx: usize, with: Term) -> Self {
+		todo!();
 	}
 }
 
