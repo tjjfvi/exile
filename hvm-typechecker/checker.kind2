@@ -15,24 +15,55 @@ HVM.log <a: Type> <r: Type> (logged: a) (result: r) {
 }
 
 Term.replace (term: Term) (var: U60) (val: Term): Term
-Term.uses (term: Term) (var: U60): Bool
+Term.replace Term.top _ _ = Term.top
+Term.replace (Term.lam type body) var val = (Term.lam
+	(Option.match type (x => Option.some (Term.replace x var val)) Option.none)
+	(TermBody.replace body var val)
+)
+Term.replace (Term.rec body) var val = (Term.rec (TermBody.replace body var val))
+Term.replace (Term.self body) var val = (Term.self (TermBody.replace body var val))
+Term.replace (Term.apply a b) var val = (Term.apply (Term.replace a var val) (Term.replace b var val))
+Term.replace (Term.check a b) var val = (Term.check (Term.replace a var val) (Term.replace b var val))
+Term.replace (Term.typeof a) var val = (Term.typeof (Term.replace a var val))
+Term.replace (Term.var id) var val = (U60.if (== id var) val (Term.var id))
+Term.replace Term.error _ _ = Term.error
+
+Term.uses_var (term: Term) (var: U60): Bool
+Term.uses_var Term.top _ = Bool.false
+Term.uses_var (Term.lam type body) var = (Bool.or
+	(Option.match type (x => (Term.uses_var x var)) Bool.false)
+	(TermBody.uses_var body var)
+)
+Term.uses_var (Term.rec body) var = (TermBody.uses_var body var)
+Term.uses_var (Term.self body) var = (TermBody.uses_var body var)
+Term.uses_var (Term.apply a b) var = (Bool.or (Term.uses_var a var) (Term.uses_var b var))
+Term.uses_var (Term.check a b) var = (Bool.or (Term.uses_var a var) (Term.uses_var b var))
+Term.uses_var (Term.typeof a) var = (Term.uses_var a var)
+Term.uses_var (Term.var id) var = (U60.if (== id var) Bool.true Bool.false)
+Term.uses_var Term.error _ = Bool.false
 
 Term.next_var (term: Term): U60
 Term.next_var Term.top = 0
 Term.next_var (Term.lam type body) = (U60.max
-	(Option.unwrap_or (Option.map type x => (Term.next_var x)) 0)
+	(Option.match type (x => (Term.next_var x)) 0)
 	(TermBody.next_var body)
 )
 Term.next_var (Term.rec body) = (TermBody.next_var body)
 Term.next_var (Term.self body) = (TermBody.next_var body)
-Term.next_var (Term.apply a b) = (U60.max (TermBody.next_var a) (TermBody.next_var b))
-Term.next_var (Term.check a b) = (U60.max (TermBody.next_var a) (TermBody.next_var b))
+Term.next_var (Term.apply a b) = (U60.max (Term.next_var a) (Term.next_var b))
+Term.next_var (Term.check a b) = (U60.max (Term.next_var a) (Term.next_var b))
 Term.next_var (Term.typeof a) = (Term.next_var a)
 Term.next_var (Term.var id) = (+ id 1)
 Term.next_var Term.error = 0
 
 TermBody.next_var (body: TermBody): U60
 TermBody.next_var (TermBody.new body.var body.term) = (U60.max body.var (Term.next_var body.term))
+
+TermBody.uses_var (body: TermBody) (var: U60): Bool
+TermBody.uses_var (TermBody.new body.var body.term) var = (Bool.or
+	(U60.if (== body.var var) Bool.true Bool.false)
+	(Term.uses_var body.term var)
+)
 
 TermBody: Type
 TermBody.new (var: U60) (term: Term): TermBody
@@ -44,10 +75,10 @@ TermBody.replace (body: TermBody) (var: U60) (val: Term): TermBody
 TermBody.replace (TermBody.new body.var body.term) var val =
   (U60.if (== body.var var)
     (TermBody.new body.var body.term) // shadowed
-    (Bool.if (Term.uses val body.var)
+    (Bool.if (Term.uses_var val body.var)
       ( // alpha conversion
         let new_var = (U60.max (+ 1 var) (U60.max (Term.next_var body.term) (Term.next_var val)));
-        (TermBody.new new_var (Term.replace (Term.replace body.term body.var new_var) var val))
+        (TermBody.new new_var (Term.replace (Term.replace body.term body.var (Term.var new_var)) var val))
       )
       (TermBody.new body.var (Term.replace body.term var val))
     )
@@ -119,13 +150,9 @@ Option <t>: Type
 Option.some <t> (value: t) : Option t
 Option.none <t> : Option t
 
-Option.map <t> (opt: Option t) (fn: t -> t) : Option t
-Option.map t (Option.some val) fn = Option.some (fn val)
-Option.map t Option.none fn = Option.none
-
-Option.unwrap_or <t> (opt: Option t) (val: t) : t
-Option.unwrap_or t (Option.some val) _ = val
-Option.unwrap_or t Option.none val = val
+Option.match <t> <u> (opt: Option t) (some: t -> u) (none: u) : u
+Option.match t u (Option.some val) some none = some val
+Option.match t u Option.none some none = none
 
 String: Type
 String.cons (a: U60) (b: String): String
@@ -157,8 +184,8 @@ Term.show (term: Term): String
 Term.show (Term.lam type (TermBody.new body.var body.term)) = 
 	let var = String.flatten [ "x" (U60.to_string body.var) ]
   String.flatten [
-		(String.flatten (Option.unwrap_or
-			(Option.map type x => [ "λ(" var ": " (Term.show x) ")" ])
+		(String.flatten (Option.match type
+			x => [ "λ(" var ": " (Term.show x) ")" ]
 			[ "λ" var ]
 		))
 		" "
