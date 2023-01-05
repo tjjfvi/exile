@@ -1,0 +1,16 @@
+Exile.Term: Type
+
+// Real terms
+Exile.Term.lambda (type: Exile.Term) (body: Exile.TermBody): Exile.Term
+Exile.Term.infer_lambda (body: Exile.TermBody): Exile.Term
+Exile.Term.recursive (body: Exile.TermBody): Exile.Term
+Exile.Term.self (body: Exile.TermBody): Exile.Term
+Exile.Term.apply (fn: Exile.Term) (argument: Exile.Term): Exile.Term
+
+Exile.Term.top: Exile.Term
+Exile.Term.bot: Exile.Term
+Exile.Term.error: Exile.Term
+Exile.Term.attach <t> (term: Exile.Term) (data: t): Exile.Term
+Exile.Term.var (id: U60): Exile.Term
+Exile.Term.check (instance: Exile.Term) (type: Exile.Term): Exile.Term
+Exile.Term.typeof (term: Exile.Term): Exile.Term

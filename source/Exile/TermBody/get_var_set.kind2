@@ -1,0 +1,3 @@
+
+Exile.TermBody.get_var_set (Exile.Term: Exile.TermBody): List U60
+Exile.TermBody.get_var_set (Exile.TermBody.new id body) = (List.cons id (Exile.Term.get_var_set body))

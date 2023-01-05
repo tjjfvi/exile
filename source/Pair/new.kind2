@@ -1,0 +1,2 @@
+// Automatically derived from Pair/_.type
+Pair.new <a: Type> <b: Type> (fst: a) (snd: b) : (Pair a b)

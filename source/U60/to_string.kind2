@@ -1,0 +1,7 @@
+
+U60.to_string (n: U60): String
+U60.to_string n = (U60.if
+	(< n 10)
+	(String.cons (+ '0' n) String.nil)
+	(String.concat (U60.to_string (/ n 10)) (String.cons (+ '0' (% n 10)) String.nil))
+)

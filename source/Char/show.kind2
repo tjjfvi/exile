@@ -1,0 +1,3 @@
+Char.show (chr: Char) : Show {
+  String.show (Char.to_string chr)
+}

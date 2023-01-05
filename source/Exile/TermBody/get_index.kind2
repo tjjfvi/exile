@@ -1,0 +1,3 @@
+Exile.TermBody.get_index (body: Exile.TermBody): U60 {
+	Exile.TermBody.match body (_ => U60) (idx => body => idx)
+}

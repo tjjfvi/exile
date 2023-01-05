@@ -1,0 +1,1 @@
+This directory contains term parsing and showing for a syntax, based on HVM's syntax, for this typechecking tool.

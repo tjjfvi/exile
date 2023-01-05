@@ -1,0 +1,2 @@
+// Automatically derived from Either/_.type
+Either.right <l: Type> <r: Type> (val: r) : (Either l r)

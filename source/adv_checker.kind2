@@ -1,0 +1,515 @@
+	Term: Type
+
+// Real terms
+Term.lambda (type: Term) (body: TermBody): Term
+Term.untyped_lambda (body: TermBody): Term
+Term.recursive (body: TermBody): Term
+Term.self (body: TermBody): Term
+Term.apply (fn: Term) (argument: Term): Term
+
+HVM.log <a: Type> <r: Type> (logged: a) (result: r): r {
+  result
+}
+
+Unit: Type
+Unit.new: Unit
+
+// Alias terms
+Term.top: Term
+// Term.top_as_rec { Term.recursive top => (Term.lambda Term.bot x => top) }
+
+TermBody: Type
+TermBody.new (idx: U60) (body: Term): TermBody
+
+TermBody.replace (body: TermBody) (with: Term): Term {
+	let body_set = TermBody.get_var_set body
+	let with_set = Term.get_var_set with
+	let id = (TermBody.get_id body)
+	let body = Term.replace_set (TermBody.get_term body) body_set with_set
+	(Term.replace.go id body with)
+}
+
+Util.find_free (list: List U60) { Util.find_free.go list 0 }
+Util.find_free.go (list: List U60) (try: U60): U60
+Util.find_free.go List.nil n = n
+Util.find_free.go list n = (Bool.if
+	(List.contains list n)
+	(Util.find_free.go list (+ n 1))
+	n
+)
+
+Term.apply_subterm (term: Term) (f: Term -> Term): Term
+Term.apply_subterm (Term.lambda type (TermBody.new id body)) f = (Term.lambda (f type) (TermBody.new id (f body)))
+Term.apply_subterm (Term.untyped_lambda (TermBody.new id body)) f = (Term.untyped_lambda (TermBody.new id (f body)))
+Term.apply_subterm (Term.recursive (TermBody.new id body)) f = (Term.recursive (TermBody.new id (f body)))
+Term.apply_subterm (Term.self (TermBody.new id body)) f = (Term.self (TermBody.new id (f body)))
+Term.apply_subterm (Term.apply a b) f = (Term.apply (f a) (f b))
+Term.apply_subterm (Term.check a b) f = (Term.check (f a) (f b))
+Term.apply_subterm x f = x
+
+
+Term.replace.go (id: U60) (body: Term) (with: Term): Term
+Term.replace.go id (Term.var v_id) with = (U60.if
+	(== id v_id) 
+	with
+	(Term.var v_id)
+)
+Term.replace.go id body with = Term.apply_subterm body st => (Term.replace.go id st with)
+
+
+TermBody.get_term (body: TermBody): Term
+TermBody.get_term (TermBody.new id term) = term
+TermBody.get_id (body: TermBody): U60
+TermBody.get_id (TermBody.new id term) = id
+TermBody.replace_with_named_var (body: TermBody) (name: String): Term
+TermBody.replace_with_named_var (TermBody.new id body) name = (Term.replace.go id body (Term.attach (Term.var id) name))
+Term.clone_with (body: Term) (with: Term): Term
+Term.clone (body: Term): Term { Term.clone_with body body } 
+
+// Checker terms
+Term.check (instance: Term) (type: Term): Term
+Term.var (uid: U60): Term
+Term.typeof (instance: Term): Term
+Term.error: Term
+Term.attach <t> (term: Term) (data: t): Term
+
+Term.is_not_error (term: Term): Bool
+Term.is_not_error Term.error = Bool.false
+Term.is_not_error a = Bool.true
+
+Term.subtype (about: Term) (sub: Term) (sup: Term) { (Term.check (Term.check about sub) sup) }
+
+Term.is_apply (term: Term): Bool
+Term.is_apply (Term.apply a b) = Bool.true
+Term.is_apply x = Bool.false
+
+Term.unused_var (term: Term): U60 {
+	Util.find_free (Term.get_var_set term)
+}
+
+Term.unused_var_term (term: Term): Term {
+	(Term.var (Term.unused_var term))
+}
+
+TermBody.unused_var_term (term: TermBody): Term {
+	(Term.var (Util.find_free (List.cons (TermBody.get_id term) (Term.get_var_set (TermBody.get_term term)))))
+}
+TermBody.get_var_set (term: TermBody): List U60
+TermBody.get_var_set (TermBody.new id body) = (List.cons id (Term.get_var_set body))
+TermBody.map_variable (body: TermBody) (fn: Term -> Term): TermBody {
+	let id = (TermBody.get_id body);
+	(TermBody.new id (Term.replace.go id (TermBody.get_term body) (fn (Term.var id))))
+}
+
+Judgement: Type
+Judgement.equal (l: Term) (r: Term): Judgement
+Judgement.reduce (term: Term): Judgement
+Judgement.show (term: Judgement): String
+Judgement.show (Judgement.reduce e) = String.flatten [
+	"[ "
+	(Term.show Checker.empty e)
+	" ]"
+]
+Judgement.show (Judgement.equal l r) = String.flatten [
+	(Term.show Checker.empty l)
+	" == "
+	(Term.show Checker.empty r)
+]
+
+TracebackEntry: Type
+TracebackEntry.comment (comment: String): TracebackEntry
+TracebackEntry.judgement (j: Judgement): TracebackEntry
+TracebackEntry.show (tree: TracebackEntry): String
+TracebackEntry.show (TracebackEntry.judgement j) = Judgement.show j
+TracebackEntry.show (TracebackEntry.comment comment) = String.flatten [ "// " comment ]
+
+String.rep (b: String) (a: U60): String
+String.rep b 0 = String.nil
+String.rep b n = (String.concat b (String.rep b (- n 1)))
+
+TracebackTree: Type
+TracebackTree.leaf (term: Term): TracebackTree
+TracebackTree.entry (entry: TracebackEntry) (child: TracebackTree): TracebackTree
+TracebackTree.and (l: TracebackTree) (r: TracebackTree): TracebackTree
+TracebackTree.and_then (l: TracebackTree) (r: TracebackTree): TracebackTree
+TracebackTree.or (l: TracebackTree) (r: TracebackTree): TracebackTree
+TracebackTree.show (depth: U60) (tree: TracebackTree): String
+TracebackTree.show depth (TracebackTree.leaf term) = String.flatten [
+	(String.rep " " depth)
+	(Term.show Checker.empty term)
+	String.newline
+]
+TracebackTree.show depth (TracebackTree.entry entry term) = String.flatten [
+	(String.rep " " depth)
+	(TracebackEntry.show entry)
+	String.newline
+	(TracebackTree.show depth term)
+]
+TracebackTree.show depth (TracebackTree.and a b) = String.flatten [
+	(String.rep " " depth)
+	"AND"
+	String.newline
+	(TracebackTree.show (+ depth 1) a)
+	
+	(String.rep " " depth)
+	"AND"
+	String.newline
+	(TracebackTree.show (+ depth 1) b)
+]
+
+TracebackTree.show depth (TracebackTree.or a b) = String.flatten [
+	(String.rep " " depth)
+	"OR"
+	String.newline
+	(TracebackTree.show (+ depth 1) a)
+	
+	(String.rep " " depth)
+	"OR"
+	String.newline
+	(TracebackTree.show (+ depth 1) b)
+]
+
+TracebackTree.show depth (TracebackTree.and_then a b) = String.flatten [
+	(String.rep " " depth)
+	"WITH"
+	String.newline
+	(TracebackTree.show (+ depth 1) a)
+	
+	(String.rep " " depth)
+	"THEN"
+	String.newline
+	(TracebackTree.show depth b)
+]
+
+CheckResult: Type
+CheckResult.new (term: Term) (tb: TracebackTree): CheckResult
+CheckResult.with_comment (result: CheckResult) (comment: String): CheckResult {
+	CheckResult.with_entry result (TracebackEntry.comment comment)
+}
+CheckResult.with_entry (result: CheckResult) (entry: TracebackEntry): CheckResult
+CheckResult.with_entry (CheckResult.new term tb) entry = (CheckResult.new term (TracebackTree.entry entry tb))
+CheckResult.with_reduce (result: CheckResult) (reduce: Term): CheckResult
+CheckResult.with_equal (result: CheckResult) (l: Term) (r: Term): CheckResult
+CheckResult.get_term (result: CheckResult): Term
+CheckResult.get_term (CheckResult.new term tb) = term
+CheckResult.get_tb (result: CheckResult): TracebackTree
+CheckResult.get_tb (CheckResult.new term tb) = tb
+CheckResult.and (l: CheckResult) (r: CheckResult) {
+	CheckResult.and_then l (_ => r)
+}
+CheckResult.and_then (result: CheckResult) (f: Term -> CheckResult): CheckResult {
+	let r_term = (CheckResult.get_term result)
+	let r_tb = (CheckResult.get_tb result)
+	let s = (f r_term)
+	let s_term = (CheckResult.get_term s)
+	let s_tb = (CheckResult.get_tb s)
+	(CheckResult.new s_term (TracebackTree.and_then r_tb s_tb))
+}
+	 
+CheckResult.map_term (result: CheckResult) (fn: Term -> Term):  CheckResult {
+	(CheckResult.new (fn (CheckResult.get_term result)) (CheckResult.get_tb result))
+}
+CheckResult.show (result: CheckResult): String
+CheckResult.show (CheckResult.new Term.error tb) = String.flatten [
+	"Check not successful"
+	String.newline
+	(TracebackTree.show 0 tb)
+]
+CheckResult.show (CheckResult.new value tb) = String.flatten [
+	"Check successful: "
+	(Term.show Checker.empty value)
+	String.newline
+	(TracebackTree.show 0 tb)
+]
+
+
+CheckResult.ok (t: Term): CheckResult {
+	CheckResult.new t (TracebackTree.leaf t)
+}
+
+CheckResult.err: CheckResult {
+	CheckResult.new Term.error (TracebackTree.leaf Term.error)
+}
+Checker: Type
+Checker.empty: Checker
+
+Checker.reduce (checker: Checker) (term: Term): CheckResult {
+	CheckResult.with_entry (Checker.reduce.go checker term) (TracebackEntry.judgement (Judgement.reduce term))
+}
+Checker.reduce.go (checker: Checker) (term: Term): CheckResult
+Checker.reduce.go ch (Term.check a Term.top) = CheckResult.ok a // TODO
+Checker.reduce.go ch (Term.apply Term.error arg) = CheckResult.err
+Checker.reduce.go ch (Term.check Term.error arg) = CheckResult.err
+Checker.reduce.go ch (Term.apply (Term.untyped_lambda body) arg) = CheckResult.ok (TermBody.replace body arg)
+Checker.reduce.go ch (Term.apply (Term.lambda type body) arg) = CheckResult.ok (TermBody.replace body arg)
+Checker.reduce.go ch (Term.check Term.top a) = CheckResult.ok a // TODO
+Checker.reduce.go ch (Term.check (Term.untyped_lambda body) Term.top) = CheckResult.ok (Term.untyped_lambda body)
+Checker.reduce.go ch (Term.check (Term.lambda type body) Term.top) = 
+	// This is how we give a type to the variable
+	let body = (TermBody.map_variable body var => type)
+	let body_id = (TermBody.get_id body)
+	let body = (TermBody.get_term body)
+	let body = Checker.reduce ch (Term.check body Term.top)
+	CheckResult.map_term body term => (Term.lambda type (TermBody.new body_id term))
+
+Checker.reduce.go ch (Term.check (Term.apply (Term.untyped_lambda body) b) c) =
+	Checker.reduce ch (Term.check (TermBody.replace body b) c)
+
+Checker.reduce.go ch (Term.check term (Term.recursive body)) =
+	let free_var = (Util.find_free (TermBody.get_var_set body))
+	let free_var2 = (Util.find_free (List.cons free_var (TermBody.get_var_set body)))
+	let free_var = (Term.var free_var)
+	let free_var2 = (Term.var free_var2)
+	let free_var = (Term.subtype free_var free_var2 (Term.recursive body))
+	Checker.reduce ch (Term.check term (TermBody.replace body free_var))
+
+Checker.reduce.go ch (Term.check term (Term.self body)) =
+	Checker.reduce ch (Term.check term (TermBody.replace body term))
+
+// nonstandard
+Checker.reduce.go ch (Term.check (Term.check a b) c) = 
+	// (CheckResult.and_then
+	// 	(Checker.reduce ch (Term.check a b))
+	// 	(term => Checker.reduce ch (Term.check term c))
+	// )
+	(CheckResult.and_then 
+		(Checker.equal ch b c)
+		term => (CheckResult.ok (Term.check a b))
+	)	
+
+
+// nonstandard
+Checker.reduce.go ch (Term.check a (Term.apply b c)) = 
+	(CheckResult.with_comment
+	(CheckResult.and_then
+		(Checker.reduce ch (Term.apply b c))
+		term => 
+			let is_apply = (Term.is_apply term)
+			(Bool.if is_apply 
+				// Couldn't reduce, so we can't check
+				CheckResult.err
+				// We could reduce, so check again
+				(Checker.reduce ch (Term.check a term))
+			)
+				
+	)
+	
+	"Attempting to reduce RHS"
+	)
+
+//nonstandard
+
+Checker.reduce.go ch (Term.check (Term.apply a b) c) =
+	(CheckResult.and_then
+		(Checker.reduce ch (Term.apply a b))
+		term => 
+			let is_apply = (Term.is_apply term)
+			(Bool.if is_apply 
+				// Couldn't reduce, so we can't check
+				CheckResult.err
+				// We could reduce, so check again
+				(Checker.reduce ch (Term.check term c))
+			)
+				
+	)
+
+// IDK how this works
+Checker.reduce.go ch (Term.check (Term.apply a b) c) =
+	let internal = (Term.check a (Term.lambda (Term.typeof b) (TermBody.new (Term.unused_var c) c)))
+	let internal = Checker.reduce ch internal
+	CheckResult.and_then internal term =>
+		(Checker.reduce ch (Term.apply term b)) 
+		
+Checker.reduce.go ch (Term.check (Term.lambda term.type term.body) (Term.lambda type.type type.body)) = 
+	let free_var = (Util.find_free (List.concat (Term.get_var_set term.type) (Term.get_var_set type.type)))
+	let is_subtype = (Term.var free_var)
+	let is_subtype = (Term.subtype is_subtype type.type term.type)
+	(CheckResult.and_then
+		(Checker.reduce ch is_subtype)
+		term => 
+			let free_var = (Util.find_free (List.concat (List.concat (TermBody.get_var_set term.body) (TermBody.get_var_set term.body)) (Term.get_var_set term.type)))
+			let free_var = (Term.check (Term.var free_var) term.type)
+			let term.body = (TermBody.replace term.body free_var)
+			let type.body = (TermBody.replace type.body free_var)
+			(Checker.reduce ch (Term.check term.body type.body))
+	)
+
+Checker.reduce.go ch (Term.check (Term.untyped_lambda term.body) (Term.lambda type.type type.body)) = Checker.reduce ch (Term.check (Term.lambda type.type term.body) (Term.lambda type.type type.body))
+
+Checker.reduce.go ch (Term.check (Term.check a b) Term.top) = Checker.reduce ch (Term.check a b)
+	
+	
+	
+// check if the lambda returns *
+Checker.reduce.go ch (Term.check term (Term.lambda type.type type.body)) =
+	let free_var = (Util.find_free (List.concat (Term.get_var_set term) (TermBody.get_var_set type.body)))
+	let free_var = (Term.check free_var type.type)
+	CheckResult.with_comment (CheckResult.and_then
+		(Checker.equal ch (TermBody.replace type.body free_var) Term.top)
+		sterm => CheckResult.ok (Bool.if (Term.is_not_error sterm) term Term.error)
+	) "Checking whether RHS is equal to * as a last resort"
+
+Checker.reduce.go ch x = CheckResult.ok x
+	
+Checker.equal (checker: Checker) (l: Term) (r: Term): CheckResult {
+	CheckResult.with_entry (Checker.equal.go checker l r) (TracebackEntry.judgement (Judgement.equal l r))
+}
+Checker.equal.go (checker: Checker) (l: Term) (r: Term): CheckResult
+Checker.equal.go ch (Term.untyped_lambda l.body) (Term.untyped_lambda r.body) = 
+	let free_var = (Util.find_free (List.concat (TermBody.get_var_set l.body) (TermBody.get_var_set r.body)))
+	let free_var = (Term.var free_var)
+	(Checker.equal ch (TermBody.replace l.body free_var) (TermBody.replace r.body free_var))
+Checker.equal.go ch (Term.self l.body) (Term.self r.body) = 
+	let free_var = (Util.find_free (List.concat (TermBody.get_var_set l.body) (TermBody.get_var_set r.body)))
+	let free_var = (Term.var free_var)
+	(Checker.equal ch (TermBody.replace l.body free_var) (TermBody.replace r.body free_var))
+Checker.equal.go ch (Term.lambda l.type l.body) (Term.lambda r.type r.body) = 
+	let free_var = (Util.find_free (List.concat (TermBody.get_var_set l.body) (TermBody.get_var_set r.body)))
+	let free_var = (Term.var free_var)
+	CheckResult.and (Checker.equal ch l.type r.type) (Checker.equal ch (TermBody.replace l.body free_var) (TermBody.replace r.body free_var))
+Checker.equal.go ch (Term.recursive l.body) (Term.recursive r.body) = 
+	let free_var = (Util.find_free (List.concat (TermBody.get_var_set l.body) (TermBody.get_var_set r.body)))
+	let free_var = (Term.var free_var)
+	// f == g if f(g(x)) == g(f(x)) for all x
+	Checker.equal ch (TermBody.replace l.body (TermBody.replace r.body free_var)) (TermBody.replace r.body (TermBody.replace l.body free_var))  
+Checker.equal.go ch (Term.var a) (Term.var b) = U60.if (== a b) (CheckResult.ok (Term.var a)) CheckResult.err
+Checker.equal.go ch Term.top Term.top = CheckResult.ok Term.top 
+Checker.equal.go ch (Term.apply a b) (Term.apply c d) = CheckResult.and (Checker.equal ch a c) (Checker.equal ch b d)
+Checker.equal.go ch a (Term.apply c d) = 
+	(CheckResult.and_then (Checker.reduce ch (Term.apply c d))
+		term => (Bool.if (Term.is_apply term)
+			CheckResult.err
+			(Checker.equal ch a term)
+		)
+	)
+Checker.equal.go ch (Term.check a b) (Term.check c d) = CheckResult.and (Checker.equal ch a c) (Checker.equal ch b d) 
+Checker.equal.go ch l r = CheckResult.err
+
+Util.is_equal (l: Term) (r: Term): Bool {
+	Term.is_not_error (CheckResult.get_term (Checker.equal Checker.empty l r))
+}
+
+Bool: Type
+Bool.true: Bool
+Bool.false: Bool
+Bool.if <p> (a: Bool) (t: p) (f: p): p
+Bool.if p Bool.true t f = t
+Bool.if p Bool.false t f = f
+U60.if <p> (a: U60) (t: p) (f: p): p
+U60.if p 0 t f = f
+U60.if p x t f = t
+Bool.and (a: Bool) (b: Bool) { Bool.if a b Bool.false } 
+Bool.or (a: Bool) (b: Bool) { Bool.if a Bool.true b }
+U60.to_string (n: U60): String
+U60.to_string n = (U60.if
+	(< n 10)
+	(String.cons (+ '0' n) String.nil)
+	(String.concat (U60.to_string (/ n 10)) (String.cons (+ '0' (% n 10)) String.nil))
+)
+Bool.to_string (a: Bool): String
+Bool.to_string Bool.true = "Bool.true"
+Bool.to_string Bool.false = "Bool.false"
+String.newline { String.cons 10 String.nil }
+
+
+String: Type
+String.cons (a: U60) (b: String): String
+String.nil: String
+
+List <t>: Type
+List.cons <t> (a: t) (b: List t): List t
+List.nil <t>: List t
+
+List.append <t> (list: List t) (item: t): List t
+List.append t List.nil item = List.cons item List.nil
+List.append t (List.cons head tail) item = List.cons head (List.append t tail item)
+
+List.len <t> (list: List t): U60
+List.len t List.nil = 0
+List.len t (List.cons _ l) = (+ (List.len l) 1)
+
+List.contains (list: List U60) (n: U60): Bool
+List.contains List.nil n = Bool.false
+List.contains (List.cons head tail)  n = (U60.if (== head n) Bool.true (List.contains tail n))
+
+List.concat <t> (a: List t) (b: List t): List t
+List.concat t (List.cons a b) c = (List.cons a (List.concat b c))
+List.concat t List.nil c = c
+
+String.concat (a: String) (b: String): String
+String.concat (String.cons a b) c = (String.cons a (String.concat b c))
+String.concat String.nil c = c
+
+String.flatten (a: List String): String
+String.flatten (List.cons a (List.cons b c)) = (String.flatten (List.cons (String.concat a b) c))
+String.flatten (List.cons a List.nil) = a
+String.flatten List.nil = ""
+
+Term.show (st: Checker) (term: Term): String
+Term.show st (Term.lambda type body) = 
+	let type_s = (Term.show st type)
+	let var = String.flatten [ "x" (U60.to_string (TermBody.get_id body)) ]
+	(String.flatten [
+		"λ("
+		var
+		": "
+		type_s
+		") "
+		(Term.show st (TermBody.replace_with_named_var body var))
+	])
+Term.show st (Term.untyped_lambda body) = 
+	let var = String.flatten [ "x" (U60.to_string (TermBody.get_id body)) ]
+	(String.flatten [
+		"λ"
+		var
+		" "
+		(Term.show st (TermBody.replace_with_named_var body var))
+	])
+	
+Term.show st (Term.recursive body) = 
+	let var = String.flatten [ "x" (U60.to_string (TermBody.get_id body)) ]
+	(String.flatten [
+		"µ"
+		var
+		" "
+		(Term.show st (TermBody.replace_with_named_var body var))
+	])
+	
+Term.show st (Term.self body) = 
+	let var = String.flatten [ "x" (U60.to_string (TermBody.get_id body)) ]
+	(String.flatten [
+		"ξ"
+		var
+		" "
+		(Term.show st (TermBody.replace_with_named_var body var))
+	])
+
+Term.show st (Term.attach String x s) = s
+Term.show st Term.top = "*"
+Term.show st Term.error = "!"
+Term.show st (Term.apply a b) = String.flatten [
+	"("
+	(Term.show st a)
+	" "
+	(Term.show st b)
+	")"
+]
+Term.show st (Term.var uid) = String.flatten [
+	"any" (U60.to_string uid)
+]
+Term.show st (Term.check term type) = String.flatten [
+	"(" (Term.show st term) " :: " (Term.show st type) ")"
+]
+Term.show st (Term.typeof term) = String.flatten [
+	"typeof " (Term.show st term)
+]
+Term.show st x = (HVM.log x "???")
+
+
+Program: Term
+// CheckProgram: Checker.Result Unit
+
+Main {
+	 let r = Checker.reduce Checker.empty Program
+	 (CheckResult.show r)
+}

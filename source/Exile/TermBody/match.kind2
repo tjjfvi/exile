@@ -1,0 +1,3 @@
+// Automatically derived from Exile/TermBody/_.type
+Exile.TermBody.match (x: (Exile.TermBody)) -(p: (x: (Exile.TermBody)) Type) (new: (id: U60) (body: Exile.Term) (p (Exile.TermBody.new id body))) : (p x)
+Exile.TermBody.match (Exile.TermBody.new id_ body_) p new = (new id_ body_)

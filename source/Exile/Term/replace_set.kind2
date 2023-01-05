@@ -1,0 +1,24 @@
+Util.list_contains_u60 (list: List U60) (n: U60): Bool {
+	(List.is_cons (List.filter list x => (U60.to_bool (== n x))))
+}
+
+
+Util.find_free (list: List U60) { Util.find_free.go list 0 }
+Util.find_free.go (list: List U60) (try: U60): U60
+Util.find_free.go List.nil n = n
+Util.find_free.go list n = (Bool.if
+	(Util.list_contains_u60 list n)
+	(Util.find_free.go list (+ n 1))
+	n
+)
+
+Exile.Term.replace_set (body: Exile.Term) (varset: List U60) (avoid: List U60): Exile.Term
+Exile.Term.replace_set body List.nil avoid = body
+Exile.Term.replace_set body (List.cons head tail) avoid = 
+	(Bool.if 
+		(Util.list_contains_u60 avoid head)
+		let free = (Util.find_free (List.concat (List.cons head tail) avoid));
+		let avoid = (List.cons free avoid);
+		(Exile.Term.replace_set body tail avoid)
+		(Exile.Term.replace_set body tail avoid)
+	)

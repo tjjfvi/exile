@@ -1,0 +1,104 @@
+
+
+Exile.HSyntax.parse.term.variable (table: Exile.DepthTable) {
+  do Parser {
+    ask _ = Parser.skip_whitespace
+    ask name = Exile.parse_name
+    return (Bool.if (String.equal name "*")
+      Exile.Term.top
+      (Bool.if (String.equal name "!")
+        Exile.Term.bot
+        (Exile.Term.attach (Exile.Term.var (Maybe.default (Exile.DepthTable.get table name) 123)) name)
+    ))
+  }
+}
+Exile.HSyntax.parse.term.apply (table: Exile.DepthTable) {
+  do Parser {
+    ask _ = Parser.skip_whitespace
+    ask _ = Parser.char '('
+    ask t1 = Exile.HSyntax.parse.term table
+    ask t2 = Exile.HSyntax.parse.term table
+    ask _ = Parser.skip_whitespace
+    ask _ = Parser.char ')'
+    return (Exile.Term.apply t1 t2)
+  }
+}
+
+Exile.HSyntax.parse.term.container (table: Exile.DepthTable) (chars: List U60) (build: String -> Exile.Term -> Exile.Term): Parser Exile.Term {
+  do Parser {
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.first_of (List.map chars (char => Parser.char char))
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.try (Parser.char '(')
+	ask _ = Parser.skip_whitespace
+	ask var_name = Exile.parse_name
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.try (Parser.char ')')
+	ask body = Exile.HSyntax.parse.term (Exile.DepthTable.set table var_name)
+	return (build var_name body)
+  }
+}
+Exile.HSyntax.parse.term.typed_lambda (table: Exile.DepthTable): Parser Exile.Term {
+  do Parser {
+  	let next_idx = (+ (Nat.to_u60 (List.length table)) 1)
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.first_of (List.map ['@', 'λ'] (char => Parser.char char))
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.try (Parser.char '(')
+	ask _ = Parser.skip_whitespace
+	ask var_name = Exile.parse_name
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.try (Parser.char ':')
+	ask type = Exile.HSyntax.parse.term table
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.try (Parser.char ')')
+	ask body = Exile.HSyntax.parse.term (Exile.DepthTable.set table var_name)
+	return (Exile.Term.attach (Exile.Term.lambda type (Exile.TermBody.new next_idx body)) var_name)
+  }
+}
+Exile.HSyntax.parse.term.top (table: Exile.DepthTable): Parser Exile.Term {
+  do Parser {
+	ask _ = Parser.skip_whitespace
+	ask _ = Parser.char '*'
+	return Exile.Term.top
+  }
+}
+
+Exile.HSyntax.parse.with_paren <w> (parser: (Parser w)) {
+  do Parser {
+    ask _ = Parser.skip_whitespace
+    ask _ = Parser.char '('
+    ask v = parser
+    ask _ = Parser.skip_whitespace
+    ask _ = Parser.char ')'
+    return v
+  }
+}
+
+Exile.HSyntax.parse.term (table: Exile.DepthTable) {
+  let next_idx = (+ (Nat.to_u60 (List.length table)) 1)
+  Parser.first_of [
+    (Exile.HSyntax.parse.term.apply table)
+    (Exile.HSyntax.parse.term.typed_lambda table)
+    (Exile.HSyntax.parse.term.container table ['@', 'λ'] (var_name => body => (Exile.Term.attach (Exile.Term.infer_lambda (Exile.TermBody.new next_idx body)) var_name)))
+    (Exile.HSyntax.parse.term.container table ['$', 'ξ'] (var_name => body => (Exile.Term.attach (Exile.Term.self (Exile.TermBody.new next_idx body)) var_name)))
+    (Exile.HSyntax.parse.term.container table ['%', 'μ'] (var_name => body => (Exile.Term.attach (Exile.Term.recursive (Exile.TermBody.new next_idx body)) var_name)))
+    (Exile.HSyntax.parse.term.variable table)
+    (Exile.HSyntax.parse.term.top table)
+    (Exile.HSyntax.parse.with_paren (Exile.HSyntax.parse.term table))
+  ]
+}
+
+Exile.HSyntax.parse_either (term: String): Either Exile.Term Parser.Error {
+  Parser.run (Exile.HSyntax.parse.term (Exile.DepthTable.new)) term
+}
+
+Exile.HSyntax.parse (term: String): Exile.Term {
+  let v = Exile.HSyntax.parse_either term
+  match Either v {
+    left => v.val
+    right => let v = v.val; match Parser.Error v {
+      new => Exile.Term.error
+    }
+  }
+}

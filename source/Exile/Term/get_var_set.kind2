@@ -1,0 +1,10 @@
+
+Exile.Term.get_var_set (term: Exile.Term): List U60
+Exile.Term.get_var_set (Exile.Term.lambda type (Exile.TermBody.new id body)) = (List.concat (Exile.Term.get_var_set type) (List.cons id (Exile.Term.get_var_set body)))
+Exile.Term.get_var_set (Exile.Term.infer_lambda (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
+Exile.Term.get_var_set (Exile.Term.recursive (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
+Exile.Term.get_var_set (Exile.Term.self (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
+Exile.Term.get_var_set (Exile.Term.apply a b) =(List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b))
+Exile.Term.get_var_set (Exile.Term.check a b) = (List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b))
+Exile.Term.get_var_set x = List.nil
+

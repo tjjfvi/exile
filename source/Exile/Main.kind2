@@ -1,0 +1,11 @@
+Code.Nat {
+	"%Bool $bool @(proposition: @(p:Bool) *) @(t: proposition @p @t @f t) @(f: proposition @p @t @f f) (proposition bool)"
+}
+
+Main {
+	do IO {
+		let code = (Exile.HSyntax.parse Code.Nat)
+		ask IO.output (Exile.HSyntax.show code)
+		(IO.done Unit.new)
+	}
+}

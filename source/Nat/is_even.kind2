@@ -1,0 +1,4 @@
+// True if the number is even
+Nat.is_even (n: Nat) : Bool
+Nat.is_even  Nat.zero    = Bool.true
+Nat.is_even (Nat.succ n) = Bool.not (Nat.is_even n)

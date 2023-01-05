@@ -1,0 +1,34 @@
+Exile.DepthTable: Type
+Exile.DepthTable = List Entry
+
+Exile.DepthTable.new: Exile.DepthTable
+Exile.DepthTable.new = []
+
+Exile.DepthTable.get (table: Exile.DepthTable) (name: String): Maybe U60
+Exile.DepthTable.get table key = (Maybe.map  (x => (Pair.snd x)) (List.head (List.filter table e => (Entry.compare key e))))
+
+Exile.DepthTable.set (table: Exile.DepthTable) (name: String): Exile.DepthTable
+Exile.DepthTable.set table name = 
+  let depth = (+ (Nat.to_u60 (List.length table)) 1)
+  let entry = (List.head (List.filter table e => (Entry.compare name e)))
+  match Maybe entry {
+    none =>
+      // Insert
+      (List.cons (Pair.new name depth) table)
+    some =>
+      // Replace value
+      List.map table (entry => (Bool.if (Entry.compare name entry)
+        (Pair.new name depth)
+        entry
+      ))
+  }
+
+
+// Implementation
+Entry: Type
+Entry = Pair String U60 
+Entry.compare (key: String) (e: Entry) {
+  (String.equal (Pair.fst e) key)
+}
+
+
