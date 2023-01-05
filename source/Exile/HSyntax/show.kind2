@@ -22,6 +22,7 @@ Exile.HSyntax.output_with_name (Exile.Term.self body) name =
 Exile.HSyntax.output_with_name x name = Exile.HSyntax.show x
 
 Exile.HSyntax.show (term: Exile.Term): String
+//Exile.HSyntax.show (Exile.Term.attach String a name) = (Exile.HSyntax.show a)
 Exile.HSyntax.show (Exile.Term.attach String (Exile.Term.var a) s) = s
 Exile.HSyntax.show (Exile.Term.attach String term name) = (Exile.HSyntax.output_with_name term name)
 Exile.HSyntax.show (Exile.Term.lambda type body) = Exile.HSyntax.output_with_name (Exile.Term.lambda type body) (Util.get_var_name body)
@@ -31,7 +32,7 @@ Exile.HSyntax.show (Exile.Term.recursive body) = Exile.HSyntax.output_with_name 
 Exile.HSyntax.show Exile.Term.top = "*"
 Exile.HSyntax.show Exile.Term.error = "!"
 Exile.HSyntax.show (Exile.Term.apply a b) = String.flatten [
-	"("
+	"A("
 	(Exile.HSyntax.show a)
 	" "
 	(Exile.HSyntax.show b)
@@ -41,7 +42,10 @@ Exile.HSyntax.show (Exile.Term.var uid) = String.flatten [
 	"any" (U60.to_string uid)
 ]
 Exile.HSyntax.show (Exile.Term.check term type) = String.flatten [
-	(Exile.HSyntax.show term) " :: " (Exile.HSyntax.show type)
+	"(" (Exile.HSyntax.show term) " : " (Exile.HSyntax.show type) ")" 
+]
+Exile.HSyntax.show (Exile.Term.supertype sup sub) = String.flatten [
+	"(" (Exile.HSyntax.show sup) " >= " (Exile.HSyntax.show sub) ")"
 ]
 Exile.HSyntax.show (Exile.Term.typeof term) = String.flatten [
 	"typeof " (Exile.HSyntax.show term)

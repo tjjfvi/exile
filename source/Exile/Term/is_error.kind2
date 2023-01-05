@@ -1,0 +1,4 @@
+Exile.Term.is_error (term: Exile.Term): Bool
+Exile.Term.is_error Exile.Term.error = Bool.true
+Exile.Term.is_error x = Bool.false
+

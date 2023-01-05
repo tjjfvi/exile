@@ -8,3 +8,9 @@ proof that Unit.new: Unit
  (P :: λ(b: Unit) Type) (λp λnew new) <= ((P :: λ(b: Unit) Type) λp λnew new)
  is true
 
+[ λp λnew new : µ Unit ξ unit λ(P: λ(b: Unit) Type) λ(new: P (λp λnew new)) (P unit) ]
+[ λp λnew new : ξ unit λ(P: λ(b: (x1 >= Unit)) Type) λ(new: P (λp λnew new)) (P unit) ]
+[ λp λnew new : λ(P: λ(b: (x1 >= Unit)) Type) λ(new: P (λp λnew new)) (P λp λnew new) ]
+[ λnew new : λ(new: (x2: λ(b: (x1 >= Unit)) Type) (λp λnew new)) ((x2: λ(b: (x1 >= Unit)) Type) (λp λnew new)) ]
+[ (new : (x2: λ(b: (x1 >= Unit)) Type) (λp λnew new)) : ((x2: λ(b: (x1 >= Unit)) Type) (λp λnew new)) ]
+this is (a: b c) : (b c)

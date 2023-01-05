@@ -4,12 +4,24 @@ Code.Bool {
 Code.Bool.true {
 	"@p @t @f t"
 }
+Code.Unit {
+	"%Unit $unit @(proposition: @(p:Unit) *) @(new: (proposition @p @new new)) (proposition unit)"
+}
+Code.Unit.new {
+	"@p @new new"
+}
+Code.lam_test {
+	"@(p: *) p"
+}
 
 Main {
 	do IO {
-		let bool = (Exile.HSyntax.parse Code.Bool)
-		let bool_true = (Exile.HSyntax.parse Code.Bool.true)
-		let result = Exile.Checker.reduce Exile.Checker.empty (Exile.Term.check bool_true bool)
+		let term = Code.Unit.new
+		let type = Code.Bool
+	
+		let type = (Exile.HSyntax.parse type)
+		let term = (Exile.HSyntax.parse term)
+		let result = Exile.Checker.reduce Exile.Checker.empty (Exile.Term.check term type)
 		ask IO.output (Exile.CheckResult.show result)
 		(IO.done Unit.new)
 	}

@@ -1,3 +1,6 @@
 Exile.CheckResult.map_term (result: Exile.CheckResult) (fn: Exile.Term -> Exile.Term):  Exile.CheckResult {
-	(Exile.CheckResult.new (fn (Exile.CheckResult.get_term result)) (Exile.CheckResult.get_tb result))
+  (Bool.if (Exile.Term.is_error (Exile.CheckResult.get_term result))
+    (Exile.CheckResult.new Exile.Term.error (Exile.CheckResult.get_tb result))
+    (Exile.CheckResult.new (fn (Exile.CheckResult.get_term result)) (Exile.CheckResult.get_tb result))
+  )
 }

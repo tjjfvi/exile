@@ -1,0 +1,8 @@
+Exile.Util.find_free (list: List U60) { Exile.Util.find_free.go list 0 }
+Exile.Util.find_free.go (list: List U60) (try: U60): U60
+Exile.Util.find_free.go List.nil n = n
+Exile.Util.find_free.go list n = (Bool.if
+	(Exile.Util.list_contains_u60 list n)
+	(Exile.Util.find_free.go list (+ n 1))
+	n
+)

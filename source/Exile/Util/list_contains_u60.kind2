@@ -1,0 +1,4 @@
+Exile.Util.list_contains_u60 (list: List U60) (n: U60): Bool {
+	(List.is_cons (List.filter list x => (U60.to_bool (== n x))))
+}
+
