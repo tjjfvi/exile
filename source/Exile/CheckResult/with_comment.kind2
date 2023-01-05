@@ -1,0 +1,4 @@
+
+Exile.CheckResult.with_comment (result: Exile.CheckResult) (comment: String): Exile.CheckResult {
+	Exile.CheckResult.with_entry result (Exile.TracebackEntry.comment comment)
+}

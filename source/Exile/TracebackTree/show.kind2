@@ -1,0 +1,47 @@
+Exile.TracebackTree.show (depth: Nat) (tree: Exile.TracebackTree): String
+Exile.TracebackTree.show depth (Exile.TracebackTree.leaf term) = String.flatten [
+	(String.repeat " " depth)
+	(Exile.HSyntax.show term)
+	String.new_line
+]
+Exile.TracebackTree.show depth (Exile.TracebackTree.entry entry term) = String.flatten [
+	(String.repeat " " depth)
+	(Exile.TracebackEntry.show entry)
+	String.new_line
+	(Exile.TracebackTree.show depth term)
+]
+Exile.TracebackTree.show depth (Exile.TracebackTree.and a b) = String.flatten [
+	(String.repeat " " depth)
+	"AND"
+	String.new_line
+	(Exile.TracebackTree.show (Nat.succ depth) a)
+	
+	(String.repeat " " depth)
+	"AND"
+	String.new_line
+	(Exile.TracebackTree.show (Nat.succ depth) b)
+]
+
+Exile.TracebackTree.show depth (Exile.TracebackTree.or a b) = String.flatten [
+	(String.repeat " " depth)
+	"OR"
+	String.new_line
+	(Exile.TracebackTree.show (Nat.succ depth) a)
+	
+	(String.repeat " " depth)
+	"OR"
+	String.new_line
+	(Exile.TracebackTree.show (Nat.succ depth) b)
+]
+
+Exile.TracebackTree.show depth (Exile.TracebackTree.and_then a b) = String.flatten [
+	(String.repeat " " depth)
+	"WITH"
+	String.new_line
+	(Exile.TracebackTree.show (Nat.succ depth) a)
+	
+	(String.repeat " " depth)
+	"THEN"
+	String.new_line
+	(Exile.TracebackTree.show depth b)
+]

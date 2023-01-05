@@ -1,0 +1,4 @@
+
+Exile.TracebackEntry: Type
+Exile.TracebackEntry.comment (comment: String): Exile.TracebackEntry
+Exile.TracebackEntry.judgement (j: Exile.Judgement): Exile.TracebackEntry

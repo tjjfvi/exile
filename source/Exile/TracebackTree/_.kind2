@@ -1,0 +1,7 @@
+
+Exile.TracebackTree: Type
+Exile.TracebackTree.leaf (term: Exile.Term): Exile.TracebackTree
+Exile.TracebackTree.entry (entry: Exile.TracebackEntry) (child: Exile.TracebackTree): Exile.TracebackTree
+Exile.TracebackTree.and (l: Exile.TracebackTree) (r: Exile.TracebackTree): Exile.TracebackTree
+Exile.TracebackTree.and_then (l: Exile.TracebackTree) (r: Exile.TracebackTree): Exile.TracebackTree
+Exile.TracebackTree.or (l: Exile.TracebackTree) (r: Exile.TracebackTree): Exile.TracebackTree

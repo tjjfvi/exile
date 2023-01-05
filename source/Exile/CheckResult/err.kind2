@@ -1,0 +1,3 @@
+Exile.CheckResult.err: Exile.CheckResult {
+	Exile.CheckResult.new Exile.Term.error (Exile.TracebackTree.leaf Exile.Term.error)
+}

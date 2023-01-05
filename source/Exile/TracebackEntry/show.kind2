@@ -1,0 +1,3 @@
+Exile.TracebackEntry.show (tree: Exile.TracebackEntry): String
+Exile.TracebackEntry.show (Exile.TracebackEntry.judgement j) = Exile.Judgement.show j
+Exile.TracebackEntry.show (Exile.TracebackEntry.comment comment) = String.flatten [ "// " comment ]

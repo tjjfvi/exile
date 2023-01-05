@@ -1,0 +1,3 @@
+
+Exile.CheckResult.with_entry (result: Exile.CheckResult) (entry: Exile.TracebackEntry): Exile.CheckResult
+Exile.CheckResult.with_entry (Exile.CheckResult.new term tb) entry = (Exile.CheckResult.new term (Exile.TracebackTree.entry entry tb))

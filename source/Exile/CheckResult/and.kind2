@@ -1,0 +1,3 @@
+Exile.CheckResult.and (l: Exile.CheckResult) (r: Exile.CheckResult) {
+	Exile.CheckResult.and_then l (_ => r)
+}

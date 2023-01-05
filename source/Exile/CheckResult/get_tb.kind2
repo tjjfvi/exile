@@ -1,0 +1,3 @@
+
+Exile.CheckResult.get_tb (result: Exile.CheckResult): Exile.TracebackTree
+Exile.CheckResult.get_tb (Exile.CheckResult.new term tb) = tb

@@ -1,0 +1,3 @@
+
+Exile.CheckResult: Type
+Exile.CheckResult.new (term: Exile.Term) (tb: Exile.TracebackTree): Exile.CheckResult

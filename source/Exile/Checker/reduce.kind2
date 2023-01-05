@@ -1,0 +1,6 @@
+Exile.Checker.reduce (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult {
+	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker term) (Exile.TracebackEntry.judgement (Exile.Judgement.reduce term))
+}
+
+Exile.Checker.reduce.go (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult
+Exile.Checker.reduce.go ch term = Exile.CheckResult.err

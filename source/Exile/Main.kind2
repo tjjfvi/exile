@@ -1,11 +1,16 @@
-Code.Nat {
+Code.Bool {
 	"%Bool $bool @(proposition: @(p:Bool) *) @(t: proposition @p @t @f t) @(f: proposition @p @t @f f) (proposition bool)"
+}
+Code.Bool.true {
+	"@p @t @f t"
 }
 
 Main {
 	do IO {
-		let code = (Exile.HSyntax.parse Code.Nat)
-		ask IO.output (Exile.HSyntax.show code)
+		let bool = (Exile.HSyntax.parse Code.Bool)
+		let bool_true = (Exile.HSyntax.parse Code.Bool.true)
+		let result = Exile.Checker.reduce Exile.Checker.empty (Exile.Term.check bool_true bool)
+		ask IO.output (Exile.CheckResult.show result)
 		(IO.done Unit.new)
 	}
 }

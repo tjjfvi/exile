@@ -1,0 +1,9 @@
+
+Exile.CheckResult.and_then (result: Exile.CheckResult) (f: Exile.Term -> Exile.CheckResult): Exile.CheckResult {
+	let r_term = (Exile.CheckResult.get_term result)
+	let r_tb = (Exile.CheckResult.get_tb result)
+	let s = (f r_term)
+	let s_term = (Exile.CheckResult.get_term s)
+	let s_tb = (Exile.CheckResult.get_tb s)
+	(Exile.CheckResult.new s_term (Exile.TracebackTree.and_then r_tb s_tb))
+}

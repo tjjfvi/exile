@@ -1,0 +1,4 @@
+Exile.CheckResult.ok (t: Exile.Term): Exile.CheckResult {
+	Exile.CheckResult.new t (Exile.TracebackTree.leaf t)
+}
+

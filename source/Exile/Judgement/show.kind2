@@ -1,0 +1,11 @@
+Exile.Judgement.show (term: Exile.Judgement): String
+Exile.Judgement.show (Exile.Judgement.reduce e) = String.flatten [
+	"[ "
+	(Exile.HSyntax.show e)
+	" ]"
+]
+Exile.Judgement.show (Exile.Judgement.equal l r) = String.flatten [
+	(Exile.HSyntax.show l)
+	" == "
+	(Exile.HSyntax.show r)
+]

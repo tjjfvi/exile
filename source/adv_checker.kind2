@@ -101,20 +101,6 @@ TermBody.map_variable (body: TermBody) (fn: Term -> Term): TermBody {
 	(TermBody.new id (Term.replace.go id (TermBody.get_term body) (fn (Term.var id))))
 }
 
-Judgement: Type
-Judgement.equal (l: Term) (r: Term): Judgement
-Judgement.reduce (term: Term): Judgement
-Judgement.show (term: Judgement): String
-Judgement.show (Judgement.reduce e) = String.flatten [
-	"[ "
-	(Term.show Checker.empty e)
-	" ]"
-]
-Judgement.show (Judgement.equal l r) = String.flatten [
-	(Term.show Checker.empty l)
-	" == "
-	(Term.show Checker.empty r)
-]
 
 TracebackEntry: Type
 TracebackEntry.comment (comment: String): TracebackEntry

@@ -1,0 +1,2 @@
+Exile.CheckResult.get_term (result: Exile.CheckResult): Exile.Term
+Exile.CheckResult.get_term (Exile.CheckResult.new term tb) = term

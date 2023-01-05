@@ -1,0 +1,3 @@
+Exile.Judgement: Type
+Exile.Judgement.equal (l: Exile.Term) (r: Exile.Term): Exile.Judgement
+Exile.Judgement.reduce (term: Exile.Term): Exile.Judgement
