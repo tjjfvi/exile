@@ -1,6 +1,6 @@
 // Display a term body, substituting the variable with the variable name
 Util.output_body (body: Exile.TermBody) (name: String): String {
-	let x = (Exile.Term.attach (Exile.Term.var 123) name)
+	let x = (Exile.Term.attach (Exile.Term.var (Exile.TermBody.get_index body)) name)
 	(Exile.HSyntax.show (Exile.TermBody.replace body x))
 }
 Util.output_body_unnamed (body: Exile.TermBody) {
@@ -12,18 +12,17 @@ Util.get_var_name (body: Exile.TermBody) { String.flatten [ "x" (U60.to_string (
 Exile.HSyntax.output_with_name (term: Exile.Term) (name: String): String
 Exile.HSyntax.output_with_name (Exile.Term.lambda type body) name = 
 	let type_s = (Exile.HSyntax.show type)
-	String.flatten [ "λ(" name ": " type_s ") " (Util.output_body body name) ]
+	String.flatten [ "λ(" name (Util.get_var_name body) ": " type_s ") " (Util.output_body body name) ]
 Exile.HSyntax.output_with_name (Exile.Term.infer_lambda body) name = 
-	String.flatten [ "λ" name " " (Util.output_body body name) ]
+	String.flatten [ "λ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
 Exile.HSyntax.output_with_name (Exile.Term.recursive body) name = 
-	String.flatten [ "µ" name " " (Util.output_body body name) ]
+	String.flatten [ "µ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
 Exile.HSyntax.output_with_name (Exile.Term.self body) name = 
-	String.flatten [ "ξ" name " " (Util.output_body body name) ]
+	String.flatten [ "ξ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
 Exile.HSyntax.output_with_name x name = Exile.HSyntax.show x
 
 Exile.HSyntax.show (term: Exile.Term): String
-//Exile.HSyntax.show (Exile.Term.attach String a name) = (Exile.HSyntax.show a)
-Exile.HSyntax.show (Exile.Term.attach String (Exile.Term.var a) s) = s
+Exile.HSyntax.show (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
 Exile.HSyntax.show (Exile.Term.attach String Exile.Term.unbound name) = String.flatten [
 	"?" name "?"
 ]
@@ -35,7 +34,7 @@ Exile.HSyntax.show (Exile.Term.recursive body) = Exile.HSyntax.output_with_name 
 Exile.HSyntax.show Exile.Term.top = "*"
 Exile.HSyntax.show Exile.Term.error = "!"
 Exile.HSyntax.show (Exile.Term.apply a b) = String.flatten [
-	"A("
+	"("
 	(Exile.HSyntax.show a)
 	" "
 	(Exile.HSyntax.show b)

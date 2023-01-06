@@ -1,0 +1,10 @@
+
+Bool.not_not = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.not (Bool.not x)) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
+
+Bool.and_true = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.and x Bool.true) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
+
+Bool.or_false = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.or x Bool.false) x) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.false))
+
+Bool.and_false = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.and x Bool.false) Bool.false) (Equal.refl Bool Bool.false) (Equal.refl Bool Bool.false))
+
+Bool.or_true = λ(x: Bool) (x (λ(x: Bool) Equal (Bool.or x Bool.true) Bool.true) (Equal.refl Bool Bool.true) (Equal.refl Bool Bool.true))

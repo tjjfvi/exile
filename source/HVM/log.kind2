@@ -1,3 +1,3 @@
-HVM.log <a: Type> <r: Type> (logged: a) (result: r) {
+HVM.log <a: Type> <r: Type> (logged: a) (result: r): r {
   result
 }

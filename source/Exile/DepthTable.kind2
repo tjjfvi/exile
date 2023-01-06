@@ -9,7 +9,11 @@ Exile.DepthTable.get table key = (Maybe.map  (x => (Pair.snd x)) (List.head (Lis
 
 Exile.DepthTable.set (table: Exile.DepthTable) (name: String): Exile.DepthTable
 Exile.DepthTable.set table name = 
-  let depth = (+ (Nat.to_u60 (List.length table)) 1)
+  Exile.DepthTable.set_value table name (+ (Nat.to_u60 (List.length table)) 1)
+
+
+Exile.DepthTable.set_value (table: Exile.DepthTable) (name: String) (depth: U60): Exile.DepthTable
+Exile.DepthTable.set_value table name depth  = 
   let entry = (List.head (List.filter table e => (Entry.compare name e)))
   match Maybe entry {
     none =>
@@ -22,8 +26,6 @@ Exile.DepthTable.set table name =
         entry
       ))
   }
-
-
 // Implementation
 Entry: Type
 Entry = Pair String U60 

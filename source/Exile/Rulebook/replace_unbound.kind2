@@ -1,4 +1,36 @@
 // This is the function that replaces unbound variables in all rules by their definitions.
 // It should also handle mutually recursive definitions
 // Unimplemented.
-Exile.Rulebook.replace_unbound (rb: Rulebook): Rulebook
+Exile.Rulebook.replace_unbound.go (rb: Exile.Rulebook) (term: Exile.Term) (unbound_map: Exile.DepthTable) (used_vars: List U60): Exile.Term
+Exile.Rulebook.replace_unbound.go rb (Exile.Term.attach String Exile.Term.unbound name) map used_vars =
+    (Maybe.match
+        (Exile.DepthTable.get map name)
+        (_ => Exile.Term)
+        (Maybe.match 
+            (Exile.Rulebook.get_definition rb name)
+            (_ => Exile.Term)
+            // If none
+            (Exile.Term.attach String Exile.Term.unbound name)
+            // If some
+            definition =>
+            let recursive_index = (Exile.Util.find_free (Exile.Term.get_var_set definition))
+            let definition = (Exile.Term.recursive (Exile.TermBody.new recursive_index definition))
+            let definition = (Exile.Term.replace_set definition (Exile.Term.get_var_set definition) (List.cons recursive_index used_vars))
+            let definition = (Exile.Rulebook.replace_unbound.go rb definition (Exile.DepthTable.set_value map name recursive_index) (List.cons recursive_index used_vars))
+            definition
+        )
+        // If we've already bound this unbound in a recursive term, then use it
+        index => (Exile.Term.var index)
+    )
+Exile.Rulebook.replace_unbound.go rb term unbound_map used_vars = (Exile.Term.apply_subterm_with_vars term (st => new_vars => (Exile.Rulebook.replace_unbound.go rb st unbound_map (List.concat new_vars used_vars))))
+
+Exile.Rulebook.replace_unbound (rb: Exile.Rulebook) {
+    List.map rb (entry => 
+        let type = (Pair.fst (Pair.snd entry))
+        let term = Exile.Term.attach (Exile.Term.unbound) (Pair.fst entry)
+        let term = Exile.Rulebook.replace_unbound.go rb term Exile.DepthTable.new List.nil
+        let type = (Maybe.map (x => Exile.Rulebook.replace_unbound.go rb x Exile.DepthTable.new List.nil) type)
+        (Pair.new (Pair.fst entry) (Pair.new type term))
+    )
+}
+

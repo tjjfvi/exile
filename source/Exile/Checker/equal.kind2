@@ -12,6 +12,14 @@ Exile.Checker.equal.go ch (Exile.Term.infer_lambda l.body) (Exile.Term.infer_lam
     (Exile.TermBody.replace l.body fresh_var)
     (Exile.TermBody.replace r.body fresh_var)
   )
+Exile.Checker.equal.go ch (Exile.Term.self l.body) (Exile.Term.self r.body) = 
+  let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
+  let fresh_var = (Exile.Term.var fresh_index)
+  (Exile.Checker.equal
+    ch
+    (Exile.TermBody.replace l.body fresh_var)
+    (Exile.TermBody.replace r.body fresh_var)
+  )
 Exile.Checker.equal.go ch (Exile.Term.lambda l.type l.body) (Exile.Term.lambda r.type r.body) = 
     (Exile.CheckResult.and
       (Exile.CheckResult.and
@@ -35,6 +43,12 @@ Exile.Checker.equal.go ch (Exile.Term.apply l.l l.r) (Exile.Term.apply r.l r.r) 
     (Exile.CheckResult.ok (Exile.Term.apply l.l l.r))
   )
   
+Exile.Checker.equal.go ch (Exile.Term.recursive l.body) right = 
+  (Exile.Checker.equal
+    ch
+    (Exile.TermBody.replace l.body (Exile.Term.recursive l.body))
+    right
+  )
 Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) = 
   (U60.if
     (== l r)
@@ -42,5 +56,7 @@ Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) =
     Exile.CheckResult.err
   )
   
-Exile.Checker.equal.go checker (Exile.Term.attach a b) (Exile.Term.attach c d) = Exile.Checker.equal.go checker a c
+Exile.Checker.equal.go checker (Exile.Term.attach a b) (Exile.Term.attach c d) = Exile.Checker.equal checker a c
+Exile.Checker.equal.go checker a (Exile.Term.attach c d) = Exile.Checker.equal checker a c
+Exile.Checker.equal.go checker (Exile.Term.attach a b) c = Exile.Checker.equal checker a c
 Exile.Checker.equal.go checker l r = Exile.CheckResult.err

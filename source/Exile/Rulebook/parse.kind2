@@ -1,6 +1,12 @@
 Exile.Rulebook.parse_entry (term_parser: Parser Exile.Term): Parser Exile.Rulebook.Entry {
   do Parser {
     ask _ = Parser.skip_whitespace
+    ask _ = Parser.repeat_while (Parser.char '#') do Parser {
+      ask Parser.skip_line
+      ask _ = Parser.skip_whitespace
+      return Unit.new
+    }
+    ask _ = Parser.skip_whitespace
     ask name = Exile.parse_name
     ask type = Parser.first_of [
       do Parser {
@@ -22,6 +28,8 @@ Exile.Rulebook.parse_entry (term_parser: Parser Exile.Term): Parser Exile.Rulebo
     return (Pair.new name (Pair.new type value))
   }
 }
+
+
 
 Exile.Rulebook.parse (term_parser: Parser Exile.Term): Parser Exile.Rulebook {
   Parser.repeat_until Parser.eof (Exile.Rulebook.parse_entry term_parser)

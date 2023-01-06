@@ -1,0 +1,7 @@
+Exile.TermBody.replace_var (term: Exile.TermBody) (from: U60) (to: U60): Exile.TermBody
+Exile.TermBody.replace_var (Exile.TermBody.new idx body) from to = 
+  let body = (Exile.Term.replace_var body from to)
+  (U60.if (== idx from)
+    (Exile.TermBody.new to body)
+    (Exile.TermBody.new idx body)
+  )

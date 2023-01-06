@@ -20,7 +20,6 @@ Code.Unbound {
 Code.T {
 	"@a @(c: a @a a) a"
 }
-Import: (Exile.Rulebook.parse 0)
 Main2 {
 	do IO {
 		ask bool_code = IO.load "../examples/Bool.xil"
@@ -35,9 +34,16 @@ Main2 {
 				return List.nil
 			})
 		)
-		let result = parsed_bool_code
-		let result = (Exile.Rulebook.show result)
-		ask IO.output result
+		let rulebook = parsed_bool_code
+		ask IO.output (Exile.Rulebook.show rulebook)
+		let rulebook = (Exile.Rulebook.replace_unbound rulebook)
+		ask IO.output (Exile.Rulebook.show rulebook)
+		let bool = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool") Exile.Term.unbound)
+		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.true") Exile.Term.unbound)
+		//let bool_true = (HVM.log (Exile.HSyntax.show bool_true) bool_true)
+		//let bool = (HVM.log (Exile.HSyntax.show bool) bool)
+		let cresult = (Exile.Checker.reduce Exile.Checker.empty (Exile.Term.check bool_true bool))
+		ask IO.output (Exile.CheckResult.show cresult)
 		return Unit.new
 	}
 }
@@ -57,4 +63,13 @@ Main3 {
 
 
 Main4 { (Parser.run (Exile.HSyntax.parse.term Exile.DepthTable.new) Code.Bool) }
+
+Main6 {
+	let a = (Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.var 1)))
+	let a = (Exile.Term.replace_var a 1 3)
+	a
+}
+
 Main { Main2 } 
+
+

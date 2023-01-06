@@ -1,0 +1,3 @@
+Exile.Rulebook.get_definition (rb: Exile.Rulebook) (name: String): Maybe Exile.Term {
+  (Maybe.map (x => (Pair.snd (Pair.snd x))) (List.head (List.filter rb (x => (String.equal (Pair.fst x) name)))))
+}

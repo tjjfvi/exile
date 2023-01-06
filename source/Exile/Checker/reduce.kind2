@@ -1,5 +1,5 @@
 Exile.Checker.reduce (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult {
-	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker term) (Exile.TracebackEntry.judgement (Exile.Judgement.reduce term))
+	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker (HVM.log (Exile.Judgement.show (Exile.Judgement.reduce term)) term)) (Exile.TracebackEntry.judgement (Exile.Judgement.reduce term))
 }
 
 Exile.Checker.reduce.go (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult
@@ -134,7 +134,8 @@ Util.reduce_check ch (Exile.Term.check a b) c =
   
 // nonstandard
 Util.reduce_check ch (Exile.Term.var a) Exile.Term.top = Exile.CheckResult.ok (Exile.Term.var a)
-
+// nonstandard
+Util.reduce_check ch (Exile.Term.recursive body) type = (Exile.Checker.reduce ch (Exile.Term.check (Exile.TermBody.replace body (Exile.Term.recursive body)) type))
 
 Util.reduce_check ch (Exile.Term.attach term meta) type = 
   Exile.CheckResult.map_term (Util.reduce_check ch term type) (term => (Exile.Term.attach term meta))
