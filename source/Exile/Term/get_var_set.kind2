@@ -11,6 +11,7 @@ Exile.Term.get_var_set (Exile.Term.typeof term) = (Exile.Term.get_var_set term)
 Exile.Term.get_var_set Exile.Term.top = List.nil
 Exile.Term.get_var_set Exile.Term.bot = List.nil
 Exile.Term.get_var_set Exile.Term.error = List.nil
+Exile.Term.get_var_set Exile.Term.unbound = List.nil
 // I don't think this rule is necessary
 Exile.Term.get_var_set (Exile.Term.var idx) = [idx]
 Exile.Term.get_var_set x = (HVM.log x List.nil)

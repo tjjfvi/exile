@@ -1,0 +1,9 @@
+Exile.Rulebook.Entry.show (a: Exile.Rulebook.Entry): String
+Exile.Rulebook.Entry.show (Pair.new name (Pair.new (Maybe.some type) body)) = 
+  String.flatten [ name ": " (Exile.HSyntax.show type) " = " (Exile.HSyntax.show body) ]
+Exile.Rulebook.Entry.show (Pair.new name (Pair.new Maybe.none body)) = 
+  String.flatten [ name " = " (Exile.HSyntax.show body) ]
+
+Exile.Rulebook.show (rb: Exile.Rulebook): String
+Exile.Rulebook.show (List.cons entry tail) = String.flatten [ (Exile.Rulebook.Entry.show entry) String.new_line (Exile.Rulebook.show tail) ]
+Exile.Rulebook.show List.nil = String.nil

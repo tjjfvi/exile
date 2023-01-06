@@ -1,0 +1,5 @@
+Exile.Rulebook: Type {
+  (List Exile.Rulebook.Entry)
+}
+
+Exile.Rulebook.Entry: Type { (Pair String (Pair (Maybe Exile.Term) Exile.Term)) }

@@ -1,0 +1,4 @@
+// This is the function that replaces unbound variables in all rules by their definitions.
+// It should also handle mutually recursive definitions
+// Unimplemented.
+Exile.Rulebook.replace_unbound (rb: Rulebook): Rulebook

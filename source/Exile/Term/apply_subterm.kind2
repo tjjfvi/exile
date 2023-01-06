@@ -11,5 +11,6 @@ Exile.Term.apply_subterm (Exile.Term.attach term meta) f = (Exile.Term.attach (f
 Exile.Term.apply_subterm Exile.Term.top f = Exile.Term.top
 Exile.Term.apply_subterm Exile.Term.bot f = Exile.Term.bot
 Exile.Term.apply_subterm Exile.Term.error f = Exile.Term.error
+Exile.Term.apply_subterm Exile.Term.unbound f = Exile.Term.unbound
 Exile.Term.apply_subterm (Exile.Term.var x) f = (Exile.Term.var x)
 Exile.Term.apply_subterm x f = (HVM.log x x)

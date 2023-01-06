@@ -7,11 +7,21 @@ Exile.Term.recursive (body: Exile.TermBody): Exile.Term
 Exile.Term.self (body: Exile.TermBody): Exile.Term
 Exile.Term.apply (fn: Exile.Term) (argument: Exile.Term): Exile.Term
 
+// Variable
+Exile.Term.var (id: U60): Exile.Term
+
+// "Alias" terms
 Exile.Term.top: Exile.Term
 Exile.Term.bot: Exile.Term
-Exile.Term.error: Exile.Term
+
+// Parser terms
+Exile.Term.unbound: Exile.Term
 Exile.Term.attach <t> (term: Exile.Term) (data: t): Exile.Term
-Exile.Term.var (id: U60): Exile.Term
+
+// Checker judgement terms
 Exile.Term.supertype (sup: Exile.Term) (sub: Exile.Term): Exile.Term
 Exile.Term.check (instance: Exile.Term) (type: Exile.Term): Exile.Term
 Exile.Term.typeof (term: Exile.Term): Exile.Term
+
+// Checker result terms
+Exile.Term.error: Exile.Term

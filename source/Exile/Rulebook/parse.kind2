@@ -1,0 +1,28 @@
+Exile.Rulebook.parse_entry (term_parser: Parser Exile.Term): Parser Exile.Rulebook.Entry {
+  do Parser {
+    ask _ = Parser.skip_whitespace
+    ask name = Exile.parse_name
+    ask type = Parser.first_of [
+      do Parser {
+        ask _ = Parser.skip_whitespace
+        ask _ = Parser.string ":"
+        ask _ = Parser.skip_whitespace
+        ask type = term_parser
+        return (Maybe.some type)
+      }
+      do Parser {
+        return Maybe.none
+      }
+    ]
+    ask _ = Parser.skip_whitespace
+    ask _ = Parser.string "="
+    ask _ = Parser.skip_whitespace
+    ask value = term_parser
+    ask _ = Parser.skip_whitespace
+    return (Pair.new name (Pair.new type value))
+  }
+}
+
+Exile.Rulebook.parse (term_parser: Parser Exile.Term): Parser Exile.Rulebook {
+  Parser.repeat_until Parser.eof (Exile.Rulebook.parse_entry term_parser)
+}

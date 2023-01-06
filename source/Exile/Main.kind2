@@ -1,5 +1,5 @@
 Code.Bool {
-	"%Bool $bool @(proposition: @(p:Bool) *) @(t: proposition @p @t @f t) @(f: proposition @p @t @f f) (proposition bool)"
+	"µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: P λp λt λf t) λ(f: P λp λt λf f) (P self)"
 }
 Code.Bool.true {
 	"@p @t @f t"
@@ -14,10 +14,38 @@ Code.lam_test {
 	"@(p: *) p"
 }
 
-Main {
+Code.Unbound {
+	"Nat.succ"
+}
+Code.T {
+	"@a @(c: a @a a) a"
+}
+Import: (Exile.Rulebook.parse 0)
+Main2 {
+	do IO {
+		ask bool_code = IO.load "../examples/Bool.xil"
+		let bool_code = (String.trim (HVM.log bool_code bool_code))
+		let term_parser = (Exile.HSyntax.parse.term Exile.DepthTable.new)
+		ask parsed_bool_code = (Either.match (Parser.run (Exile.Rulebook.parse term_parser) bool_code)
+			p => (IO Exile.Rulebook)
+			(result => IO.pure result)
+			(error => do IO {
+				ask IO.output (Parser.Error.match error (x => String) (msg => init => end => msg))
+				ask IO.output (String.flatten ["Error" String.new_line])
+				return List.nil
+			})
+		)
+		let result = parsed_bool_code
+		let result = (Exile.Rulebook.show result)
+		ask IO.output result
+		return Unit.new
+	}
+}
+
+Main3 {
 	do IO {
 		let term = Code.Unit.new
-		let type = Code.Bool
+		let type = Code.T
 	
 		let type = (Exile.HSyntax.parse type)
 		let term = (Exile.HSyntax.parse term)
@@ -26,3 +54,7 @@ Main {
 		(IO.done Unit.new)
 	}
 }
+
+
+Main4 { (Parser.run (Exile.HSyntax.parse.term Exile.DepthTable.new) Code.Bool) }
+Main { Main2 } 
