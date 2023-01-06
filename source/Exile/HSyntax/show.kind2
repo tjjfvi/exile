@@ -1,7 +1,7 @@
 // Display a term body, substituting the variable with the variable name
 Util.output_body (body: Exile.TermBody) (name: String): String {
 	let x = (Exile.Term.attach (Exile.Term.var (Exile.TermBody.get_index body)) name)
-	(Exile.HSyntax.show (Exile.TermBody.replace body x))
+	(Exile.HSyntax.show (Exile.TermBody.get_term body))
 }
 Util.output_body_unnamed (body: Exile.TermBody) {
 	let name = Util.get_var_name body

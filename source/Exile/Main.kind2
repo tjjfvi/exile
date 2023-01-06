@@ -1,5 +1,5 @@
 Code.Bool {
-	"µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: P λp λt λf t) λ(f: P λp λt λf f) (P self)"
+	"µ Bool ξ self λ(P: λ(b: Bool) *) λ(tr: (P λp λt λf t)) λ(fl: (P λp λt λf f)) (P self)"
 }
 Code.Bool.true {
 	"@p @t @f t"
@@ -62,7 +62,7 @@ Main3 {
 }
 
 
-Main4 { (Parser.run (Exile.HSyntax.parse.term Exile.DepthTable.new) Code.Bool) }
+Main4 { (Exile.HSyntax.parse Code.Bool) }
 
 Main6 {
 	let a = (Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.var 1)))

@@ -1,5 +1,8 @@
 Exile.Checker.reduce (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult {
-	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker (HVM.log (Exile.Judgement.show (Exile.Judgement.reduce term)) term)) (Exile.TracebackEntry.judgement (Exile.Judgement.reduce term))
+  let judgement = (Exile.Judgement.reduce term)
+  // For logging
+  // let term = (HVM.log (Exile.Judgement.show judgement) term)
+	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker term) (Exile.TracebackEntry.judgement judgement)
 }
 
 Exile.Checker.reduce.go (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult
@@ -66,8 +69,8 @@ Util.reduce_check ch (Exile.Term.infer_lambda body) (Exile.Term.lambda type type
     let fresh_index = Exile.Util.find_free (List.flatten [(Exile.Term.get_var_set type) (Exile.TermBody.get_var_set body) (Exile.TermBody.get_var_set type_body)])
     let fresh_var = Exile.Term.check (Exile.Term.var fresh_index) type
     let result = Exile.Checker.reduce ch (Exile.Term.check (Exile.TermBody.replace body fresh_var) (Exile.TermBody.replace type_body fresh_var))
-    Exile.CheckResult.map_term result body => 
-      (Exile.Term.lambda type (Exile.TermBody.new fresh_index body))
+    Exile.CheckResult.with_comment (Exile.CheckResult.map_term result body => 
+      (Exile.Term.lambda type (Exile.TermBody.new fresh_index body)))"a" 
 Util.reduce_check ch (Exile.Term.lambda term.type term.body) (Exile.Term.lambda type.type type.body) = 
     let fresh_index = Exile.Util.find_free (List.flatten [(Exile.Term.get_var_set term.type) (Exile.Term.get_var_set type.type) (Exile.TermBody.get_var_set term.body) (Exile.TermBody.get_var_set type.body) ])
     let result = Exile.Checker.reduce ch (Exile.Term.check (Exile.Term.check (Exile.Term.var fresh_index) type.type) term.type)
@@ -138,9 +141,9 @@ Util.reduce_check ch (Exile.Term.var a) Exile.Term.top = Exile.CheckResult.ok (E
 Util.reduce_check ch (Exile.Term.recursive body) type = (Exile.Checker.reduce ch (Exile.Term.check (Exile.TermBody.replace body (Exile.Term.recursive body)) type))
 
 Util.reduce_check ch (Exile.Term.attach term meta) type = 
-  Exile.CheckResult.map_term (Util.reduce_check ch term type) (term => (Exile.Term.attach term meta))
+  Exile.CheckResult.map_term (Exile.Checker.reduce ch (Exile.Term.check term type)) (term => (Exile.Term.attach term meta))
 Util.reduce_check ch term (Exile.Term.attach type meta) = 
-  Util.reduce_check ch term type
+  (Exile.Checker.reduce ch (Exile.Term.check term type))
 Util.reduce_check ch term type = 
   (Exile.CheckResult.with_comment Exile.CheckResult.err
   (String.flatten [

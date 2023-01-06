@@ -1,4 +1,3 @@
-
 Exile.Term.replace.go (id: U60) (body: Exile.Term) (with: Exile.Term): Exile.Term
 Exile.Term.replace.go id (Exile.Term.var v_id) with = (U60.if
 	(== id v_id) 
@@ -12,7 +11,7 @@ Exile.TermBody.replace_avoid (body: Exile.TermBody) (with: Exile.Term) (avoid: L
 	let body_set = Exile.TermBody.get_var_set body
 	let with_set = Exile.Term.get_var_set with
 	let id = (Exile.TermBody.get_index body)
-	let body = Exile.Term.replace_set (Exile.TermBody.get_term body) body_set (List.concat with_set avoid)
-	(Exile.Term.replace.go id body with)
+	let with = Exile.Term.replace_set with body_set (List.concat with_set avoid)
+	(Exile.Term.replace.go id (Exile.TermBody.get_term body) with)
 }
 
