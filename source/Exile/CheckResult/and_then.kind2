@@ -6,5 +6,5 @@ Exile.CheckResult.and_then (result: Exile.CheckResult) (f: Exile.Term -> Exile.C
 	let s_term = (Exile.CheckResult.get_term s)
 	let s_tb = (Exile.CheckResult.get_tb s)
 	let final_term = (Bool.if (Exile.Term.is_error r_term) Exile.Term.error s_term)
-	(Exile.CheckResult.new final_term (Exile.TracebackTree.and_then r_tb s_tb))
+	(Exile.CheckResult.new (HVM.log (Pair.new r_term s_term) final_term) (Exile.TracebackTree.and_then r_tb s_tb))
 }

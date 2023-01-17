@@ -1,0 +1,44 @@
+[ Dm(@(a: T) b) ]
+	T
+
+[ &z (body z) <= b ] 
+	[ (body b) <= b ] 
+	
+[ a <= $z (body z) ] 
+	[ a <= (body a) ]
+ 
+[ a < $z (body z) ] 
+	[ a < (body a) ] 
+
+[ a < &x (body x) ] 
+	[ a <= (body ( z >= &x (body x))) ] 	
+
+[ a < b ] 
+	let x = (x < [ Dm(b) ])
+	[ (a x) < (b x) ]
+	
+[ (a < b) < c ]
+	[ b <= c ]
+
+[ a <= b ]
+	[ a == b ]
+
+example:
+
+! = @x x
+* = $x x
+Bool = &Bool $self @(P: @(:Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P self)
+Bool.true = @p @t @f t
+
+Bool.true < Boolc
+Bool.true < &Bool $self @(P: @(:Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P self)
+Bool.true < $self @(P: @(:z >= Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P self)
+Bool.true < @(P: @(:z >= Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P Bool.true)
+@p @t @f t < @(P: @(:z >= Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P Bool.true)
+@t @f t < @(:(P <  @(:z >= Bool) *) @p @t @f t) @(:(P <  @(:z >= Bool) *) @p @t @f f) ((P <  @(:z >= Bool) *) Bool.true)
+@f (t < (P <  @(:z >= Bool) *) @p @t @f t) < @(:(P <  @(:z >= Bool) *) @p @t @f f) ((P <  @(:z >= Bool) *) Bool.true)
+(t < (P <  @(:z >= Bool) *) @p @t @f t) < ((P <  @(:z >= Bool) *) Bool.true)
+(t < (P <  @(:z >= Bool) *) @p @t @f t) < ((P <  @(:z >= Bool) *) @p @t @f t)
+(t < (P <  @(:z >= Bool) *) @p @t @f t) < ((P <  @(:z >= Bool) *) @p @t @f t)
+(P <  @(:z >= Bool) *) @p @t @f t <= (P <  @(:z >= Bool) *) @p @t @f t
+

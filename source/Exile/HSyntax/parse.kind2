@@ -77,7 +77,7 @@ Exile.HSyntax.parse.term (table: Exile.DepthTable) {
     (Exile.HSyntax.parse.term.typed_lambda table)
     (Exile.HSyntax.parse.term.container table ['@', 'λ'] (var_name => body => (Exile.Term.attach (Exile.Term.infer_lambda (Exile.TermBody.new next_idx body)) var_name)))
     (Exile.HSyntax.parse.term.container table ['$', 'ξ'] (var_name => body => (Exile.Term.attach (Exile.Term.self (Exile.TermBody.new next_idx body)) var_name)))
-    (Exile.HSyntax.parse.term.container table ['%', 'μ', 181] (var_name => body => (Exile.Term.attach (Exile.Term.recursive (Exile.TermBody.new next_idx body)) var_name)))
+    (Exile.HSyntax.parse.term.container table ['&', '%', 'μ', 181] (var_name => body => (Exile.Term.attach (Exile.Term.recursive (Exile.TermBody.new next_idx body)) var_name)))
     (Exile.HSyntax.parse.term.variable table)
     (Exile.HSyntax.parse.term.top table)
     (Exile.HSyntax.parse.with_paren (Exile.HSyntax.parse.term table))

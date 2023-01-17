@@ -1,0 +1,4 @@
+Not: @(:*) * = @x x
+Forall = @T@(prop: (:T) *) @(x:T) (prop x)
+Exists = @T@(prop: T -> *) (Not T)
+

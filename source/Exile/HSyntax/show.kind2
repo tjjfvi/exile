@@ -43,8 +43,8 @@ Exile.HSyntax.show (Exile.Term.apply a b) = String.flatten [
 Exile.HSyntax.show (Exile.Term.var uid) = String.flatten [
 	"any" (U60.to_string uid)
 ]
-Exile.HSyntax.show (Exile.Term.check term type) = String.flatten [
-	"(" (Exile.HSyntax.show term) " : " (Exile.HSyntax.show type) ")" 
+Exile.HSyntax.show (Exile.Term.subtype term type) = String.flatten [
+	"(" (Exile.HSyntax.show term) " <= " (Exile.HSyntax.show type) ")" 
 ]
 Exile.HSyntax.show (Exile.Term.supertype sup sub) = String.flatten [
 	"(" (Exile.HSyntax.show sup) " >= " (Exile.HSyntax.show sub) ")"

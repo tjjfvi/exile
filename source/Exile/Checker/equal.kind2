@@ -3,6 +3,12 @@ Exile.Checker.equal (checker: Exile.Checker) (l: Exile.Term) (r: Exile.Term): Ex
 }
 
 Exile.Checker.equal.go (checker: Exile.Checker) (l: Exile.Term) (r: Exile.Term): Exile.CheckResult
+
+Exile.Checker.equal.go checker (Exile.Term.attach a b) (Exile.Term.attach c d) = Exile.Checker.equal checker a c
+Exile.Checker.equal.go checker a (Exile.Term.attach c d) = Exile.Checker.equal checker a c
+Exile.Checker.equal.go checker (Exile.Term.attach a b) c = Exile.Checker.equal checker a c
+
+
 Exile.Checker.equal.go checker Exile.Term.top Exile.Term.top = Exile.CheckResult.ok Exile.Term.top
 Exile.Checker.equal.go ch (Exile.Term.infer_lambda l.body) (Exile.Term.infer_lambda r.body) = 
   let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
@@ -29,11 +35,16 @@ Exile.Checker.equal.go ch (Exile.Term.lambda l.type l.body) (Exile.Term.lambda r
       (Exile.CheckResult.ok (Exile.Term.lambda l.type l.body))
     )
       
-Exile.Checker.equal.go ch (Exile.Term.check l.instance l.type) (Exile.Term.check r.instance r.type) = 
+Exile.Checker.equal.go ch (Exile.Term.subtype l.instance l.type) (Exile.Term.subtype r.instance r.type) = 
   (Exile.CheckResult.and_then
     (Exile.Checker.equal ch l.instance r.instance)
     term => (Exile.CheckResult.map_term (Exile.Checker.equal ch l.type r.type)
-      term2 => (Exile.Term.check term term2)))
+      term2 => (Exile.Term.subtype term term2)))
+Exile.Checker.equal.go ch (Exile.Term.supertype l.instance l.type) (Exile.Term.supertype r.instance r.type) = 
+  (Exile.CheckResult.and_then
+    (Exile.Checker.equal ch l.instance r.instance)
+    term => (Exile.CheckResult.map_term (Exile.Checker.equal ch l.type r.type)
+      term2 => (Exile.Term.subtype term term2)))
 Exile.Checker.equal.go ch (Exile.Term.apply l.l l.r) (Exile.Term.apply r.l r.r) = 
   (Exile.CheckResult.and
     (Exile.CheckResult.and
@@ -42,12 +53,27 @@ Exile.Checker.equal.go ch (Exile.Term.apply l.l l.r) (Exile.Term.apply r.l r.r) 
     )
     (Exile.CheckResult.ok (Exile.Term.apply l.l l.r))
   )
+Exile.Checker.equal.go ch (Exile.Term.recursive l.body) (Exile.Term.recursive r.body) = 
+  
+  let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
+  let fresh_var = (Exile.Term.var fresh_index)
+  (Exile.Checker.equal
+    ch
+    (Exile.TermBody.replace l.body (Exile.TermBody.replace r.body fresh_var))
+    (Exile.TermBody.replace r.body (Exile.TermBody.replace l.body fresh_var))
+  )
   
 Exile.Checker.equal.go ch (Exile.Term.recursive l.body) right = 
   (Exile.Checker.equal
     ch
     (Exile.TermBody.replace l.body (Exile.Term.recursive l.body))
     right
+  )
+Exile.Checker.equal.go ch left (Exile.Term.recursive r.body) = 
+  (Exile.Checker.equal
+    ch
+    left
+    (Exile.TermBody.replace r.body (Exile.Term.recursive r.body))
   )
 Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) = 
   (U60.if
@@ -56,7 +82,4 @@ Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) =
     Exile.CheckResult.err
   )
   
-Exile.Checker.equal.go checker (Exile.Term.attach a b) (Exile.Term.attach c d) = Exile.Checker.equal checker a c
-Exile.Checker.equal.go checker a (Exile.Term.attach c d) = Exile.Checker.equal checker a c
-Exile.Checker.equal.go checker (Exile.Term.attach a b) c = Exile.Checker.equal checker a c
 Exile.Checker.equal.go checker l r = Exile.CheckResult.err

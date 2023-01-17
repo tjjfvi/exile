@@ -5,7 +5,7 @@ Exile.Term.apply_subterm_with_vars (Exile.Term.infer_lambda (Exile.TermBody.new 
 Exile.Term.apply_subterm_with_vars (Exile.Term.recursive (Exile.TermBody.new id body)) f = (Exile.Term.recursive (Exile.TermBody.new id (f body [id])))
 Exile.Term.apply_subterm_with_vars (Exile.Term.self (Exile.TermBody.new id body)) f = (Exile.Term.self (Exile.TermBody.new id (f body [id])))
 Exile.Term.apply_subterm_with_vars (Exile.Term.apply a b) f = (Exile.Term.apply (f a []) (f b []))
-Exile.Term.apply_subterm_with_vars (Exile.Term.check a b) f = (Exile.Term.check (f a []) (f b []))
+Exile.Term.apply_subterm_with_vars (Exile.Term.subtype a b) f = (Exile.Term.subtype (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.supertype a b) f = (Exile.Term.supertype (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.attach term meta) f = (Exile.Term.attach (f term []) meta)
 Exile.Term.apply_subterm_with_vars Exile.Term.top f = Exile.Term.top

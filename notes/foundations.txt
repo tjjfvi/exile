@@ -1,0 +1,169 @@
+The big important axiom:
+
+Definition: Dm(f) := domain of f.
+
+Axiom 1.1: ∀f∀u f: u <-> ∀x x: Dm(u) -> (f x): (u x)
+Axiom 1.1.5: ∀f∀u f: u <-> ∀x x: Dm(u) -> x: Dm(f)]
+Axiom 1.2: ∀a∀b EfExEy (f x) = a and (f y) = b
+// AKA: You can always build a function that gives you the values you want.
+Axiom 1.3: There exists at least one type with no members. we'll call it !
+
+Proof 1.3.5
+
+Proof 1.4.
+	We will prove that:
+		∀x: Dm(u) u x = ! -> u = !
+	let (u x) = !
+	forall f, x: Dm(f):
+		(f x): ! is false
+		therefore, f: u is false
+		therefore, u has no members.
+		the Dm(u) bound in the goal can be proved through axiom 1.1.5
+		qed.
+	
+Proof 1.5: 
+	We will prove that:
+		! x = !
+	let u = !
+	for all f, x: Dm(f):
+		f: ! is false
+		because of [1.1] (f x): (u x) is false
+		because of [1.1] (f x): (! x) is false
+		because of [1.2] ∀a a: (! x) is false
+		therefore (! x) has no members
+		qed.
+		
+Proof 1.6:
+	Let f = !
+	f x = !
+	axiom 1.1 becomes:
+	∀u∀x !: u x <-> !: u
+	
+Proof 1.7: 
+	We will prove that:
+		∀f∀u∀x∀y (f x): (u x) <-> (f y): (u y)
+	because of axiom 1.1 f: u
+	because of axiom 1.1 f y: u y
+	qed.
+
+We will introduce an extra axiom:
+Axiom 2.1: There exists a universe type * such that ∀x x: *
+
+Proof 2.2: 
+	We will prove that:
+		(* x) = *
+	
+	for all f, x: Dm(f):
+		f: * is true
+		because of [1.1] (f x): (u x) is true
+		because of [1.1] (f x): (* x) is true
+		because of [1.2] ∀a a: (* x) is true
+		therefore (* x) is the type of everything
+		qed.
+
+Proof 2.3: 
+	We will prove that:
+		∀x (u x) = * -> u = *
+	
+	similar to proof 1.4.
+
+Proof 2.4: 
+	We will prove that:
+		∀x∀y(y: ! -> y: x)
+	true because of the principle of explosion, y: ! is a contradiction.
+	
+=== Dependent Inductive and co-inductive types ===
+Example 1: Natural numbers
+	We want to be able to create the inductive principle for natural numbers
+
+	Nat has two constructors
+	Nat.zero: Nat
+	Nat.succ: Nat -> Nat
+
+	The inductive principle is.
+	@(P: Nat -> *) 
+		@(:P(Nat.zero)) 
+		@(@(pred: Nat) @(:(P pred)) (P (Nat.succ pred))) 
+		(@(n:Nat) (P n))
+	
+	// In prose: For any proposition P and any Nat n, if you prove that it holds for zero and you prove the induction step, then it holds for all natural numbers
+
+Example 2: Stream of T.
+
+	let Stt be (Stream T)
+
+	Stt has two destructors
+
+	Stt.head: Stt -> T
+	Stt.tail: Stt -> Stt
+	
+	@(P: @(head: T) @(tail: Stt) *) 
+		// If:
+		//	for any head and tail, if (P tail), then P head tail: 
+		@(:@(head: T) @(tail: Stt) @(proof: P (Stt.head tail) (Stt.tail tail)) (P head tail)) 
+		//	then, for any S it is true.
+		(@(s: Stt) (P s))
+
+
+	
+Testing: The Application of Self-types
+	let f: $self (body self)
+	∀x: Dm($self (body self))
+	f: (body f)
+	f x: (body f) x
+	but additionally,
+	f x: $self (body self) x
+	
+	let body = (x: $self (body self)) (w: Dm($self (body self))) ((inner w) x)
+	
+	f x: ((inner f) x)
+	f x: $self (
+
+bool = $self λp λt λf (p self)
+true = λp λt λf t
+true: bool
+true x: bool x
+true x = λt λf t
+a type of λt λf t is ∀T∀U (x: T)(y: U) T
+
+so ∀T∀U , bool x is a supertype of (x: T)(y: U) T
+and since Bool.false: Bool, 
+∀T∀U , bool x is a supertype of (x: T)(y: U) U
+
+µ x (body x) : ξ x (type x) iff body : type
+
+µ x (body x)
+
+*: $self self
+nu I : nu I
+
+λt λf t
+
+Bool = µ Bool ν self λ(P: λ(b: Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self)
+
+λp λt λf t : µ Bool ν self λ(P: λ(b: Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self)
+λp λt λf t : ν self λ(P: λ(b: Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self)
+λp λt λf t : λ(P: λ(b: bool_t >= Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self_t <= self)
+λt λf t : λ(t: P Bool.true) λ(f: P Bool.false) (P self_t <= self)
+λf (t: P Bool.true) : λ(f: P Bool.false) (P self_t <= self)
+(t: P λp λt λf t) : (P self_t <= self)
+P λp λt λf t <= (P self_t <= self)
+P λp λt λf t <= (P self_t <= ν self λ(P: λ(b: Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self))
+???
+
+mu F <= x if F(x) <= x
+x <= nu F if x <= F(x)
+x : xi F if x : F(x)
+
+
+mu F: x if F(x): x
+x: nu F if x: F(x)
+
+mu F <= x iff F(x) <= x
+x <= nu F iff x <= F(x)
+x : xi F iff x : F(x)
+wi F: x iff wi F: F(x)
+
+
+
+

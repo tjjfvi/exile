@@ -1,0 +1,61 @@
+:=< axioms
+
+
+
+Definition: We define a <= b
+Definition: We define Dm(u)
+Definition: We define a = b. a = b iff ∀P you can infer P(b) from P(a). Trivially, a = a
+Axiom 1.1: ∀f∀u f < u <-> (∀x x < Dm(u) -> (f x) < (u x))
+Axiom 1.2: ∀x∀F &z (F z) <= x iff (F x) <= x
+Axiom 1.3: ∀x∀F $z (F z) >= x iff (F x) >= x
+Axiom 1.4: ~∀t∃x x < t
+// Prose: Some types are uninhabited
+
+
+Proof 2.1:
+	We will prove that:
+		∀x <= $z z
+	forall x:
+		x <= $z z
+		[1.2] iff x <= x
+		[Refl] iff true
+		QED.
+
+Proof 2.2:
+	We will prove that:
+		~∃x x < (@z z)
+		// Prose: the identity function is uninhabited
+	by contradiction:
+		[assume] ∃x x < (@z z)
+		[let] x < @z z
+		[1.1] ∀f∀u f < u <-> (∀x x < Dm(u) -> (f x) < (u x))
+		[subst] x < @z z <-> (∀v v < Dm(@z z) -> (x v) < ((@z z) v))
+		[imply] (∀v v < Dm(@z z) -> (x v) < ((@z z) v))
+		[b-reduct] (∀v v < Dm(@z z) -> (x v) < v)
+		[dm-z-z] (∀v (x v) < v)
+		[generalize x = x v] ∀v∃x x < v
+		[1.4] ~∀t∃x x: t
+		[contradict] ∀v∃x x < v, but ~∀t∃x x: t.
+		we've reached a contradiction.
+		// Prose: Let x be an instance of the identity function. Then for any v, x v: I v, which means x v: v, which means v is never uninhabited and there are no uninhabited types.
+		
+Proof 2.3:
+	We will prove that:
+		∀f∀u f <= u <-> Dm(f) >= Dm(u) && (∀x x < Dm(u) -> (f x) <= (u x))
+	Either:
+		f = u:
+			then ∀x x <= Dm(u) (f x) = (u x) 
+			and Dm(f) == Dm(U)
+			so if the LHS of the equality is true, then the rhs in true.
+			the reverse follows from function extensionality.
+		f < u:
+			true because of axiom 1.1
+		not f < u and not f <= u:
+			axiom 1.1 again.
+		
+			
+			
+		
+
+
+		

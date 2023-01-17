@@ -5,7 +5,7 @@ Nat = µ Nat ξ self
     n
   ))
   λ(z: P (λp λs λz z))
-  P self
+  (P self)
 
 Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n P s z)
 
