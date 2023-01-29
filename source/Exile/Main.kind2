@@ -40,8 +40,8 @@ Main2 {
 		ask IO.output (Exile.Rulebook.show rulebook)
 		let rulebook = (Exile.Rulebook.replace_unbound rulebook)
 		ask IO.output (Exile.Rulebook.show rulebook)
-		let bool = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool") Exile.Term.unbound)
-		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.true") Exile.Term.unbound)
+		let bool = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.not.type") Exile.Term.unbound)
+		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.not") Exile.Term.unbound)
 		//let bool_true = (HVM.log (Exile.HSyntax.show bool_true) bool_true)
 		//let bool = (HVM.log (Exile.HSyntax.show bool) bool)
 		let cresult = (Exile.Checker.reduce Exile.Checker.empty (Exile.Term.subtype bool_true bool))
@@ -65,6 +65,17 @@ Main3 {
 
 
 Main4 { (Exile.HSyntax.parse Code.Bool) }
+
+Main5 {
+	let a = (Exile.Term.var 0)
+	let b = (Exile.Term.var 1)
+	let term = (Exile.Term.subtype a b)
+	let type = b
+	let term = (Exile.Term.infer_lambda (Exile.TermBody.new 10 term))
+	let type = (Exile.Term.infer_lambda (Exile.TermBody.new 10 type))
+	let res = (Exile.Checker.reduce Exile.Checker.empty (Exile.Term.subtype term type))
+	(Exile.CheckResult.show res)
+}
 
 Main6 {
 	let a = (Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.var 1)))

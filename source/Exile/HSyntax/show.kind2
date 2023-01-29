@@ -1,60 +1,99 @@
+Util.csi_m (n: String) { String.flatten [String.ascii_escape "[" n "m"]  }
+Util.depth_to_color (depth: U60): String
+Util.depth_to_color 0 = Util.csi_m "1;31"
+Util.depth_to_color 1 = Util.csi_m "1;32"
+Util.depth_to_color 2 = Util.csi_m "1;33"
+Util.depth_to_color 3 = Util.csi_m "1;34"
+Util.depth_to_color 4 = Util.csi_m "1;35"
+Util.depth_to_color 5 = Util.csi_m "1;36"
+Util.depth_to_color 6 = Util.csi_m "1;30"
+Util.depth_to_color x = Util.csi_m "0"
+State.color_string (a: State) (s: String): String { String.flatten [
+	(Util.depth_to_color (State.get_depth a))
+	s
+	(Util.csi_m "0")
+]}
+
+
 // Display a term body, substituting the variable with the variable name
-Util.output_body (body: Exile.TermBody) (name: String): String {
+Util.output_body (st: State) (body: Exile.TermBody) (name: String): String {
 	let x = (Exile.Term.attach (Exile.Term.var (Exile.TermBody.get_index body)) name)
-	(Exile.HSyntax.show (Exile.TermBody.get_term body))
+	State.inc_depth st st => (Exile.HSyntax.show.go st (Exile.TermBody.get_term body))
 }
-Util.output_body_unnamed (body: Exile.TermBody) {
+Util.output_body_unnamed (st: State) (body: Exile.TermBody) {
 	let name = Util.get_var_name body
-	(Util.output_body body name)
+	(Util.output_body st body name)
 }
 Util.get_var_name (body: Exile.TermBody) { String.flatten [ "x" (U60.to_string (Exile.TermBody.get_index body)) ] } 
 
-Exile.HSyntax.output_with_name (term: Exile.Term) (name: String): String
-Exile.HSyntax.output_with_name (Exile.Term.lambda type body) name = 
-	let type_s = (Exile.HSyntax.show type)
-	String.flatten [ "λ(" name (Util.get_var_name body) ": " type_s ") " (Util.output_body body name) ]
-Exile.HSyntax.output_with_name (Exile.Term.infer_lambda body) name = 
-	String.flatten [ "λ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
-Exile.HSyntax.output_with_name (Exile.Term.recursive body) name = 
-	String.flatten [ "µ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
-Exile.HSyntax.output_with_name (Exile.Term.self body) name = 
-	String.flatten [ "ξ" name  (Util.get_var_name body) " " (Util.output_body body name) ]
-Exile.HSyntax.output_with_name x name = Exile.HSyntax.show x
+Exile.HSyntax.output_with_name (st: State) (term: Exile.Term) (name: String): String
+Exile.HSyntax.output_with_name st (Exile.Term.lambda type body) name = 
+	let type_s = (Exile.HSyntax.show.go (State.inc_depth st st => st) type)
+	String.flatten [ "λ(" name ": " type_s ") " (Util.output_body st body name) ]
+Exile.HSyntax.output_with_name st (Exile.Term.infer_lambda body) name = 
+	String.flatten [ "λ" name " " (Util.output_body st body name) ]
+Exile.HSyntax.output_with_name st (Exile.Term.recursive body) name = 
+	String.flatten [ "µ" name " " (Util.output_body st body name) ]
+Exile.HSyntax.output_with_name st (Exile.Term.self body) name = 
+	String.flatten [ "ξ" name " " (Util.output_body st body name) ]
+Exile.HSyntax.output_with_name st x name = Exile.HSyntax.show.go st x
 
-Exile.HSyntax.show (term: Exile.Term): String
-Exile.HSyntax.show (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
-Exile.HSyntax.show (Exile.Term.attach String Exile.Term.unbound name) = String.flatten [
+State { U60 }
+State.get_depth (a: State): U60 { a } 
+State.set_depth (a: State) (depth: U60): State { depth }
+State.inc_depth <t> (a: State) (cont: State -> t): t {
+	let depth = State.get_depth a
+	let depth = (+ depth 1)
+	let a = State.set_depth a depth
+	(cont a)
+}
+State.empty { 0 }
+
+Exile.HSyntax.show (term: Exile.Term) {
+	Exile.HSyntax.show.go State.empty term
+}
+Exile.HSyntax.show.go (st: State) (term: Exile.Term): String
+Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s]
+// Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
+Exile.HSyntax.show.go st (Exile.Term.attach String Exile.Term.unbound name) = String.flatten [
 	"?" name "?"
 ]
-Exile.HSyntax.show (Exile.Term.attach String term name) = (Exile.HSyntax.output_with_name term name)
-Exile.HSyntax.show (Exile.Term.lambda type body) = Exile.HSyntax.output_with_name (Exile.Term.lambda type body) (Util.get_var_name body)
-Exile.HSyntax.show (Exile.Term.infer_lambda body) = Exile.HSyntax.output_with_name (Exile.Term.infer_lambda body) (Util.get_var_name body)
-Exile.HSyntax.show (Exile.Term.self body) = Exile.HSyntax.output_with_name (Exile.Term.self body) (Util.get_var_name body)
-Exile.HSyntax.show (Exile.Term.recursive body) = Exile.HSyntax.output_with_name (Exile.Term.recursive body) (Util.get_var_name body)
-Exile.HSyntax.show Exile.Term.top = "*"
-Exile.HSyntax.show Exile.Term.error = "!"
-Exile.HSyntax.show (Exile.Term.apply a b) = String.flatten [
-	"("
-	(Exile.HSyntax.show a)
+Exile.HSyntax.show.go st (Exile.Term.attach String term name) = (Exile.HSyntax.output_with_name st term name)
+Exile.HSyntax.show.go st (Exile.Term.lambda type body) = Exile.HSyntax.output_with_name st (Exile.Term.lambda type body) (Util.get_var_name body)
+Exile.HSyntax.show.go st (Exile.Term.infer_lambda body) = Exile.HSyntax.output_with_name st (Exile.Term.infer_lambda body) (Util.get_var_name body)
+Exile.HSyntax.show.go st (Exile.Term.self body) = Exile.HSyntax.output_with_name st (Exile.Term.self body) (Util.get_var_name body)
+Exile.HSyntax.show.go st (Exile.Term.recursive body) = Exile.HSyntax.output_with_name st (Exile.Term.recursive body) (Util.get_var_name body)
+Exile.HSyntax.show.go st Exile.Term.error = "! (Err)"
+Exile.HSyntax.show.go st (Exile.Term.apply a b) = String.flatten [
+	(State.color_string st "A(")
+	(State.inc_depth st st => (Exile.HSyntax.show.go st a))
 	" "
-	(Exile.HSyntax.show b)
-	")"
+	(State.inc_depth st st => (Exile.HSyntax.show.go st b))
+	(State.color_string st ")")
 ]
-Exile.HSyntax.show (Exile.Term.var uid) = String.flatten [
+Exile.HSyntax.show.go st (Exile.Term.var uid) = String.flatten [
 	"any" (U60.to_string uid)
 ]
-Exile.HSyntax.show (Exile.Term.subtype term type) = String.flatten [
-	"(" (Exile.HSyntax.show term) " <= " (Exile.HSyntax.show type) ")" 
+Exile.HSyntax.show.go st (Exile.Term.subtype sub sup) = String.flatten [
+	(State.color_string st "(")
+	(State.inc_depth st st => (Exile.HSyntax.show.go st sub))
+	(State.color_string st " <= ")
+	(State.inc_depth st st => (Exile.HSyntax.show.go st sup))
+	(State.color_string st ")") 
 ]
-Exile.HSyntax.show (Exile.Term.supertype sup sub) = String.flatten [
-	"(" (Exile.HSyntax.show sup) " >= " (Exile.HSyntax.show sub) ")"
+Exile.HSyntax.show.go st (Exile.Term.supertype sup sub) = String.flatten [
+	(State.color_string st "(")
+	(State.inc_depth st st => (Exile.HSyntax.show.go st sup))
+	(State.color_string st " >= ")
+	(State.inc_depth st st => (Exile.HSyntax.show.go st sub))
+	(State.color_string st ")") 
 ]
-Exile.HSyntax.show (Exile.Term.typeof term) = String.flatten [
-	"typeof " (Exile.HSyntax.show term)
+Exile.HSyntax.show.go st (Exile.Term.typeof term) = String.flatten [
+	"typeof " (Exile.HSyntax.show.go st term)
 ]
-Exile.HSyntax.show (Exile.Term.attach t v meta) = String.flatten [
-	(Exile.HSyntax.show v)
+Exile.HSyntax.show.go st (Exile.Term.attach t v meta) = String.flatten [
+	(Exile.HSyntax.show.go st v)
 ]
-Exile.HSyntax.show Exile.Term.unbound = "<unbound>"
+Exile.HSyntax.show.go st Exile.Term.unbound = "<unbound>"
 
-Exile.HSyntax.show x = (HVM.log x "???")
+Exile.HSyntax.show.go st x = (HVM.log x "???")

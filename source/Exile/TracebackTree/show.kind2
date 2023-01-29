@@ -34,7 +34,7 @@ Exile.TracebackTree.show depth (Exile.TracebackTree.or a b) = String.flatten [
 	(Exile.TracebackTree.show (Nat.succ depth) b)
 ]
 
-Exile.TracebackTree.show depth (Exile.TracebackTree.and_then a b) = String.flatten [
+Exile.TracebackTree.show depth (Exile.TracebackTree.and_then a b) = (U60.if (> (Nat.to_u60 depth) 5) "" (String.flatten [
 	(String.repeat " " depth)
 	"WITH"
 	String.new_line
@@ -44,4 +44,4 @@ Exile.TracebackTree.show depth (Exile.TracebackTree.and_then a b) = String.flatt
 	"THEN"
 	String.new_line
 	(Exile.TracebackTree.show depth b)
-]
+]))

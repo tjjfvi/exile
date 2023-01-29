@@ -36,11 +36,20 @@ Util.reduce_app ch function argument =
   
 Util.reduce_check (ch: Exile.Checker) (sub: Exile.Term) (sup: Exile.Term): Exile.CheckResult
 
-Util.reduce_check ch (Exile.Term.recursive body) sup = 
-    (Exile.Checker.reduce ch (Exile.Term.subtype (Exile.TermBody.replace body sup) sup))
     
-Util.reduce_check ch sub (Exile.Term.self body)  = 
-    (Exile.Checker.reduce ch (Exile.Term.subtype sub (Exile.TermBody.replace body sub)))
+Util.reduce_check ch (Exile.Term.recursive body) sup = 
+    (Bool.if
+      (Exile.TermBody.is_identity body)
+      (Exile.CheckResult.ok (Exile.Term.recursive body))
+      (Exile.Checker.reduce ch (Exile.Term.subtype (Exile.TermBody.replace body sup) sup))
+    )
+    
+Util.reduce_check ch sub (Exile.Term.self body)  =
+    (Bool.if
+      (Exile.TermBody.is_identity body)
+      (Exile.CheckResult.ok sub)
+      (Exile.Checker.reduce ch (Exile.Term.subtype sub (Exile.TermBody.replace body sub)))
+    )
     
 // [ a <= &x (body x) ] 
 //   [ a <= (body ( z >= &x (body x))) ] 	
@@ -48,6 +57,18 @@ Util.reduce_check ch sub (Exile.Term.recursive body) =
     let free = (Exile.Util.find_free (List.concat (Exile.Term.get_var_set sub) (Exile.TermBody.get_var_set body)))
     let var = (Exile.Term.var free)
     (Exile.Checker.reduce ch (Exile.Term.subtype sub (Exile.TermBody.replace body (Exile.Term.supertype var (Exile.Term.recursive body)))))
+
+// [ $x (body x) <= a ] 
+//   [ (body ( z <= $x (body x))) <= a ] 
+Util.reduce_check ch (Exile.Term.self body) sup = 
+    (Bool.if
+      (Exile.TermBody.is_identity body)
+      (Exile.CheckResult.err)
+      let free = (Exile.Util.find_free (List.concat (Exile.Term.get_var_set sup) (Exile.TermBody.get_var_set body)))
+      let var = (Exile.Term.var free)
+      (Exile.Checker.reduce ch (Exile.Term.subtype (Exile.TermBody.replace body (Exile.Term.subtype var (Exile.Term.self body))) sup))
+    )
+
 
 Util.reduce_check ch (Exile.Term.lambda sub.type sub.body) (Exile.Term.lambda sup.type sup.body) = 
   (Exile.CheckResult.and_then
@@ -61,10 +82,22 @@ Util.reduce_check ch (Exile.Term.lambda sub.type sub.body) (Exile.Term.lambda su
       ))
   )
 Util.reduce_check ch (Exile.Term.infer_lambda sub.body) (Exile.Term.lambda sup.type sup.body) = 
-  Util.reduce_check ch (Exile.Term.lambda Exile.Term.top sub.body) (Exile.Term.lambda sup.type sup.body)
-
-Util.reduce_check ch a Exile.Term.top = 
-  Exile.CheckResult.ok a
+  let type = sup.type
+  let free = (Exile.Util.find_free (List.flatten [(Exile.Term.get_var_set type) (Exile.TermBody.get_var_set sub.body) (Exile.TermBody.get_var_set sup.body)]))
+  let var = (Exile.Term.subtype (Exile.Term.var free) type)
+  (Exile.Checker.reduce ch (Exile.Term.subtype 
+    (Exile.TermBody.replace sub.body var)
+    (Exile.TermBody.replace sup.body var)
+  ))
+  
+Util.reduce_check ch  (Exile.Term.lambda sub.type sub.body) (Exile.Term.infer_lambda sup.body) = 
+  let type = sub.type
+  let free = (Exile.Util.find_free (List.flatten [(Exile.Term.get_var_set type) (Exile.TermBody.get_var_set sub.body) (Exile.TermBody.get_var_set sup.body)]))
+  let var = (Exile.Term.subtype (Exile.Term.var free) type)
+  (Exile.Checker.reduce ch (Exile.Term.subtype 
+    (Exile.TermBody.replace sub.body var)
+    (Exile.TermBody.replace sup.body var)
+  ))
   
 // [ a <= (b <= c) ]
 // check whether a <= b or a <= c
@@ -74,25 +107,47 @@ Util.reduce_check ch a (Exile.Term.subtype b c) =
     (Exile.Checker.reduce ch (Exile.Term.subtype a c))
   )
 // [ (a <= b) <= c ]
-// 
+// if a <= c, then this is true
+// if b <= c, then a <= c too since a <= b
+
 Util.reduce_check ch (Exile.Term.subtype a b) c =
   (Exile.CheckResult.or
-    (Exile.Checker.reduce ch (Exile.Term.subtype a b))
     (Exile.Checker.reduce ch (Exile.Term.subtype b c))
+    (Exile.Checker.reduce ch (Exile.Term.subtype a c))
+  )
+  
+// [ a <= (b >= c) ]
+
+Util.reduce_check ch a (Exile.Term.supertype b c)  =
+  (Exile.CheckResult.or
+    (Exile.Checker.reduce ch (Exile.Term.subtype a b))
+    (Exile.Checker.reduce ch (Exile.Term.subtype a c))
   )
 
+// [ (a >= b) <= c ]
+// we want to check a <= c
+// we know that b <= a
+// so b <= c -> a <= c
+Util.reduce_check ch a (Exile.Term.supertype b c)  =
+  (Exile.CheckResult.or
+    (Exile.Checker.reduce ch (Exile.Term.subtype b c))
+    (Exile.Checker.reduce ch (Exile.Term.subtype a c))
+  )
+   
 Util.reduce_check ch term (Exile.Term.attach a b) = 
   Util.reduce_check ch term a
 Util.reduce_check ch (Exile.Term.attach a b) term = 
   Util.reduce_check ch a term
 Util.reduce_check ch (Exile.Term.apply a b) (Exile.Term.apply c d) =
   (Exile.Checker.equal ch (Exile.Term.apply a b) (Exile.Term.apply c d))
+
+Util.reduce_check ch (Exile.Term.var a) b = 
+  (Exile.Checker.equal ch (Exile.Term.var a) b)
   
 Util.reduce_check ch term type = 
   (Exile.CheckResult.with_comment Exile.CheckResult.err
   (String.flatten [
     "Can't check " 
-    
     (Exile.HSyntax.show term) 
     " Against " 
     (Exile.HSyntax.show (HVM.log type type))

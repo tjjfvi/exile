@@ -1,0 +1,5 @@
+Exile.TermBody.is_identity (body: Exile.TermBody): Bool 
+Exile.TermBody.is_identity (Exile.TermBody.new id (Exile.Term.var id2 )) =
+	 (U60.if (== id id2) Bool.true Bool.false)
+Exile.TermBody.is_identity (Exile.TermBody.new id a) =
+	 Bool.false

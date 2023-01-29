@@ -11,8 +11,11 @@ Exile.Term.apply (fn: Exile.Term) (argument: Exile.Term): Exile.Term
 Exile.Term.var (id: U60): Exile.Term
 
 // "Alias" terms
-Exile.Term.top: Exile.Term
-Exile.Term.bot: Exile.Term
+Exile.Term.top: Exile.Term { Exile.Term.self      (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
+Exile.Term.bot: Exile.Term { Exile.Term.recursive (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
+Exile.Term.empty: Exile.Term { Exile.Term.infer_lambda (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
+
+Exile.Term.infer: Exile.Term
 
 // Parser terms
 Exile.Term.unbound: Exile.Term

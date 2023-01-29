@@ -9,7 +9,6 @@ Exile.Checker.equal.go checker a (Exile.Term.attach c d) = Exile.Checker.equal c
 Exile.Checker.equal.go checker (Exile.Term.attach a b) c = Exile.Checker.equal checker a c
 
 
-Exile.Checker.equal.go checker Exile.Term.top Exile.Term.top = Exile.CheckResult.ok Exile.Term.top
 Exile.Checker.equal.go ch (Exile.Term.infer_lambda l.body) (Exile.Term.infer_lambda r.body) = 
   let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
   let fresh_var = (Exile.Term.var fresh_index)
@@ -74,6 +73,18 @@ Exile.Checker.equal.go ch left (Exile.Term.recursive r.body) =
     ch
     left
     (Exile.TermBody.replace r.body (Exile.Term.recursive r.body))
+  )
+Exile.Checker.equal.go ch (Exile.Term.self l.body) right = 
+  (Exile.Checker.equal
+    ch
+    (Exile.TermBody.replace l.body (Exile.Term.self l.body))
+    right
+  )
+Exile.Checker.equal.go ch left (Exile.Term.self r.body) = 
+  (Exile.Checker.equal
+    ch
+    left
+    (Exile.TermBody.replace r.body (Exile.Term.self r.body))
   )
 Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) = 
   (U60.if
