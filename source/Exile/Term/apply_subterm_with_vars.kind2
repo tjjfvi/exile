@@ -1,14 +1,18 @@
 
 Exile.Term.apply_subterm_with_vars (term: Exile.Term) (f: Exile.Term -> (List U60) -> Exile.Term): Exile.Term
-Exile.Term.apply_subterm_with_vars (Exile.Term.lambda type (Exile.TermBody.new id body)) f = (Exile.Term.lambda (f type []) (Exile.TermBody.new id (f body [id])))
+Exile.Term.apply_subterm_with_vars (Exile.Term.lambda type sup_type (Exile.TermBody.new id body)) f = (Exile.Term.lambda (f type []) (f sup_type [])  (Exile.TermBody.new id (f body [id])))
 Exile.Term.apply_subterm_with_vars (Exile.Term.infer_lambda (Exile.TermBody.new id body)) f = (Exile.Term.infer_lambda (Exile.TermBody.new id (f body [id])))
-Exile.Term.apply_subterm_with_vars (Exile.Term.recursive (Exile.TermBody.new id body)) f = (Exile.Term.recursive (Exile.TermBody.new id (f body [id])))
-Exile.Term.apply_subterm_with_vars (Exile.Term.self (Exile.TermBody.new id body)) f = (Exile.Term.self (Exile.TermBody.new id (f body [id])))
+Exile.Term.apply_subterm_with_vars (Exile.Term.recursive type (Exile.TermBody.new id body)) f = (Exile.Term.recursive (f type []) (Exile.TermBody.new id (f body [id])))
+Exile.Term.apply_subterm_with_vars (Exile.Term.self type (Exile.TermBody.new id body)) f = (Exile.Term.self (f type []) (Exile.TermBody.new id (f body [id])))
 Exile.Term.apply_subterm_with_vars (Exile.Term.apply a b) f = (Exile.Term.apply (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.subtype a b) f = (Exile.Term.subtype (f a []) (f b []))
+Exile.Term.apply_subterm_with_vars (Exile.Term.bounded a b c) f = (Exile.Term.bounded (f a []) (f b []) (f c []))
+Exile.Term.apply_subterm_with_vars (Exile.Term.larger a) f = (Exile.Term.larger (f a []))
+Exile.Term.apply_subterm_with_vars (Exile.Term.smaller a) f = (Exile.Term.smaller (f a []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.supertype a b) f = (Exile.Term.supertype (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.attach term meta) f = (Exile.Term.attach (f term []) meta)
 Exile.Term.apply_subterm_with_vars Exile.Term.error f = Exile.Term.error
 Exile.Term.apply_subterm_with_vars Exile.Term.unbound f = Exile.Term.unbound
+Exile.Term.apply_subterm_with_vars Exile.Term.no_bound f = Exile.Term.no_bound
 Exile.Term.apply_subterm_with_vars (Exile.Term.var x) f = (Exile.Term.var x)
 Exile.Term.apply_subterm_with_vars x f = (HVM.log (Pair.new "Exile.Term.apply_subterm_with_vars" x) x)

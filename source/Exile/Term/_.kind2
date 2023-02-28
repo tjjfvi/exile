@@ -1,30 +1,35 @@
 Exile.Term: Type
 
 // Real terms
-Exile.Term.lambda (type: Exile.Term) (body: Exile.TermBody): Exile.Term
+Exile.Term.lambda (type: Exile.Term) (sup_type: Exile.Term) (body: Exile.TermBody): Exile.Term
 Exile.Term.infer_lambda (body: Exile.TermBody): Exile.Term
-Exile.Term.recursive (body: Exile.TermBody): Exile.Term
-Exile.Term.self (body: Exile.TermBody): Exile.Term
+Exile.Term.recursive (less_than: Exile.Term) (body: Exile.TermBody): Exile.Term
+Exile.Term.self (greater_than: Exile.Term) (body: Exile.TermBody): Exile.Term
 Exile.Term.apply (fn: Exile.Term) (argument: Exile.Term): Exile.Term
 
 // Variable
 Exile.Term.var (id: U60): Exile.Term
 
 // "Alias" terms
-Exile.Term.top: Exile.Term { Exile.Term.self      (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
-Exile.Term.bot: Exile.Term { Exile.Term.recursive (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
+Exile.Term.top: Exile.Term { Exile.Term.self Exile.Term.no_bound (Exile.TermBody.new 0 (Exile.Term.larger (Exile.Term.var 0))) } 
+Exile.Term.bot: Exile.Term { Exile.Term.recursive Exile.Term.no_bound (Exile.TermBody.new 0 (Exile.Term.smaller (Exile.Term.var 0))) } 
 Exile.Term.empty: Exile.Term { Exile.Term.infer_lambda (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
 
 Exile.Term.infer: Exile.Term
+Exile.Term.no_bound: Exile.Term
 
 // Parser terms
 Exile.Term.unbound: Exile.Term
+Exile.Term.no_bound: Exile.Term
 Exile.Term.attach <t> (term: Exile.Term) (data: t): Exile.Term
 
 // Checker judgement terms
+Exile.Term.bounded (sup: Exile.Term) (term: Exile.Term) (sub: Exile.Term): Exile.Term
 Exile.Term.supertype (sup: Exile.Term) (sub: Exile.Term): Exile.Term
 Exile.Term.subtype (instance: Exile.Term) (type: Exile.Term): Exile.Term
 Exile.Term.typeof (term: Exile.Term): Exile.Term
+Exile.Term.larger (term: Exile.Term): Exile.Term
+Exile.Term.smaller (term: Exile.Term): Exile.Term
 
 // Checker result terms
 Exile.Term.error: Exile.Term

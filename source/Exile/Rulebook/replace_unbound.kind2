@@ -14,7 +14,7 @@ Exile.Rulebook.replace_unbound.go rb (Exile.Term.attach String Exile.Term.unboun
             // If some
             definition =>
             let recursive_index = (Exile.Util.find_free (Exile.Term.get_var_set definition))
-            let definition = (Exile.Term.recursive (Exile.TermBody.new recursive_index definition))
+            let definition = (Exile.Term.recursive Exile.Term.no_bound (Exile.TermBody.new recursive_index definition))
             let definition = (Exile.Term.replace_set definition (Exile.Term.get_var_set definition) (List.cons recursive_index used_vars))
             let definition = (Exile.Rulebook.replace_unbound.go rb definition (Exile.DepthTable.set_value map name recursive_index) (List.cons recursive_index used_vars))
             definition

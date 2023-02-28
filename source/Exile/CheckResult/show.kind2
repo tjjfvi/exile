@@ -1,17 +1,13 @@
 Exile.CheckResult.show (result: Exile.CheckResult): String
-Exile.CheckResult.show (Exile.CheckResult.new Exile.Term.error tb) = String.flatten [
-	"Check not successful"
-	String.new_line
-	(Exile.TracebackTree.show Nat.zero tb)
-	"Check not successful"
-	String.new_line
-]
-Exile.CheckResult.show (Exile.CheckResult.new value tb) = String.flatten [
-	"Check successful: "
+Exile.CheckResult.show (Exile.CheckResult.new value tb) = 
+	let s = (Bool.if (Exile.Term.is_error value) "Check not successful." "Check successful: " )
+String.flatten [
+	s
 	(Exile.HSyntax.show value)
 	String.new_line
 	(Exile.TracebackTree.show Nat.zero tb)
-	"Check successful."
+	s
+	(Exile.HSyntax.show value)
 	String.new_line
 ]
 

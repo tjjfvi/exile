@@ -1,0 +1,8 @@
+Exile.CheckResult.if <t> (r: Exile.CheckResult) (true: t) (false: t): t
+Exile.CheckResult.if t r true false = 
+  (Bool.if
+    (Exile.Term.is_error (Exile.CheckResult.get_term r))
+    false
+    true
+  )
+

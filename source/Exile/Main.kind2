@@ -23,16 +23,20 @@ Code.T {
 Main2 {
 	do IO {
 		ask bool_code = IO.load "../examples/Bool.xil"
-		let bool_code = (String.trim (HVM.log bool_code bool_code))
+		let bool_code = (String.trim bool_code)
 		ask unit_code = IO.load "../examples/Unit.xil"
-		let unit_code = (String.trim (HVM.log unit_code unit_code))
+		let unit_code = (String.trim unit_code)
 		let term_parser = (Exile.HSyntax.parse.term Exile.DepthTable.new)
-		ask parsed_bool_code = (Either.match (Parser.run (Exile.Rulebook.parse term_parser) (String.concat bool_code unit_code))
+		let code = (String.concat bool_code (String.cons 10 unit_code))
+		ask parsed_bool_code = (Either.match (Parser.run (Exile.Rulebook.parse term_parser) code)
 			p => (IO Exile.Rulebook)
 			(result => IO.pure result)
 			(error => do IO {
-				ask IO.output (Parser.Error.match error (x => String) (msg => init => end => msg))
-				ask IO.output (String.flatten ["Error" String.new_line])
+				let s =  (Parser.Error.match error (x => String) (msg => init => end => 
+					let back = (String.slice (U60.to_nat (- init 3)) (U60.to_nat (+ end 3)) code)
+					String.flatten ["Error: ", msg, String.new_line, "fragment", " ", back, (U60.to_string init), " to ", (U60.to_string end)  String.new_line]
+				))
+				ask IO.output s
 				return List.nil
 			})
 		)
@@ -40,11 +44,11 @@ Main2 {
 		ask IO.output (Exile.Rulebook.show rulebook)
 		let rulebook = (Exile.Rulebook.replace_unbound rulebook)
 		ask IO.output (Exile.Rulebook.show rulebook)
-		let bool = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.not.type") Exile.Term.unbound)
-		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "Bool.not") Exile.Term.unbound)
+		let bool = (Maybe.default (Exile.Rulebook.get_definition rulebook "CheckType") Exile.Term.unbound)
+		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "CheckTerm") Exile.Term.unbound)
 		//let bool_true = (HVM.log (Exile.HSyntax.show bool_true) bool_true)
 		//let bool = (HVM.log (Exile.HSyntax.show bool) bool)
-		let cresult = (Exile.Checker.reduce Exile.Checker.empty (Exile.Term.subtype bool_true bool))
+		let cresult = (Exile.Checker.reduce_instance Exile.Checker.empty bool_true bool)
 		ask IO.output (Exile.CheckResult.show cresult)
 		return Unit.new
 	}
@@ -64,7 +68,8 @@ Main3 {
 }
 
 
-Main4 { (Exile.HSyntax.parse Code.Bool) }
+Main4 { (Exile.HSyntax.show (Exile.HSyntax.parse Code.Bool)) }
+Main12 { (Exile.HSyntax.show (Exile.HSyntax.parse "@p @t @f p")) }
 
 Main5 {
 	let a = (Exile.Term.var 0)

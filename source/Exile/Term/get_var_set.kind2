@@ -1,15 +1,18 @@
 Exile.Term.get_var_set (term: Exile.Term): List U60
-Exile.Term.get_var_set (Exile.Term.lambda type (Exile.TermBody.new id body)) = (List.concat (Exile.Term.get_var_set type) (List.cons id (Exile.Term.get_var_set body)))
+Exile.Term.get_var_set (Exile.Term.lambda type sup_type (Exile.TermBody.new id body)) = (List.concat (List.concat (Exile.Term.get_var_set type) (List.cons id (Exile.Term.get_var_set body))) (Exile.Term.get_var_set sup_type))
 Exile.Term.get_var_set (Exile.Term.infer_lambda (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
-Exile.Term.get_var_set (Exile.Term.recursive (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
-Exile.Term.get_var_set (Exile.Term.self (Exile.TermBody.new id body)) = (List.cons id (Exile.Term.get_var_set body))
+Exile.Term.get_var_set (Exile.Term.recursive type (Exile.TermBody.new id body)) = (List.concat (List.cons id (Exile.Term.get_var_set body)) (Exile.Term.get_var_set type))
+Exile.Term.get_var_set (Exile.Term.self type (Exile.TermBody.new id body)) = (List.concat (List.cons id (Exile.Term.get_var_set body)) (Exile.Term.get_var_set type))
 Exile.Term.get_var_set (Exile.Term.apply a b) =(List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b))
 Exile.Term.get_var_set (Exile.Term.subtype a b) = (List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b))
 Exile.Term.get_var_set (Exile.Term.supertype a b) = (List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b))
+Exile.Term.get_var_set (Exile.Term.bounded a b c) = (List.concat (List.concat (Exile.Term.get_var_set a) (Exile.Term.get_var_set b)) (Exile.Term.get_var_set c))
 Exile.Term.get_var_set (Exile.Term.attach term meta) = (Exile.Term.get_var_set term)
-Exile.Term.get_var_set (Exile.Term.typeof term) = (Exile.Term.get_var_set term)
+Exile.Term.get_var_set (Exile.Term.larger term) = (Exile.Term.get_var_set term)
+Exile.Term.get_var_set (Exile.Term.smaller term) = (Exile.Term.get_var_set term)
 Exile.Term.get_var_set Exile.Term.error = List.nil
 Exile.Term.get_var_set Exile.Term.unbound = List.nil
+Exile.Term.get_var_set Exile.Term.no_bound = List.nil
 Exile.Term.get_var_set (Exile.Term.var idx) = [idx]
 Exile.Term.get_var_set x = (HVM.log (Pair.new "Exile.Term.get_var_set" x) List.nil)
 

@@ -1,0 +1,6 @@
+Exile.Term.or_top (term: Exile.Term): Exile.Term {
+  (Bool.if (Exile.Term.is_unbound term)
+    Exile.Term.top
+    term
+  )
+}

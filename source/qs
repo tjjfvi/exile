@@ -1,0 +1,1435 @@
+[33mwarning[0m: ignored redefinition of 'Exile.Term.no_bound'.
+"Bool = µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: (P Bool.true)) λ(f: (P Bool.false)) (P self)
+
+Bool.true: Bool = λp λt λf t
+
+Bool.false: Bool = λp λt λf f
+
+Bool.not = λ(x: Bool) (x (λ_ Bool) Bool.false Bool.true)
+
+Bool.and = λ(x: Bool) λ(y: Bool) (x (λ_ Bool) y Bool.false)
+
+Bool.or = λ(x: Bool) λ(y: Bool) (x (λ(_:Bool) Bool) Bool.true y)
+
+Bool.not.type = λ(x: Bool) (Bool)
+
+
+"
+"Unit = µ Unit ξ unit λ(P: λ(b: Unit) *) λ(new: P (λp λnew new)) (P unit)
+
+Unit.new = λp λnew new
+"
+Bool = µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx0 any0⁺) λ(t[1;34m < [0m[1;34m([0mP ?Bool.true?[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP ?Bool.false?[1;35m)[0m) [1;36m([0mP self[1;36m)[0m
+Bool.true: ?Bool? = λp λt λf t
+Bool.false: ?Bool? = λp λt λf f
+Bool.not = λ(x[1;31m < [0m?Bool?) [1;32m([0mx [1;33m([0mλ_ ?Bool? [1;34m([0m?Bool.false? ?Bool.true?[1;34m)[0m[1;33m)[0m[1;32m)[0m
+Bool.and = λ(x[1;31m < [0m?Bool?) λ(y[1;32m < [0m?Bool?) [1;33m([0mx [1;34m([0mλ_ ?Bool? [1;35m([0my ?Bool.false?[1;35m)[0m[1;34m)[0m[1;33m)[0m
+Bool.or = λ(x[1;31m < [0m?Bool?) λ(y[1;32m < [0m?Bool?) [1;33m([0mx [1;34m([0mλ(_[1;35m < [0m?Bool?) ?Bool? [1;35m([0m?Bool.true? y[1;35m)[0m[1;34m)[0m[1;33m)[0m
+Bool.not.type = λ(x[1;31m < [0m?Bool?) ?Bool?
+Unit = µUnit ξunit λ(P[1;33m < [0mλ(b[1;33m < [0mUnit) ξx0 any0⁺) λ(new[1;34m < [0m[1;34m([0mP λp λnew new[1;34m)[0m) [1;35m([0mP unit[1;35m)[0m
+Unit.new = λp λnew new
+Bool = µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx0 any0⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m
+Bool.true: µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx0 any0⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m = µx4 λp λt λf t
+Bool.false: µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx0 any0⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m = µx4 λp λt λf f
+Bool.not = µx3 λ(x[1;32m < [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx10 any10⁺) λ(t[1;36m < [0m[1;36m([0mP µx4 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) [1;33m([0mx [1;34m([0mλ_ µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx14 any14⁺) λ(t[0m < [0m[0m([0mP µx4 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;35m([0mµx4 λp λt λf f µx4 λp λt λf t[1;35m)[0m[1;34m)[0m[1;33m)[0m
+Bool.and = µx4 λ(x[1;32m < [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx2 any2⁺) λ(t[1;36m < [0m[1;36m([0mP µx5 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) λ(y[1;33m < [0mµx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx2 any2⁺) λ(t[1;30m < [0m[1;30m([0mP µx5 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) [1;34m([0mx [1;35m([0mλ_ µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx16 any16⁺) λ(t[0m < [0m[0m([0mP µx5 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;36m([0my µx5 λp λt λf f[1;36m)[0m[1;35m)[0m[1;34m)[0m
+Bool.or = µx4 λ(x[1;32m < [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx2 any2⁺) λ(t[1;36m < [0m[1;36m([0mP µx5 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) λ(y[1;33m < [0mµx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx2 any2⁺) λ(t[1;30m < [0m[1;30m([0mP µx5 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) [1;34m([0mx [1;35m([0mλ(_[1;36m < [0mµx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx3 any3⁺) λ(t[0m < [0m[0m([0mP µx5 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx16 any16⁺) λ(t[0m < [0m[0m([0mP µx5 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;36m([0mµx5 λp λt λf t y[1;36m)[0m[1;35m)[0m[1;34m)[0m
+Bool.not.type = µx2 λ(x[1;32m < [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx3 any3⁺) λ(t[1;36m < [0m[1;36m([0mP µx4 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) µx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx3 any3⁺) λ(t[1;30m < [0m[1;30m([0mP µx4 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m
+Unit = µx7 µUnit ξunit λ(P[1;34m < [0mλ(b[1;34m < [0mUnit) ξx0 any0⁺) λ(new[1;35m < [0m[1;35m([0mP λp λnew new[1;35m)[0m) [1;36m([0mP unit[1;36m)[0m
+Unit.new = µx3 λp λnew new
+0
+0
+0
+0
+(Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 3 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 3) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 2 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 13 (Exile.Term.larger (Exile.Term.var 13)))))) "b"))
+(Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.apply (Exile.Term.attach (Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 2 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 2) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 8 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 14 (Exile.Term.larger (Exile.Term.var 14)))))) "b")) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 4 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 5 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 9 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 10 (Exile.Term.attach (Exile.Term.var 9) "t"))) "f"))) "t"))) "p"))))))
+0
+0
+0
+0
+0
+0
+(Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 3 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 3) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 2 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 13 (Exile.Term.larger (Exile.Term.var 13)))))) "b"))
+(Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.apply (Exile.Term.attach (Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 2 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 2) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 8 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 14 (Exile.Term.larger (Exile.Term.var 14)))))) "b")) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 5 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 9 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 10 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 11 (Exile.Term.attach (Exile.Term.var 11) "f"))) "f"))) "t"))) "p"))))))
+0
+0
+0
+0
+0
+(Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 2 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 2) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 8 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 14 (Exile.Term.larger (Exile.Term.var 14)))))) "b"))
+(Exile.Term.infer_lambda (Exile.TermBody.new 4 (Exile.Term.apply (Exile.Term.attach (Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.var 29) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 0 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 3 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 0) "Bool") (Exile.TermBody.new 6 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.larger (Exile.Term.var 18)))))) "b") (Exile.TermBody.new 6 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.var 17) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 7 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 12 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 17 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 18 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 19 (Exile.Term.attach (Exile.Term.var 19) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 12 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 6) "P") (Exile.Term.attach (Exile.Term.var 3) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.TermBody.new 2 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 13 (Exile.Term.larger (Exile.Term.var 13)))))) "b")) "P") (Exile.Term.attach (Exile.Term.bounded (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 1 (Exile.Term.attach (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 13 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.attach (Exile.Term.var 1) "Bool") (Exile.TermBody.new 34 (Exile.Term.self (Exile.Term.no_bound) (Exile.TermBody.new 34 (Exile.Term.larger (Exile.Term.var 34)))))) "b") (Exile.TermBody.new 34 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 34) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 14 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 15 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 21 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 22 (Exile.Term.attach (Exile.Term.var 21) "t"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 14 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 34) "P") (Exile.Term.recursive (Exile.Term.no_bound) (Exile.TermBody.new 15 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 21 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 22 (Exile.Term.attach (Exile.Term.lambda (Exile.Term.no_bound) (Exile.Term.no_bound) (Exile.TermBody.new 23 (Exile.Term.attach (Exile.Term.var 23) "f"))) "f"))) "t"))) "p")))) (Exile.TermBody.new 15 (Exile.Term.apply (Exile.Term.attach (Exile.Term.var 34) "P") (Exile.Term.attach (Exile.Term.var 13) "self")))) "f"))) "t"))) "P"))) "self"))) "Bool") (Exile.Term.no_bound)) "self"))))
+0
+0
+0
+0
+1
+1
+Check not successful.! (Err)
+[ [1;31m([0mµx3 λ(x[1;33m < [0mµx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx10 any10⁺) λ(t[1;30m < [0m[1;30m([0mP µx4 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) [1;34m([0mx [1;35m([0mλ_ µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx14 any14⁺) λ(t[0m < [0m[0m([0mP µx4 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;36m([0mµx4 λp λt λf f µx4 λp λt λf t[1;36m)[0m[1;35m)[0m[1;34m)[0m[1;31m <= [0mµx2 λ(x[1;33m < [0mµx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx3 any3⁺) λ(t[1;30m < [0m[1;30m([0mP µx4 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) µx7 µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx3 any3⁺) λ(t[0m < [0m[0m([0mP µx4 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;31m)[0m ]
+[ (λ(x[1;31m < [0mµx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) [1;32m([0mx [1;33m([0mλ_ µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx14 any14⁺) λ(t[0m < [0m[0m([0mP µx4 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;34m([0mµx4 λp λt λf f µx4 λp λt λf t[1;34m)[0m[1;33m)[0m[1;32m)[0m[1;31m < [0mµx2 λ(x[1;32m < [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx3 any3⁺) λ(t[1;36m < [0m[1;36m([0mP µx4 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) µx7 µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx3 any3⁺) λ(t[1;30m < [0m[1;30m([0mP µx4 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ]
+[ (λ(x[1;31m < [0mµx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) [1;32m([0mx [1;33m([0mλ_ µx7 µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx14 any14⁺) λ(t[0m < [0m[0m([0mP µx4 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx5 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m [1;34m([0mµx4 λp λt λf f µx4 λp λt λf t[1;34m)[0m[1;33m)[0m[1;32m)[0m[1;31m < [0mλ(x[1;31m < [0mµx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx3 any3⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) µx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx3 any3⁺) λ(t[1;36m < [0m[1;36m([0mP µx4 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ]
+AND
+ [ (µx0 any0⁻[1;31m < [0mξx0 any0⁺⁺) ]
+ [ (ξx1 any1⁺⁺⁻[1;31m < [0mξx0 any0⁺⁺) ]
+ [ ξx1 any1⁺⁺ == ξx0 any0⁺ ]
+ [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+ [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+ [ ξx1 any1⁺ == ξx1 any1⁺ ]
+ [ any0⁺ == any0⁺ ]
+ [ any0 == any0 ]
+ any0
+AND
+ [ (µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx3 any3⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m[1;31m < [0mµx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m⁺) ]
+ [ (µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m[1;31m < [0mµx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m⁺) ]
+ OR
+  [ [1;31m([0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx3 any3⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m[1;31m <= [0mµx7 µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx10 any10⁺) λ(t[1;36m < [0m[1;36m([0mP µx4 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx5 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;31m)[0m ]
+  [ (µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx10 any10⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ]
+  [ (µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx10 any10⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ]
+  [ (µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m[1;31m < [0mλ(P[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m) ]
+  [ (ξself λ(P[1;32m < [0mλ(b[1;32m < [0mλ(x16[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx31 any31⁺) λ(t[1;33m < [0m[1;33m([0mP µx24 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx25 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx3 any3⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m[1;31m < [0mλ(x8[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m) ]
+  [ (λ(P[1;31m < [0mλ(b[1;31m < [0mλ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m) ξx3 any3⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP ξself λ(P[1;36m < [0mλ(b[1;36m < [0mλ(x50[1;36m < [0mλ(b[1;36m < [0mµBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx102 any102⁺) λ(t[0m < [0m[0m([0mP µx95 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx96 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx80 any80⁺) λ(t[1;30m < [0m[1;30m([0mP µx51 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx52 λp λt λf f[0m)[0m) [0m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[0m)[0m) ξx26 any26⁺) λ(t[1;30m < [0m[1;30m([0mP µx27 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx28 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m[1;31m < [0mλ(x8[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m) ]
+  AND
+   [ (µx0 any0⁻[1;31m < [0mξx0 any0⁺⁺) ]
+   [ (ξx1 any1⁺⁺⁻[1;31m < [0mξx0 any0⁺⁺) ]
+   [ ξx1 any1⁺⁺ == ξx0 any0⁺ ]
+   [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+   [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+   [ ξx1 any1⁺ == ξx1 any1⁺ ]
+   [ any0⁺ == any0⁺ ]
+   [ any0 == any0 ]
+   any0
+  AND
+   AND
+    [ (λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺[1;31m < [0mλ(b[1;31m < [0mλ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m) ξx3 any3⁺⁺) ]
+    [ [1;31m([0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx10 any10⁺[1;31m <= [0mλ(b[1;32m < [0mλ(x16[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx31 any31⁺) λ(t[1;33m < [0m[1;33m([0mP µx24 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx25 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx3 any3⁺[1;31m)[0m ]
+    AND
+     [ (µx0 any0⁻[1;31m < [0mξx0 any0⁺⁺) ]
+     [ (ξx1 any1⁺⁺⁻[1;31m < [0mξx0 any0⁺⁺) ]
+     [ ξx1 any1⁺⁺ == ξx0 any0⁺ ]
+     [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+     [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+     [ ξx1 any1⁺ == ξx1 any1⁺ ]
+     [ any0⁺ == any0⁺ ]
+     [ any0 == any0 ]
+     any0
+    AND
+     AND
+      [ (λ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m⁺) ]
+      [ [1;31m([0mλ(x16[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx31 any31⁺) λ(t[1;33m < [0m[1;33m([0mP µx24 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx25 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m[1;31m <= [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m[1;31m)[0m ]
+      [ (λ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx15 any15⁺) λ(t[1;35m < [0m[1;35m([0mP µx5 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx8 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ]
+      [ (λ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m[1;31m < [0mλ(P[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx15 any15⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP λ(x49[1;35m < [0mλ(b[1;35m < [0mµBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx29 any29⁺) λ(t[0m < [0m[0m([0mP µx10 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx11 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx31 any31⁺) λ(t[1;36m < [0m[1;36m([0mP µx24 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx25 λp λt λf f[1;30m)[0m) [0m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx47 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx48 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[0m)[0m[1;34m)[0m) ]
+      µx0 any0⁻
+     AND
+      [ (ξx10 any10⁺[1;31m < [0mξx3 (any1[1;32m < [0mλ(x16[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx31 any31⁺) λ(t[1;33m < [0m[1;33m([0mP µx24 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx25 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m)⁺) ]
+      [ (ξx10 any10⁺[1;31m < [0m(any1[1;31m < [0mλ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m)⁺) ]
+      [ (ξx0 any0⁺⁺[1;31m < [0m(any1[1;31m < [0mλ(x16[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx31 any31⁺) λ(t[1;32m < [0m[1;32m([0mP µx24 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx25 λp λt λf f[1;33m)[0m) [1;34m([0mP µBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;34m)[0m)⁺) ]
+      [ [1;31m([0mξx0 any0⁺⁺[1;31m <= [0m(any1[1;32m < [0mλ(x16[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx31 any31⁺) λ(t[1;33m < [0m[1;33m([0mP µx24 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx25 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx34 any34⁺) λ(t[0m < [0m[0m([0mP µx14 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m)[1;31m)[0m ]
+      ξx0 any0⁺⁺⁻
+   AND
+    [ (λ(t[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;32m)[0m) [1;33m([0m(any29[1;34m < [0mλ(b[1;34m < [0mµBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx18 any18⁺) λ(t[1;30m < [0m[1;30m([0mP µx7 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx12 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) ξself λ(P[1;35m < [0mλ(b[1;35m < [0mλ(x50[1;35m < [0mλ(b[1;35m < [0mµBool ξself λ(P[1;30m < [0mλ(b[1;30m < [0mBool) ξx102 any102⁺) λ(t[0m < [0m[0m([0mP µx95 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx96 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx80 any80⁺) λ(t[1;36m < [0m[1;36m([0mP µx51 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx52 λp λt λf f[1;30m)[0m) [0m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[0m)[0m) ξx26 any26⁺) λ(t[1;36m < [0m[1;36m([0mP µx27 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx28 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;33m)[0m[1;31m < [0mλ(t[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx4 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;32m)[0m) [1;33m([0m(any29[1;34m < [0mλ(b[1;34m < [0mµBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx18 any18⁺) λ(t[1;30m < [0m[1;30m([0mP µx7 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx12 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx34 any34⁺) λ(t[1;30m < [0m[1;30m([0mP µx14 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx15 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;33m)[0m) ]
+    AND
+     [ (µx0 any0⁻[1;31m < [0mξx0 any0⁺⁺) ]
+     [ (ξx1 any1⁺⁺⁻[1;31m < [0mξx0 any0⁺⁺) ]
+     [ ξx1 any1⁺⁺ == ξx0 any0⁺ ]
+     [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+     [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+     [ ξx1 any1⁺ == ξx1 any1⁺ ]
+     [ any0⁺ == any0⁺ ]
+     [ any0 == any0 ]
+     any0
+    AND
+     AND
+      [ ([1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx4 λp λt λf t[1;31m)[0m[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;31m)[0m⁺) ]
+      OR
+       [ [1;31m([0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µx4 λp λt λf t[1;32m)[0m[1;31m <= [0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;32m)[0m[1;31m)[0m ]
+       [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λ(µx4 λp λt λf t⁻[1;31m < [0mx1[1;31m < [0mµx4 λp λt λf t⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;32m)[0m ]
+       [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λ(µx4 λp λt λf t⁻[1;31m < [0mx1[1;31m < [0mµx4 λp λt λf t⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;32m)[0m ]
+       [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λx1 [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;32m)[0m ]
+       ! (Err)
+      OR
+       [ [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx4 λp λt λf t[1;31m)[0m == [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx4 λp λt λf t[1;31m)[0m ]
+       AND
+        AND
+         [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) ]
+         [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) ]
+         AND
+          AND
+           [ <no bound> == <no bound> ]
+           <no bound>
+          AND
+           [ any29 == any29 ]
+           any29
+         AND
+          [ λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺ == λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺ ]
+          [ λ(x2[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺ == λ(x8[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺ ]
+          AND
+           AND
+            AND
+             [ µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+             [ µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+             [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+             [ ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+             [ λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+             [ λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+             AND
+              AND
+               AND
+                [ λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ == λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+                [ λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ == λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+                AND
+                 AND
+                  AND
+                   [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                   [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                   [ ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                   [ λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                   [ λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                   AND
+                    AND
+                     AND
+                      [ λ(b[1;31m < [0mBool) ξx13 any13⁺ == λ(b[1;31m < [0mBool) ξx13 any13⁺ ]
+                      [ λ(x4[1;31m < [0mBool) ξx13 any13⁺ == λ(x4[1;31m < [0mBool) ξx13 any13⁺ ]
+                      AND
+                       AND
+                        AND
+                         [ Bool == Bool ]
+                         [ any1 == any1 ]
+                         any1
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                       AND
+                        [ λx4 ξx13 any13⁺ == λx4 ξx13 any13⁺ ]
+                        [ ξx13 any13⁺ == ξx13 any13⁺ ]
+                        [ any0⁺ == any0⁺ ]
+                        [ any0 == any0 ]
+                        any0
+                      AND
+                       λ(x4[1;31m < [0mBool) ξx13 any13⁺
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                    AND
+                     [ λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                     [ λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                     [ λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                     AND
+                      AND
+                       AND
+                        [ [1;31m([0mP µx5 λp λt λf t[1;31m)[0m == [1;31m([0mP µx5 λp λt λf t[1;31m)[0m ]
+                        AND
+                         AND
+                          [ P == P ]
+                          [ any1 == any1 ]
+                          any1
+                         AND
+                          [ µx5 λp λt λf t == µx5 λp λt λf t ]
+                          [ λp λt λf t == λp λt λf t ]
+                          [ λx8 λt λf t == λx8 λt λf t ]
+                          AND
+                           AND
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                           AND
+                            [ λx8 λt λf t == λx8 λt λf t ]
+                            [ λt λf t == λt λf t ]
+                            [ λx11 λf t == λx11 λf t ]
+                            AND
+                             AND
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                             AND
+                              [ λx11 λf t == λx11 λf t ]
+                              [ λf t == λf t ]
+                              [ λx13 t == λx13 t ]
+                              AND
+                               AND
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                               AND
+                                [ λx13 t == λx13 t ]
+                                [ t == t ]
+                                [ any0 == any0 ]
+                                any0
+                              AND
+                               λx13 t
+                            AND
+                             λx11 λf t
+                          AND
+                           λx8 λt λf t
+                        AND
+                         [1;31m([0mP µx5 λp λt λf t[1;31m)[0m
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                      AND
+                       [ λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                       [ λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                       [ λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                       AND
+                        AND
+                         AND
+                          [ [1;31m([0mP µx8 λp λt λf f[1;31m)[0m == [1;31m([0mP µx8 λp λt λf f[1;31m)[0m ]
+                          AND
+                           AND
+                            [ P == P ]
+                            [ any1 == any1 ]
+                            any1
+                           AND
+                            [ µx8 λp λt λf f == µx8 λp λt λf f ]
+                            [ λp λt λf f == λp λt λf f ]
+                            [ λx11 λt λf f == λx11 λt λf f ]
+                            AND
+                             AND
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                             AND
+                              [ λx11 λt λf f == λx11 λt λf f ]
+                              [ λt λf f == λt λf f ]
+                              [ λx13 λf f == λx13 λf f ]
+                              AND
+                               AND
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                               AND
+                                [ λx13 λf f == λx13 λf f ]
+                                [ λf f == λf f ]
+                                [ λx14 f == λx14 f ]
+                                AND
+                                 AND
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                 AND
+                                  [ λx14 f == λx14 f ]
+                                  [ f == f ]
+                                  [ any0 == any0 ]
+                                  any0
+                                AND
+                                 λx14 f
+                              AND
+                               λx13 λf f
+                            AND
+                             λx11 λt λf f
+                          AND
+                           [1;31m([0mP µx8 λp λt λf f[1;31m)[0m
+                         AND
+                          [ <no bound> == <no bound> ]
+                          <no bound>
+                        AND
+                         [ λx8 [1;32m([0mP self[1;32m)[0m == λx8 [1;32m([0mP self[1;32m)[0m ]
+                         [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+                         AND
+                          AND
+                           [ P == P ]
+                           [ any1 == any1 ]
+                           any1
+                          AND
+                           [ self == self ]
+                           [ any0 == any0 ]
+                           any0
+                         AND
+                          [1;31m([0mP self[1;31m)[0m
+                       AND
+                        λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+                     AND
+                      λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+                   AND
+                    λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+                  AND
+                   [ <no bound> == <no bound> ]
+                   <no bound>
+                 AND
+                  [ λx6 ξx18 any18⁺ == λx6 ξx18 any18⁺ ]
+                  [ ξx18 any18⁺ == ξx18 any18⁺ ]
+                  [ any0⁺ == any0⁺ ]
+                  [ any0 == any0 ]
+                  any0
+                AND
+                 λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+               [ λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+               [ λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+               AND
+                AND
+                 AND
+                  [ [1;31m([0mP µx7 λp λt λf t[1;31m)[0m == [1;31m([0mP µx7 λp λt λf t[1;31m)[0m ]
+                  AND
+                   AND
+                    [ P == P ]
+                    [ any1 == any1 ]
+                    any1
+                   AND
+                    [ µx7 λp λt λf t == µx7 λp λt λf t ]
+                    [ λp λt λf t == λp λt λf t ]
+                    [ λx12 λt λf t == λx12 λt λf t ]
+                    AND
+                     AND
+                      AND
+                       [ <no bound> == <no bound> ]
+                       <no bound>
+                      AND
+                       [ <no bound> == <no bound> ]
+                       <no bound>
+                     AND
+                      [ λx12 λt λf t == λx12 λt λf t ]
+                      [ λt λf t == λt λf t ]
+                      [ λx17 λf t == λx17 λf t ]
+                      AND
+                       AND
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                       AND
+                        [ λx17 λf t == λx17 λf t ]
+                        [ λf t == λf t ]
+                        [ λx18 t == λx18 t ]
+                        AND
+                         AND
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                         AND
+                          [ λx18 t == λx18 t ]
+                          [ t == t ]
+                          [ any0 == any0 ]
+                          any0
+                        AND
+                         λx18 t
+                      AND
+                       λx17 λf t
+                    AND
+                     λx12 λt λf t
+                  AND
+                   [1;31m([0mP µx7 λp λt λf t[1;31m)[0m
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                AND
+                 [ λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                 [ λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                 [ λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                 AND
+                  AND
+                   AND
+                    [ [1;31m([0mP µx12 λp λt λf f[1;31m)[0m == [1;31m([0mP µx12 λp λt λf f[1;31m)[0m ]
+                    AND
+                     AND
+                      [ P == P ]
+                      [ any1 == any1 ]
+                      any1
+                     AND
+                      [ µx12 λp λt λf f == µx12 λp λt λf f ]
+                      [ λp λt λf f == λp λt λf f ]
+                      [ λx17 λt λf f == λx17 λt λf f ]
+                      AND
+                       AND
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                       AND
+                        [ λx17 λt λf f == λx17 λt λf f ]
+                        [ λt λf f == λt λf f ]
+                        [ λx18 λf f == λx18 λf f ]
+                        AND
+                         AND
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                         AND
+                          [ λx18 λf f == λx18 λf f ]
+                          [ λf f == λf f ]
+                          [ λx19 f == λx19 f ]
+                          AND
+                           AND
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                           AND
+                            [ λx19 f == λx19 f ]
+                            [ f == f ]
+                            [ any0 == any0 ]
+                            any0
+                          AND
+                           λx19 f
+                        AND
+                         λx18 λf f
+                      AND
+                       λx17 λt λf f
+                    AND
+                     [1;31m([0mP µx12 λp λt λf f[1;31m)[0m
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                  AND
+                   [ λx12 [1;32m([0mP self[1;32m)[0m == λx12 [1;32m([0mP self[1;32m)[0m ]
+                   [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+                   AND
+                    AND
+                     [ P == P ]
+                     [ any1 == any1 ]
+                     any1
+                    AND
+                     [ self == self ]
+                     [ any0 == any0 ]
+                     any0
+                   AND
+                    [1;31m([0mP self[1;31m)[0m
+                 AND
+                  λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+               AND
+                λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+             AND
+              λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+            AND
+             [ <no bound> == <no bound> ]
+             <no bound>
+           AND
+            [ λx2 ξx13 any13⁺ == λx8 ξx14 any14⁺ ]
+            [ ξx13 any13⁺ == ξx14 any14⁺ ]
+            [ any0⁺ == any0⁺ ]
+            [ any0 == any0 ]
+            any0
+          AND
+           λ(x2[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺
+        AND
+         [ µx4 λp λt λf t == µx4 λp λt λf t ]
+         [ λp λt λf t == λp λt λf t ]
+         [ λx5 λt λf t == λx5 λt λf t ]
+         AND
+          AND
+           AND
+            [ <no bound> == <no bound> ]
+            <no bound>
+           AND
+            [ <no bound> == <no bound> ]
+            <no bound>
+          AND
+           [ λx5 λt λf t == λx5 λt λf t ]
+           [ λt λf t == λt λf t ]
+           [ λx9 λf t == λx9 λf t ]
+           AND
+            AND
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+            AND
+             [ λx9 λf t == λx9 λf t ]
+             [ λf t == λf t ]
+             [ λx10 t == λx10 t ]
+             AND
+              AND
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx10 t == λx10 t ]
+               [ t == t ]
+               [ any0 == any0 ]
+               any0
+             AND
+              λx10 t
+           AND
+            λx9 λf t
+         AND
+          λx5 λt λf t
+       AND
+        [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx4 λp λt λf t[1;31m)[0m
+     AND
+      [ (λ(f[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;31m)[0m) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) ξself λ(P[1;34m < [0mλ(b[1;34m < [0mλ(x50[1;34m < [0mλ(b[1;34m < [0mµBool ξself λ(P[1;36m < [0mλ(b[1;36m < [0mBool) ξx102 any102⁺) λ(t[1;30m < [0m[1;30m([0mP µx95 λp λt λf t[1;30m)[0m) λ(f[0m < [0m[0m([0mP µx96 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m) ξx80 any80⁺) λ(t[1;35m < [0m[1;35m([0mP µx51 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx52 λp λt λf f[1;36m)[0m) [1;30m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;30m)[0m) ξx26 any26⁺) λ(t[1;35m < [0m[1;35m([0mP µx27 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx28 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m[1;32m)[0m[1;31m < [0mλ(f[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;31m)[0m) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx34 any34⁺) λ(t[1;36m < [0m[1;36m([0mP µx14 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx15 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;32m)[0m) ]
+      AND
+       [ (µx0 any0⁻[1;31m < [0mξx0 any0⁺⁺) ]
+       [ (ξx1 any1⁺⁺⁻[1;31m < [0mξx0 any0⁺⁺) ]
+       [ ξx1 any1⁺⁺ == ξx0 any0⁺ ]
+       [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+       [ ξx1 any1⁺⁺ == ξx1 any1⁺⁺ ]
+       [ ξx1 any1⁺ == ξx1 any1⁺ ]
+       [ any0⁺ == any0⁺ ]
+       [ any0 == any0 ]
+       any0
+      AND
+       AND
+        [ ([1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;31m)[0m[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;31m)[0m⁺) ]
+        OR
+         [ [1;31m([0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;32m)[0m[1;31m <= [0m[1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;32m)[0m[1;31m)[0m ]
+         [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λ(µx5 λp λt λf f⁻[1;31m < [0mx1[1;31m < [0mµx5 λp λt λf f⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;32m)[0m ]
+         [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λ(µx5 λp λt λf f⁻[1;31m < [0mx1[1;31m < [0mµx5 λp λt λf f⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;32m)[0m ]
+         [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == λx1 [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;32m)[0m ]
+         ! (Err)
+        OR
+         [ [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;31m)[0m == [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) µx5 λp λt λf f[1;31m)[0m ]
+         AND
+          AND
+           [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) ]
+           [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺) == (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) ]
+           AND
+            AND
+             [ <no bound> == <no bound> ]
+             <no bound>
+            AND
+             [ any29 == any29 ]
+             any29
+           AND
+            [ λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺ == λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺ ]
+            [ λ(x2[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺ == λ(x8[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺ ]
+            AND
+             AND
+              AND
+               [ µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+               [ µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+               [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+               [ ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx13 any13⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+               [ λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+               [ λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+               AND
+                AND
+                 AND
+                  [ λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ == λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+                  [ λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ == λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+                  AND
+                   AND
+                    AND
+                     [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                     [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                     [ ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+                     [ λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                     [ λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                     AND
+                      AND
+                       AND
+                        [ λ(b[1;31m < [0mBool) ξx13 any13⁺ == λ(b[1;31m < [0mBool) ξx13 any13⁺ ]
+                        [ λ(x4[1;31m < [0mBool) ξx13 any13⁺ == λ(x4[1;31m < [0mBool) ξx13 any13⁺ ]
+                        AND
+                         AND
+                          AND
+                           [ Bool == Bool ]
+                           [ any1 == any1 ]
+                           any1
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                         AND
+                          [ λx4 ξx13 any13⁺ == λx4 ξx13 any13⁺ ]
+                          [ ξx13 any13⁺ == ξx13 any13⁺ ]
+                          [ any0⁺ == any0⁺ ]
+                          [ any0 == any0 ]
+                          any0
+                        AND
+                         λ(x4[1;31m < [0mBool) ξx13 any13⁺
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                      AND
+                       [ λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                       [ λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                       [ λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                       AND
+                        AND
+                         AND
+                          [ [1;31m([0mP µx5 λp λt λf t[1;31m)[0m == [1;31m([0mP µx5 λp λt λf t[1;31m)[0m ]
+                          AND
+                           AND
+                            [ P == P ]
+                            [ any1 == any1 ]
+                            any1
+                           AND
+                            [ µx5 λp λt λf t == µx5 λp λt λf t ]
+                            [ λp λt λf t == λp λt λf t ]
+                            [ λx8 λt λf t == λx8 λt λf t ]
+                            AND
+                             AND
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                             AND
+                              [ λx8 λt λf t == λx8 λt λf t ]
+                              [ λt λf t == λt λf t ]
+                              [ λx11 λf t == λx11 λf t ]
+                              AND
+                               AND
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                               AND
+                                [ λx11 λf t == λx11 λf t ]
+                                [ λf t == λf t ]
+                                [ λx13 t == λx13 t ]
+                                AND
+                                 AND
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                 AND
+                                  [ λx13 t == λx13 t ]
+                                  [ t == t ]
+                                  [ any0 == any0 ]
+                                  any0
+                                AND
+                                 λx13 t
+                              AND
+                               λx11 λf t
+                            AND
+                             λx8 λt λf t
+                          AND
+                           [1;31m([0mP µx5 λp λt λf t[1;31m)[0m
+                         AND
+                          [ <no bound> == <no bound> ]
+                          <no bound>
+                        AND
+                         [ λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                         [ λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                         [ λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                         AND
+                          AND
+                           AND
+                            [ [1;31m([0mP µx8 λp λt λf f[1;31m)[0m == [1;31m([0mP µx8 λp λt λf f[1;31m)[0m ]
+                            AND
+                             AND
+                              [ P == P ]
+                              [ any1 == any1 ]
+                              any1
+                             AND
+                              [ µx8 λp λt λf f == µx8 λp λt λf f ]
+                              [ λp λt λf f == λp λt λf f ]
+                              [ λx11 λt λf f == λx11 λt λf f ]
+                              AND
+                               AND
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                                AND
+                                 [ <no bound> == <no bound> ]
+                                 <no bound>
+                               AND
+                                [ λx11 λt λf f == λx11 λt λf f ]
+                                [ λt λf f == λt λf f ]
+                                [ λx13 λf f == λx13 λf f ]
+                                AND
+                                 AND
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                  AND
+                                   [ <no bound> == <no bound> ]
+                                   <no bound>
+                                 AND
+                                  [ λx13 λf f == λx13 λf f ]
+                                  [ λf f == λf f ]
+                                  [ λx14 f == λx14 f ]
+                                  AND
+                                   AND
+                                    AND
+                                     [ <no bound> == <no bound> ]
+                                     <no bound>
+                                    AND
+                                     [ <no bound> == <no bound> ]
+                                     <no bound>
+                                   AND
+                                    [ λx14 f == λx14 f ]
+                                    [ f == f ]
+                                    [ any0 == any0 ]
+                                    any0
+                                  AND
+                                   λx14 f
+                                AND
+                                 λx13 λf f
+                              AND
+                               λx11 λt λf f
+                            AND
+                             [1;31m([0mP µx8 λp λt λf f[1;31m)[0m
+                           AND
+                            [ <no bound> == <no bound> ]
+                            <no bound>
+                          AND
+                           [ λx8 [1;32m([0mP self[1;32m)[0m == λx8 [1;32m([0mP self[1;32m)[0m ]
+                           [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+                           AND
+                            AND
+                             [ P == P ]
+                             [ any1 == any1 ]
+                             any1
+                            AND
+                             [ self == self ]
+                             [ any0 == any0 ]
+                             any0
+                           AND
+                            [1;31m([0mP self[1;31m)[0m
+                         AND
+                          λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+                       AND
+                        λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+                     AND
+                      λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx13 any13⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+                    AND
+                     [ <no bound> == <no bound> ]
+                     <no bound>
+                   AND
+                    [ λx6 ξx18 any18⁺ == λx6 ξx18 any18⁺ ]
+                    [ ξx18 any18⁺ == ξx18 any18⁺ ]
+                    [ any0⁺ == any0⁺ ]
+                    [ any0 == any0 ]
+                    any0
+                  AND
+                   λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                AND
+                 [ λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+                 [ λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                 [ λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                 AND
+                  AND
+                   AND
+                    [ [1;31m([0mP µx7 λp λt λf t[1;31m)[0m == [1;31m([0mP µx7 λp λt λf t[1;31m)[0m ]
+                    AND
+                     AND
+                      [ P == P ]
+                      [ any1 == any1 ]
+                      any1
+                     AND
+                      [ µx7 λp λt λf t == µx7 λp λt λf t ]
+                      [ λp λt λf t == λp λt λf t ]
+                      [ λx12 λt λf t == λx12 λt λf t ]
+                      AND
+                       AND
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                        AND
+                         [ <no bound> == <no bound> ]
+                         <no bound>
+                       AND
+                        [ λx12 λt λf t == λx12 λt λf t ]
+                        [ λt λf t == λt λf t ]
+                        [ λx17 λf t == λx17 λf t ]
+                        AND
+                         AND
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                         AND
+                          [ λx17 λf t == λx17 λf t ]
+                          [ λf t == λf t ]
+                          [ λx18 t == λx18 t ]
+                          AND
+                           AND
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                           AND
+                            [ λx18 t == λx18 t ]
+                            [ t == t ]
+                            [ any0 == any0 ]
+                            any0
+                          AND
+                           λx18 t
+                        AND
+                         λx17 λf t
+                      AND
+                       λx12 λt λf t
+                    AND
+                     [1;31m([0mP µx7 λp λt λf t[1;31m)[0m
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                  AND
+                   [ λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+                   [ λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                   [ λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+                   AND
+                    AND
+                     AND
+                      [ [1;31m([0mP µx12 λp λt λf f[1;31m)[0m == [1;31m([0mP µx12 λp λt λf f[1;31m)[0m ]
+                      AND
+                       AND
+                        [ P == P ]
+                        [ any1 == any1 ]
+                        any1
+                       AND
+                        [ µx12 λp λt λf f == µx12 λp λt λf f ]
+                        [ λp λt λf f == λp λt λf f ]
+                        [ λx17 λt λf f == λx17 λt λf f ]
+                        AND
+                         AND
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                          AND
+                           [ <no bound> == <no bound> ]
+                           <no bound>
+                         AND
+                          [ λx17 λt λf f == λx17 λt λf f ]
+                          [ λt λf f == λt λf f ]
+                          [ λx18 λf f == λx18 λf f ]
+                          AND
+                           AND
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                            AND
+                             [ <no bound> == <no bound> ]
+                             <no bound>
+                           AND
+                            [ λx18 λf f == λx18 λf f ]
+                            [ λf f == λf f ]
+                            [ λx19 f == λx19 f ]
+                            AND
+                             AND
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                              AND
+                               [ <no bound> == <no bound> ]
+                               <no bound>
+                             AND
+                              [ λx19 f == λx19 f ]
+                              [ f == f ]
+                              [ any0 == any0 ]
+                              any0
+                            AND
+                             λx19 f
+                          AND
+                           λx18 λf f
+                        AND
+                         λx17 λt λf f
+                      AND
+                       [1;31m([0mP µx12 λp λt λf f[1;31m)[0m
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                    AND
+                     [ λx12 [1;32m([0mP self[1;32m)[0m == λx12 [1;32m([0mP self[1;32m)[0m ]
+                     [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+                     AND
+                      AND
+                       [ P == P ]
+                       [ any1 == any1 ]
+                       any1
+                      AND
+                       [ self == self ]
+                       [ any0 == any0 ]
+                       any0
+                     AND
+                      [1;31m([0mP self[1;31m)[0m
+                   AND
+                    λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+                 AND
+                  λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+               AND
+                λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx13 any13⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+              AND
+               [ <no bound> == <no bound> ]
+               <no bound>
+             AND
+              [ λx2 ξx13 any13⁺ == λx8 ξx14 any14⁺ ]
+              [ ξx13 any13⁺ == ξx14 any14⁺ ]
+              [ any0⁺ == any0⁺ ]
+              [ any0 == any0 ]
+              any0
+            AND
+             λ(x2[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx13 any13⁺
+          AND
+           [ µx5 λp λt λf f == µx5 λp λt λf f ]
+           [ λp λt λf f == λp λt λf f ]
+           [ λx9 λt λf f == λx9 λt λf f ]
+           AND
+            AND
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+            AND
+             [ λx9 λt λf f == λx9 λt λf f ]
+             [ λt λf f == λt λf f ]
+             [ λx10 λf f == λx10 λf f ]
+             AND
+              AND
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx10 λf f == λx10 λf f ]
+               [ λf f == λf f ]
+               [ λx11 f == λx11 f ]
+               AND
+                AND
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                AND
+                 [ λx11 f == λx11 f ]
+                 [ f == f ]
+                 [ any0 == any0 ]
+                 any0
+               AND
+                λx11 f
+             AND
+              λx10 λf f
+           AND
+            λx9 λt λf f
+         AND
+          [1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µx5 λp λt λf f[1;31m)[0m
+       AND
+        [ ([1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx14 any14⁺) ξself λ(P[1;33m < [0mλ(b[1;33m < [0mλ(x50[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx102 any102⁺) λ(t[1;36m < [0m[1;36m([0mP µx95 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx96 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx80 any80⁺) λ(t[1;34m < [0m[1;34m([0mP µx51 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx52 λp λt λf f[1;35m)[0m) [1;36m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;36m)[0m) ξx26 any26⁺) λ(t[1;34m < [0m[1;34m([0mP µx27 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx28 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m[1;31m)[0m[1;31m < [0m[1;31m([0m(any29[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx34 any34⁺) λ(t[1;35m < [0m[1;35m([0mP µx14 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx15 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m[1;31m)[0m) ]
+        [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) == λ(ξself λ(P[1;32m < [0mλ(b[1;32m < [0mλ(x50[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx102 any102⁺) λ(t[1;35m < [0m[1;35m([0mP µx95 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx96 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx80 any80⁺) λ(t[1;33m < [0m[1;33m([0mP µx51 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx52 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx26 any26⁺) λ(t[1;33m < [0m[1;33m([0mP µx27 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx28 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m⁻[1;31m < [0mx4[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mλ(x50[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx102 any102⁺) λ(t[1;35m < [0m[1;35m([0mP µx95 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx96 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx80 any80⁺) λ(t[1;33m < [0m[1;33m([0mP µx51 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx52 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx26 any26⁺) λ(t[1;33m < [0m[1;33m([0mP µx27 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx28 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx34 any34⁺) λ(t[1;36m < [0m[1;36m([0mP µx14 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx15 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;32m)[0m ]
+        [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) == λ(ξself λ(P[1;32m < [0mλ(b[1;32m < [0mλ(x50[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx102 any102⁺) λ(t[1;35m < [0m[1;35m([0mP µx95 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx96 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx80 any80⁺) λ(t[1;33m < [0m[1;33m([0mP µx51 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx52 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx26 any26⁺) λ(t[1;33m < [0m[1;33m([0mP µx27 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx28 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m⁻[1;31m < [0mx4[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mλ(x50[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx102 any102⁺) λ(t[1;35m < [0m[1;35m([0mP µx95 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx96 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx80 any80⁺) λ(t[1;33m < [0m[1;33m([0mP µx51 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx52 λp λt λf f[1;34m)[0m) [1;35m([0mP µBool ξself λ(P[0m < [0mλ(b[0m < [0mBool) ξx56 any56⁺) λ(t[0m < [0m[0m([0mP µx57 λp λt λf t[0m)[0m) λ(f[0m < [0m[0m([0mP µx58 λp λt λf f[0m)[0m) [0m([0mP self[0m)[0m[1;35m)[0m) ξx26 any26⁺) λ(t[1;33m < [0m[1;33m([0mP µx27 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx28 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m⁺) [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx34 any34⁺) λ(t[1;36m < [0m[1;36m([0mP µx14 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx15 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;32m)[0m ]
+        [ (any29[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx14 any14⁺) == λx4 [1;32m([0m(any29[1;33m < [0mλ(b[1;33m < [0mµBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx18 any18⁺) λ(t[1;36m < [0m[1;36m([0mP µx7 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx12 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m) ξx13 any13⁺) µBool ξself λ(P[1;35m < [0mλ(b[1;35m < [0mBool) ξx34 any34⁺) λ(t[1;36m < [0m[1;36m([0mP µx14 λp λt λf t[1;36m)[0m) λ(f[1;30m < [0m[1;30m([0mP µx15 λp λt λf f[1;30m)[0m) [0m([0mP self[0m)[0m[1;32m)[0m ]
+        ! (Err)
+ OR
+  [ µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m ]
+  [ µx1 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx3 any3⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx7 µBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx10 any10⁺) λ(t[1;35m < [0m[1;35m([0mP µx4 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx5 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m ]
+  [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx16 any16⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx3 any3⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx10 any10⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+  [ ξx8 λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx16 any16⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx3 any3⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == µx1 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx10 any10⁺) λ(t[1;34m < [0m[1;34m([0mP µx4 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx5 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+  [ ξx8 λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx16 any16⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx3 any3⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx10 any10⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+  [ ξx8 λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx16 any16⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx3 any3⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mµBool ξself λ(P[1;34m < [0mλ(b[1;34m < [0mBool) ξx18 any18⁺) λ(t[1;35m < [0m[1;35m([0mP µx7 λp λt λf t[1;35m)[0m) λ(f[1;36m < [0m[1;36m([0mP µx12 λp λt λf f[1;36m)[0m) [1;30m([0mP self[1;30m)[0m) ξx10 any10⁺) λ(t[1;33m < [0m[1;33m([0mP µx4 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx5 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+  [ λ(P[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx3 any3⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+  [ λ(x3[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx3 any3⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x8[1;31m < [0mλ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺) λ(t[1;32m < [0m[1;32m([0mP µx4 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx5 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+  [ λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx3 any3⁺ == λ(b[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺ ]
+  [ λ(x3[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx3 any3⁺ == λ(x8[1;31m < [0mµBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx10 any10⁺ ]
+  AND
+   AND
+    [ µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+    [ µBool ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+    [ µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m == µx0 ξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx7 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx12 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m ]
+    [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+    [ ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx18 any18⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mξself λ(P[1;33m < [0mλ(b[1;33m < [0mBool) ξx16 any16⁺) λ(t[1;34m < [0m[1;34m([0mP µx5 λp λt λf t[1;34m)[0m) λ(f[1;35m < [0m[1;35m([0mP µx8 λp λt λf f[1;35m)[0m) [1;36m([0mP self[1;36m)[0m) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx7 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx12 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+    [ λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+    [ λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+    AND
+     AND
+      AND
+       [ λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺ == λ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+       [ λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺ == λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx18 any18⁺ ]
+       AND
+        AND
+         AND
+          [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+          [ ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+          [ ξx3 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m == ξx2 λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx16 any16⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m ]
+          [ λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(P[1;31m < [0mλ(b[1;31m < [0mBool) ξx16 any16⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+          [ λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx16 any16⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+          AND
+           AND
+            AND
+             [ λ(b[1;31m < [0mBool) ξx18 any18⁺ == λ(b[1;31m < [0mBool) ξx16 any16⁺ ]
+             [ λ(x4[1;31m < [0mBool) ξx18 any18⁺ == λ(x4[1;31m < [0mBool) ξx16 any16⁺ ]
+             AND
+              AND
+               AND
+                [ Bool == Bool ]
+                [ any1 == any1 ]
+                any1
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx4 ξx18 any18⁺ == λx4 ξx16 any16⁺ ]
+               [ ξx18 any18⁺ == ξx16 any16⁺ ]
+               [ any0⁺ == any0⁺ ]
+               [ any0 == any0 ]
+               any0
+             AND
+              λ(x4[1;31m < [0mBool) ξx18 any18⁺
+            AND
+             [ <no bound> == <no bound> ]
+             <no bound>
+           AND
+            [ λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx4 λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+            [ λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+            [ λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+            AND
+             AND
+              AND
+               [ [1;31m([0mP µx5 λp λt λf t[1;31m)[0m == [1;31m([0mP µx5 λp λt λf t[1;31m)[0m ]
+               AND
+                AND
+                 [ P == P ]
+                 [ any1 == any1 ]
+                 any1
+                AND
+                 [ µx5 λp λt λf t == µx5 λp λt λf t ]
+                 [ λp λt λf t == λp λt λf t ]
+                 [ λx8 λt λf t == λx8 λt λf t ]
+                 AND
+                  AND
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                  AND
+                   [ λx8 λt λf t == λx8 λt λf t ]
+                   [ λt λf t == λt λf t ]
+                   [ λx11 λf t == λx15 λf t ]
+                   AND
+                    AND
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                    AND
+                     [ λx11 λf t == λx15 λf t ]
+                     [ λf t == λf t ]
+                     [ λx18 t == λx16 t ]
+                     AND
+                      AND
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                      AND
+                       [ λx18 t == λx16 t ]
+                       [ t == t ]
+                       [ any0 == any0 ]
+                       any0
+                     AND
+                      λx18 t
+                   AND
+                    λx11 λf t
+                 AND
+                  λx8 λt λf t
+               AND
+                [1;31m([0mP µx5 λp λt λf t[1;31m)[0m
+              AND
+               [ <no bound> == <no bound> ]
+               <no bound>
+             AND
+              [ λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx5 λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+              [ λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+              [ λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+              AND
+               AND
+                AND
+                 [ [1;31m([0mP µx8 λp λt λf f[1;31m)[0m == [1;31m([0mP µx8 λp λt λf f[1;31m)[0m ]
+                 AND
+                  AND
+                   [ P == P ]
+                   [ any1 == any1 ]
+                   any1
+                  AND
+                   [ µx8 λp λt λf f == µx8 λp λt λf f ]
+                   [ λp λt λf f == λp λt λf f ]
+                   [ λx11 λt λf f == λx15 λt λf f ]
+                   AND
+                    AND
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                     AND
+                      [ <no bound> == <no bound> ]
+                      <no bound>
+                    AND
+                     [ λx11 λt λf f == λx15 λt λf f ]
+                     [ λt λf f == λt λf f ]
+                     [ λx18 λf f == λx16 λf f ]
+                     AND
+                      AND
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                       AND
+                        [ <no bound> == <no bound> ]
+                        <no bound>
+                      AND
+                       [ λx18 λf f == λx16 λf f ]
+                       [ λf f == λf f ]
+                       [ λx19 f == λx11 f ]
+                       AND
+                        AND
+                         AND
+                          [ <no bound> == <no bound> ]
+                          <no bound>
+                         AND
+                          [ <no bound> == <no bound> ]
+                          <no bound>
+                        AND
+                         [ λx19 f == λx11 f ]
+                         [ f == f ]
+                         [ any0 == any0 ]
+                         any0
+                       AND
+                        λx19 f
+                     AND
+                      λx18 λf f
+                   AND
+                    λx11 λt λf f
+                 AND
+                  [1;31m([0mP µx8 λp λt λf f[1;31m)[0m
+                AND
+                 [ <no bound> == <no bound> ]
+                 <no bound>
+               AND
+                [ λx8 [1;32m([0mP self[1;32m)[0m == λx8 [1;32m([0mP self[1;32m)[0m ]
+                [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+                AND
+                 AND
+                  [ P == P ]
+                  [ any1 == any1 ]
+                  any1
+                 AND
+                  [ self == self ]
+                  [ any0 == any0 ]
+                  any0
+                AND
+                 [1;31m([0mP self[1;31m)[0m
+              AND
+               λ(x8[1;31m < [0m[1;31m([0mP µx8 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+            AND
+             λ(x5[1;31m < [0m[1;31m([0mP µx5 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx8 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+          AND
+           λ(x4[1;31m < [0mλ(b[1;31m < [0mBool) ξx18 any18⁺) λ(t[1;32m < [0m[1;32m([0mP µx5 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx8 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+         AND
+          [ <no bound> == <no bound> ]
+          <no bound>
+        AND
+         [ λx6 ξx16 any16⁺ == λx6 ξx18 any18⁺ ]
+         [ ξx16 any16⁺ == ξx18 any18⁺ ]
+         [ any0⁺ == any0⁺ ]
+         [ any0 == any0 ]
+         any0
+       AND
+        λ(x6[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺
+      AND
+       [ <no bound> == <no bound> ]
+       <no bound>
+     AND
+      [ λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m == λx6 λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m ]
+      [ λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(t[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+      [ λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+      AND
+       AND
+        AND
+         [ [1;31m([0mP µx7 λp λt λf t[1;31m)[0m == [1;31m([0mP µx7 λp λt λf t[1;31m)[0m ]
+         AND
+          AND
+           [ P == P ]
+           [ any1 == any1 ]
+           any1
+          AND
+           [ µx7 λp λt λf t == µx7 λp λt λf t ]
+           [ λp λt λf t == λp λt λf t ]
+           [ λx12 λt λf t == λx12 λt λf t ]
+           AND
+            AND
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+             AND
+              [ <no bound> == <no bound> ]
+              <no bound>
+            AND
+             [ λx12 λt λf t == λx12 λt λf t ]
+             [ λt λf t == λt λf t ]
+             [ λx15 λf t == λx17 λf t ]
+             AND
+              AND
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx15 λf t == λx17 λf t ]
+               [ λf t == λf t ]
+               [ λx16 t == λx18 t ]
+               AND
+                AND
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                AND
+                 [ λx16 t == λx18 t ]
+                 [ t == t ]
+                 [ any0 == any0 ]
+                 any0
+               AND
+                λx16 t
+             AND
+              λx15 λf t
+           AND
+            λx12 λt λf t
+         AND
+          [1;31m([0mP µx7 λp λt λf t[1;31m)[0m
+        AND
+         [ <no bound> == <no bound> ]
+         <no bound>
+       AND
+        [ λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m == λx7 λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m ]
+        [ λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(f[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+        [ λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m == λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m ]
+        AND
+         AND
+          AND
+           [ [1;31m([0mP µx12 λp λt λf f[1;31m)[0m == [1;31m([0mP µx12 λp λt λf f[1;31m)[0m ]
+           AND
+            AND
+             [ P == P ]
+             [ any1 == any1 ]
+             any1
+            AND
+             [ µx12 λp λt λf f == µx12 λp λt λf f ]
+             [ λp λt λf f == λp λt λf f ]
+             [ λx15 λt λf f == λx17 λt λf f ]
+             AND
+              AND
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+               AND
+                [ <no bound> == <no bound> ]
+                <no bound>
+              AND
+               [ λx15 λt λf f == λx17 λt λf f ]
+               [ λt λf f == λt λf f ]
+               [ λx16 λf f == λx18 λf f ]
+               AND
+                AND
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                 AND
+                  [ <no bound> == <no bound> ]
+                  <no bound>
+                AND
+                 [ λx16 λf f == λx18 λf f ]
+                 [ λf f == λf f ]
+                 [ λx17 f == λx19 f ]
+                 AND
+                  AND
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                   AND
+                    [ <no bound> == <no bound> ]
+                    <no bound>
+                  AND
+                   [ λx17 f == λx19 f ]
+                   [ f == f ]
+                   [ any0 == any0 ]
+                   any0
+                 AND
+                  λx17 f
+               AND
+                λx16 λf f
+             AND
+              λx15 λt λf f
+           AND
+            [1;31m([0mP µx12 λp λt λf f[1;31m)[0m
+          AND
+           [ <no bound> == <no bound> ]
+           <no bound>
+         AND
+          [ λx12 [1;32m([0mP self[1;32m)[0m == λx12 [1;32m([0mP self[1;32m)[0m ]
+          [ [1;31m([0mP self[1;31m)[0m == [1;31m([0mP self[1;31m)[0m ]
+          AND
+           AND
+            [ P == P ]
+            [ any1 == any1 ]
+            any1
+           AND
+            [ self == self ]
+            [ any0 == any0 ]
+            any0
+          AND
+           [1;31m([0mP self[1;31m)[0m
+        AND
+         λ(x12[1;31m < [0m[1;31m([0mP µx12 λp λt λf f[1;31m)[0m) [1;32m([0mP self[1;32m)[0m
+      AND
+       λ(x7[1;31m < [0m[1;31m([0mP µx7 λp λt λf t[1;31m)[0m) λ(f[1;32m < [0m[1;32m([0mP µx12 λp λt λf f[1;32m)[0m) [1;33m([0mP self[1;33m)[0m
+    AND
+     λ(x6[1;31m < [0mλ(b[1;31m < [0mξself λ(P[1;32m < [0mλ(b[1;32m < [0mBool) ξx18 any18⁺) λ(t[1;33m < [0m[1;33m([0mP µx5 λp λt λf t[1;33m)[0m) λ(f[1;34m < [0m[1;34m([0mP µx8 λp λt λf f[1;34m)[0m) [1;35m([0mP self[1;35m)[0m) ξx16 any16⁺) λ(t[1;32m < [0m[1;32m([0mP µx7 λp λt λf t[1;32m)[0m) λ(f[1;33m < [0m[1;33m([0mP µx12 λp λt λf f[1;33m)[0m) [1;34m([0mP self[1;34m)[0m
+   AND
+    [ <no bound> == <no bound> ]
+    <no bound>
+  AND
+   [ λx3 ξx3 any3⁺ == λx8 ξx10 any10⁺ ]
+   [ ξx3 any0⁺ == ξx10 any10⁺ ]
+   [ any0⁺ == any1⁺ ]
+   [ any0 == any1 ]
+   ! (Err)
+Check not successful.! (Err)
+
+
+(Unit.new)
+Rewrites: 18957060

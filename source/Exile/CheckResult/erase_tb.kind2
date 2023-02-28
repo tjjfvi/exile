@@ -1,0 +1,2 @@
+Exile.CheckResult.erase_tb (a: Exile.CheckResult): Exile.CheckResult
+Exile.CheckResult.erase_tb (Exile.CheckResult.new term tb) = (Exile.CheckResult.new term (Exile.TracebackTree.leaf term))

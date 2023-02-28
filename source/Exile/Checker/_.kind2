@@ -1,3 +1,40 @@
 Exile.Checker: Type
-Exile.Checker.empty: Exile.Checker
+Exile.Checker.new (a: U60) (used_counter: UsedMap): Exile.Checker
+Exile.Checker.empty: Exile.Checker {
+  Exile.Checker.new 0 List.nil
+}
+Exile.Checker.deeper <t> (ch: Exile.Checker) (a: Exile.Checker -> t): t
+Exile.Checker.deeper t (Exile.Checker.new n m) a = (a (Exile.Checker.new (+ n 1) m))
 
+Exile.Checker.get_depth (ch: Exile.Checker): U60
+Exile.Checker.get_depth (Exile.Checker.new n m) = n
+
+Exile.Checker.with_term (ch: Exile.Checker) (term: Exile.Term) (a: Exile.Checker -> Exile.CheckResult): Exile.CheckResult
+Exile.Checker.with_term (Exile.Checker.new n m) term a =
+  let v = (UsedMap.get m term)
+
+  (U60.if 
+    (> v 1)
+    (Exile.CheckResult.with_comment (Exile.CheckResult.with_comment (Exile.CheckResult.ok term) (Exile.HSyntax.show term)) "Checking loop detected. Term:")
+    (
+      let m = UsedMap.increase m term
+      (a (Exile.Checker.new (+ n 1) m))
+    )
+  )
+
+UsedMap: Type { List (Pair Exile.Term U60) }
+UsedMap.increase (m: UsedMap) (k: Exile.Term): UsedMap
+UsedMap.increase List.nil k = (List.cons (Pair.new k 1) List.nil)
+UsedMap.increase (List.cons (Pair.new head.k head.v) tail) k = (Exile.CheckResult.if
+  (Exile.Checker.equal_strict Exile.Checker.empty head.k k)
+  (List.cons (Pair.new head.k (+ head.v 1)) tail)
+  (List.cons (Pair.new head.k head.v) (UsedMap.increase tail k))
+)
+UsedMap.get (m: UsedMap) (k: Exile.Term): U60 {
+  let a = List.filter m (x => (Exile.CheckResult.if
+    (Exile.Checker.equal_strict Exile.Checker.empty (Pair.fst x) k)
+    Bool.true
+    Bool.false
+  ))
+  (Maybe.default (Maybe.map (x => (Pair.snd x)) (List.head a)) 0)
+}

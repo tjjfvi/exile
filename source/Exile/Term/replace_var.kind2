@@ -1,7 +1,7 @@
 Exile.Term.replace_var (term: Exile.Term) (from: U60) (to: U60): Exile.Term
 Exile.Term.replace_var (Exile.Term.var idx) from to = U60.if (== idx from) (Exile.Term.var to) (Exile.Term.var idx)
-Exile.Term.replace_var (Exile.Term.lambda type body) from to = (Exile.Term.lambda (Exile.Term.replace_var type from to) (Exile.TermBody.replace_var body from to))
+Exile.Term.replace_var (Exile.Term.lambda type sup_type body) from to = (Exile.Term.lambda (Exile.Term.replace_var type from to) (Exile.Term.replace_var sup_type from to)  (Exile.TermBody.replace_var body from to))
 Exile.Term.replace_var (Exile.Term.infer_lambda body) from to = (Exile.Term.infer_lambda (Exile.TermBody.replace_var body from to))
-Exile.Term.replace_var (Exile.Term.recursive body) from to = (Exile.Term.recursive (Exile.TermBody.replace_var body from to))
-Exile.Term.replace_var (Exile.Term.self body) from to = (Exile.Term.self (Exile.TermBody.replace_var body from to))
+Exile.Term.replace_var (Exile.Term.recursive type body) from to = (Exile.Term.recursive  (Exile.Term.replace_var type from to)  (Exile.TermBody.replace_var body from to))
+Exile.Term.replace_var (Exile.Term.self type body) from to = (Exile.Term.self (Exile.Term.replace_var type from to)  (Exile.TermBody.replace_var body from to))
 Exile.Term.replace_var term from to = (Exile.Term.apply_subterm term (st => (Exile.Term.replace_var st from to)))

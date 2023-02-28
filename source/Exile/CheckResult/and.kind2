@@ -1,3 +1,11 @@
 Exile.CheckResult.and (l: Exile.CheckResult) (r: Exile.CheckResult) {
-	Exile.CheckResult.and_then l (_ => r)
+	let r_term = (Exile.CheckResult.get_term l)
+	let r_tb = (Exile.CheckResult.get_tb l)
+	let s_term = (Exile.CheckResult.get_term r)
+	let s_tb = (Exile.CheckResult.get_tb r)
+	let final_term = (Bool.if (Exile.Term.is_error r_term) Exile.Term.error s_term)
+
+	//let tb = (Exile.TracebackTree.and r_tb s_tb)
+	let tb = (Bool.if (Exile.Term.is_error r_term) r_tb s_tb)
+	(Exile.CheckResult.new final_term tb)
 }
