@@ -1,0 +1,47 @@
+[ a b < c ]
+  [ a < @(b- < x < b+) c ]
+
+[ @(T < x < U) a < @(V < x < W) b ]
+  V >= T && W <= U &&
+    let V < x < W
+    a < b
+
+[ x < (T < y < U) ]
+  [ x < T ] || [ x < y ]
+[ (T < x < U) < y ]
+  [ U < y ] || [ x < y ]
+[ T < x < U ]
+   [ T < x ] && [ x < U ]
+   
+[ (@(T < x < U) a)+ ]
+	[ @(T < x < U) (a+) ]
+
+[ (@(T < x < U) a)- ]
+	[ @(T < x < U) (a-) ]
+	
+[ x < (y+) ]
+   [ x == y ] || [ x < y ]
+   
+[ (x-) < y ]
+   [ x == y ] || [ x < y ]
+   
+[ (x-) < (y-) ]
+   [ x < y ]
+   
+[ (x+) < (y+) ]
+   [ x < y ]
+   
+[ &(x < T) (a x) < b ]
+  ([ T < b+ ] && T) || [ (a b) < b ]
+  
+[ a < $(T < x) (b x) ]
+  ([ a- < T ] && T) || [ a < (b a) ]
+  
+  
+[ $(T < x) (a x) < b ]
+  let z = $(T < x) (a x)
+  [ (a z) < b ]
+  
+[ a < &(x < T) (b x) ]
+	let z = &(x < T) (b x)
+  [ a < (b &(x < T) (b x))

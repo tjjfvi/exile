@@ -1,0 +1,11 @@
+Nat = &Nat $nat @(P < @(:Nat) *) @(zero < @P @z @s z) @(succ < @n @P @z @s (s n)) (P nat)
+
+Nat.zero = @P @z @s z
+Nat.succ = @n @P @z @s (s n)
+
+Equal = @a @b @P @(:(P a)) (P b)
+
+Nat.add = @(a < Nat) @(b < Nat) (a (@_ Nat) b @pred (pred (@_ Nat) (Nat.succ a))))
+
+Nat.add.comm.type = @(a < Nat) @(b < Nat) (Equal (Nat.add a b) (Nat.add b a))
+Nat.add.comm = (Equal )

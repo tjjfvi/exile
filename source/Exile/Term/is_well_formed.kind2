@@ -1,0 +1,5 @@
+Exile.Term.is_well_formed (x: Exile.Term): Bool
+Exile.Term.is_well_formed.go x = Exile.Term.is_well_formed.go x []
+
+Exile.Term.is_well_formed.go (x: Exile.Term) (prev: List U60): Bool
+Exile.Term.is_well_formed.go 

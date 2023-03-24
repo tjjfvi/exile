@@ -1,3 +1,10 @@
 Unit = µ Unit ξ unit λ(P: λ(b: Unit) *) λ(new: P (λp λnew new)) (P unit)
 
 Unit.new = λp λnew new
+
+Unit.identity = λ(a: Unit) ((a (λx Unit)) Unit.new)
+Unit.identity.type = λ(w:Unit) Unit
+
+CheckTerm = Unit.identity
+CheckType = Unit.identity.type
+

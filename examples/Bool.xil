@@ -1,15 +1,14 @@
-Bool = µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: P Bool.true) λ(f: P Bool.false) (P self)
+Bool = µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: (P Bool.true)) λ(f: (P Bool.false)) (P self)
 
 Bool.true: Bool = λp λt λf t
 
 Bool.false: Bool = λp λt λf f
 
-Bool.not: λ(:Bool) Bool = λ(x: Bool) (x (λ_ Bool) Bool.false Bool.true)
+Bool.not = λ(x: Bool) (((x (λ_ Bool)) Bool.false) Bool.true)
 
 Bool.and = λ(x: Bool) λ(y: Bool) (x (λ_ Bool) y Bool.false)
 
 Bool.or = λ(x: Bool) λ(y: Bool) (x (λ(_:Bool) Bool) Bool.true y)
 
 Bool.not.type = λ(x: Bool) (Bool)
-
 

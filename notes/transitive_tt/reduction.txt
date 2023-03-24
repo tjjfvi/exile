@@ -42,3 +42,13 @@ Bool.true < @(P: @(:z >= Bool) *) @(:P @p @t @f t) @(:P @p @t @f f) (P Bool.true
 (t < (P <  @(:z >= Bool) *) @p @t @f t) < ((P <  @(:z >= Bool) *) @p @t @f t)
 (P <  @(:z >= Bool) *) @p @t @f t <= (P <  @(:z >= Bool) *) @p @t @f t
 
+Unit = &Unit $unit @(P: @(:Unit) *) @(:P @p @n n) (P unit)
+Unit.id = @(u: Unit) ((u (@_ Unit)) @p @n n)
+Unit.id.type = @(u: Unit) Unit
+
+Unit.id < Unit.id.type
+@(u: Unit) ((u (@_ Unit)) @p @n n) < @(u: Unit) Unit
+∀u (((u < Unit) (@_ Unit)) @p @n n) < Unit
+∀u (((u < Unit) (@_ Unit)) @p @n n) < &Unit $unit @(P: @(:Unit) *) @(:P @p @n n) (P unit)
+∀u (((u < Unit) (@_ Unit)) @p @n n) < $unit @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P unit)
+∀u (((u < Unit) (@_ Unit)) @p @n n) < @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P (((u < Unit) (@_ Unit)) @p @n n))

@@ -1,3 +1,7 @@
+Util.get_body (a: Exile.Term): Exile.TermBody
+Util.get_body (Exile.Term.self a b) = b
+Util.get_body (Exile.Term.recursive a b) = b
+
 Exile.Checker.equal (checker: Exile.Checker) (l: Exile.Term) (r: Exile.Term): Exile.CheckResult { 
   let j = (Exile.TracebackEntry.judgement (Exile.Judgement.equal l r))
   //let l = (HVM.log (Exile.TracebackEntry.show j) l)
@@ -11,15 +15,19 @@ Exile.Checker.equal.go checker a (Exile.Term.attach c d) = Exile.Checker.equal c
 Exile.Checker.equal.go checker (Exile.Term.attach a b) c = Exile.Checker.equal checker a c
 
 
-Exile.Checker.equal.go ch (Exile.Term.infer_lambda l.body) (Exile.Term.infer_lambda r.body) = 
-  let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
-  let fresh_var = (Exile.Term.var fresh_index)
-  (Exile.Checker.equal
-    ch
-    (Exile.TermBody.replace l.body fresh_var)
-    (Exile.TermBody.replace r.body fresh_var)
-  )
 Exile.Checker.equal.go ch (Exile.Term.self a l.body) (Exile.Term.self b r.body) = 
+  
+  // This weird trick is necessary because otherwise l.body might use different vars in both cases.
+  let l_set = Exile.TermBody.get_var_set l.body
+  let r.body = (Exile.Term.replace_set (Exile.Term.self b r.body) (Exile.TermBody.get_var_set r.body) l_set)
+  let r.body = (Util.get_body r.body)
+
+  
+  let r_set = Exile.TermBody.get_var_set l.body
+  let l.body = (Exile.Term.replace_set (Exile.Term.self a l.body) (Exile.TermBody.get_var_set l.body) r_set)
+  let l.body = (Util.get_body l.body)
+
+  // TODO do this for recursive too.
   
   let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
   let fresh_var = (Exile.Term.var fresh_index)
@@ -35,7 +43,12 @@ Exile.Checker.equal.go ch (Exile.Term.lambda l.sub l.type l.body) (Exile.Term.la
           (Exile.Checker.equal ch l.type r.type)
           (Exile.Checker.equal ch l.sub r.sub)
         )
-        (Exile.Checker.equal ch (Exile.Term.infer_lambda l.body) (Exile.Term.infer_lambda r.body))
+        let free_var = (Exile.Util.find_free (List.concat
+          (Exile.Term.get_var_set (Exile.Term.lambda l.sub l.type l.body))
+          (Exile.Term.get_var_set (Exile.Term.lambda r.sub r.type r.body))
+        ))
+        let free_var = (Exile.Term.var free_var)
+        (Exile.Checker.equal ch (Exile.TermBody.replace l.body free_var) (Exile.TermBody.replace r.body free_var))
       )
       (Exile.CheckResult.ok (Exile.Term.lambda l.sub l.type l.body))
     )
@@ -56,6 +69,15 @@ Exile.Checker.equal.go ch (Exile.Term.apply l.l l.r) (Exile.Term.apply r.l r.r) 
     (Exile.Checker.equal ch l.r r.r)
   )
 Exile.Checker.equal.go ch (Exile.Term.recursive a l.body) (Exile.Term.recursive b r.body) = 
+  
+  let l_set = Exile.TermBody.get_var_set l.body
+  let r.body = (Exile.Term.replace_set (Exile.Term.recursive b r.body) (Exile.TermBody.get_var_set r.body) l_set)
+  let r.body = (Util.get_body r.body)
+
+  
+  let r_set = Exile.TermBody.get_var_set l.body
+  let l.body = (Exile.Term.replace_set (Exile.Term.recursive a l.body) (Exile.TermBody.get_var_set l.body) r_set)
+  let l.body = (Util.get_body l.body)
   
   let fresh_index = Exile.Util.find_free (List.concat (Exile.TermBody.get_var_set l.body) (Exile.TermBody.get_var_set r.body))
   let fresh_var = (Exile.Term.var fresh_index)
@@ -95,6 +117,10 @@ Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.var r) =
     (Exile.CheckResult.ok (Exile.Term.var l))
     (Exile.CheckResult.with_comment (Exile.CheckResult.err) "different numbered vars")
   )
+Exile.Checker.equal.go ch (Exile.Term.larger (Exile.Term.var l)) (Exile.Term.var r) = (Exile.Checker.equal ch (Exile.Term.var l) (Exile.Term.var r))
+Exile.Checker.equal.go ch (Exile.Term.var l) (Exile.Term.larger (Exile.Term.var r)) = (Exile.Checker.equal ch (Exile.Term.var l) (Exile.Term.var r))
+Exile.Checker.equal.go ch (Exile.Term.larger (Exile.Term.attach d m)) r = (Exile.Checker.equal ch d r)
+  
 Exile.Checker.equal.go ch (Exile.Term.larger l) (Exile.Term.larger r) = 
   Exile.Checker.equal ch l r
 Exile.Checker.equal.go ch (Exile.Term.smaller  l) (Exile.Term.smaller r) = 
@@ -116,10 +142,6 @@ Exile.Checker.equal.go ch (Exile.Term.bounded a b c) (Exile.Term.bounded d e f) 
 Exile.Checker.equal.go ch a (Exile.Term.larger (Exile.Term.attach b c))  = 
     (Exile.Checker.equal ch a (Exile.Term.larger b))
   
-Exile.Checker.equal.go ch (Exile.Term.lambda l.sub l.type l.body) b = 
-    (Exile.Checker.equal ch (Exile.Term.infer_lambda l.body) b)
-Exile.Checker.equal.go ch a (Exile.Term.lambda l.sub l.type l.body) = 
-    (Exile.Checker.equal ch a (Exile.Term.infer_lambda l.body))
 Exile.Checker.equal.go ch e (Exile.Term.bounded Exile.Term.no_bound b Exile.Term.no_bound) = 
     (Exile.Checker.equal ch e b)
 Exile.Checker.equal.go ch (Exile.Term.bounded Exile.Term.no_bound b Exile.Term.no_bound) e = 

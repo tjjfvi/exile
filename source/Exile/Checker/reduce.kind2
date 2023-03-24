@@ -35,11 +35,8 @@ Exile.Checker.reduce.go ch (Exile.Term.subtype sub sup) =
 Exile.Checker.reduce.go ch (Exile.Term.supertype sup sub) =
   (Util.pre_reduce_check ch sub sup)
 Exile.Checker.reduce.go ch (Exile.Term.larger (Exile.Term.lambda sub sup (Exile.TermBody.new index term))) =
-  let term = (Exile.Term.replace_var term index 1000000000)
   (Exile.CheckResult.and_then (Exile.Checker.reduce ch (Exile.Term.larger term))
     term => 
-      let index = (Exile.Util.find_free (Exile.Term.get_var_set term))
-      let term = (Exile.Term.replace_var term 1000000000 index)
      (Exile.CheckResult.ok (Exile.Term.lambda sub sup (Exile.TermBody.new index term)))
   )
   

@@ -1,0 +1,28 @@
+I'm currently interested in a problem Rust is facing right now, which is the inability to specify generic-ness for the const and async traits. This leads to writing many functions repeatedly.
+
+                      		Asynchrony	Iteration			Fallibility					Non-Const
+Reification	        		Future		Iterator			Result/Option
+Core register	     		impl Future	impl Iterator		Ok/Err and Some/None
+Consuming register						for loop/collect	match/unwrap
+Combinatoric register					Iterator methods	Result and Option methods
+Syntax register creation	async														DEFAULT
+Syntax register bubbling	await							? operator					IMPLICIT
+
+A function is async 		if any function it calls is async.
+A function is fallible 		if any function it calls is fallible.
+A function is non-const 	if any function it calls is non-const.
+
+Bubbling an iterator???
+Right, bubbling an iterator is mapping over it.
+Think of iterators more like generators.
+
+A function is an iterator 	if any function it calls is an iterator.??
+you might imagine a function that takes in either a generator or a normal function, and then returns a generator or a normal function based on that
+
+the solution??
+
+implicit inherited monadic parameter!
+
+monads do bubbling n stuff natively
+
+fn inherit(x: Monad, a: Value): a
