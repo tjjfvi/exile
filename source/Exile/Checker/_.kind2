@@ -14,8 +14,8 @@ Exile.Checker.with_term (Exile.Checker.new n m) term a =
   let v = (UsedMap.get m term)
 
   (U60.if 
-    (> v 1)
-    (Exile.CheckResult.with_comment (Exile.CheckResult.with_comment (Exile.CheckResult.ok term) (Exile.HSyntax.show term)) "Checking loop detected. Term:")
+    (> v 5)
+    (Exile.CheckResult.with_comment (Exile.CheckResult.with_comment (Exile.CheckResult.err) (Exile.HSyntax.show term)) "Checking loop detected. Term:")
     (
       let m = UsedMap.increase m term
       (a (Exile.Checker.new (+ n 1) m))

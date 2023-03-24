@@ -27,8 +27,6 @@ Exile.Checker.reduce.go ch (Exile.Term.apply (Exile.Term.attach (Exile.Term.boun
   Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.val argument)) val =>
   Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sup argument)) sup =>
   (Exile.CheckResult.ok (Exile.Term.bounded sub val sup))
-Exile.Checker.reduce.go ch (Exile.Term.apply (Exile.Term.recursive type term.body) arg) = 
-  Exile.Checker.try_reduce ch (Exile.Term.apply (Exile.TermBody.replace term.body (Exile.Term.recursive type term.body)) arg)
 Exile.Checker.reduce.go ch (Exile.Term.apply function argument) =
   (Exile.CheckResult.and_then (Exile.Checker.try_reduce ch function)
     function =>  Util.reduce_app ch function argument)
@@ -105,7 +103,35 @@ Util.reduce_app ch (Exile.Term.infer_lambda body) argument =
 Util.reduce_app ch (Exile.Term.lambda a type body) argument = 
   let replaced = (Exile.TermBody.replace body argument)
   Exile.Checker.reduce ch replaced
+Util.reduce_app ch (Exile.Term.attach function m) argument = 
+  Util.reduce_app ch function argument
+Util.reduce_app ch (Exile.Term.recursive type term.body) argument = 
+  (Exile.CheckResult.if
+    (Exile.Checker.equal ch (Exile.Term.recursive type term.body) Exile.Term.bot) 
+    (Exile.CheckResult.ok (Exile.Term.recursive type term.body))
+    (Util.reduce_app ch (Exile.TermBody.replace term.body (Exile.Term.recursive type term.body)) argument)
+  )
+    
+Util.reduce_app ch (Exile.Term.self type term.body) argument = 
+  (Exile.CheckResult.if
+    (Exile.Checker.equal ch (Exile.Term.self type term.body) Exile.Term.top) 
+    (Exile.CheckResult.ok (Exile.Term.self type term.body))
+    (Util.reduce_app ch (Exile.TermBody.replace term.body (Exile.Term.self type term.body)) argument)
+  )
   
+Util.reduce_app ch (Exile.Term.smaller x) argument = 
+  Exile.CheckResult.and_then (Exile.Checker.reduce ch (Exile.Term.apply x argument)) x =>
+    Exile.Checker.reduce ch (Exile.Term.smaller x)
+Util.reduce_app ch (Exile.Term.larger x) argument = 
+  Exile.CheckResult.and_then (Exile.Checker.reduce ch (Exile.Term.apply x argument)) x =>
+    Exile.Checker.reduce ch (Exile.Term.larger x)
+
+    
+Util.reduce_app ch (Exile.Term.bounded function.sub function.val function.sup) argument =
+  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sub argument)) sub =>
+  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.val argument)) val =>
+  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sup argument)) sup =>
+  (Exile.CheckResult.ok (Exile.Term.bounded sub val sup))
 Util.reduce_app ch function argument = 
   Exile.CheckResult.ok (Exile.Term.apply (HVM.log function function) argument)
 
@@ -230,16 +256,16 @@ Util.reduce_check ch sub (Exile.Term.self type body)  =
     rc
   )
 Util.reduce_check ch (Exile.Term.lambda sub.sub sub.sup sub.body) (Exile.Term.lambda sup.sub sup.sup sup.body)  =
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.reduce ch (Exile.Term.or_bot sub.sub))) sub.sub =>
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.reduce ch (Exile.Term.or_top sub.sup))) sub.sup =>
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.reduce ch (Exile.Term.or_top sup.sub))) sup.sub =>
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.reduce ch (Exile.Term.or_bot sup.sup))) sup.sup =>
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.reduce ch (Exile.Term.larger sup.sub)) "sup.sub plus")) sup.sub_plus =>
-  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.reduce ch (Exile.Term.larger sub.sup)) "sub.sup plus")) sub.sup_plus =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.Term.or_bot sub.sub))) sub.sub =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.Term.or_top sub.sup))) sub.sup =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.Term.or_top sup.sub))) sup.sub =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.Term.or_bot sup.sup))) sup.sup =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.Term.larger sup.sub)) "sup.sub plus")) sup.sub_plus =>
+  Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.Term.larger sub.sup)) "sub.sup plus")) sub.sup_plus =>
   (Exile.CheckResult.and
     (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sub.sub sup.sub_plus) "greater-than bound check"))
     (Exile.CheckResult.and
-      ((Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sup.sup sub.sup_plus) "less-than bound check"))
+      (Exile.CheckResult.ok Exile.Term.top)//((Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sup.sup sub.sup_plus) "less-than bound check"))
     
       let used_vars = List.flatten [
         (Exile.Term.get_var_set sub.sub)
@@ -252,8 +278,8 @@ Util.reduce_check ch (Exile.Term.lambda sub.sub sub.sup sub.body) (Exile.Term.la
       let free_var = Exile.Util.find_free used_vars
       let free_var = (Exile.Term.var free_var)
       let bounded = (Exile.Term.bounded sub.sub free_var sup.sup)
-      (Exile.CheckResult.and_then (Exile.CheckResult.with_comment (Exile.Checker.reduce ch (Exile.TermBody.replace sub.body bounded)) "sub_reduce")
-        sub => (Exile.CheckResult.and_then (Exile.CheckResult.with_comment (Exile.Checker.reduce ch (Exile.TermBody.replace sup.body bounded)) "sup_reduce")
+      (Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.TermBody.replace sub.body bounded)) "sub_reduce"))
+        sub => (Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.TermBody.replace sup.body bounded)) "sup_reduce"))
           sup =>
           (Exile.CheckResult.with_comment 
           (Exile.Checker.reduce_instance ch sub sup)
@@ -270,8 +296,11 @@ Util.reduce_check ch (Exile.Term.lambda sub.sub sub.sup sub.body) (Exile.Term.la
 // [ (T < x < U) < y ]
 //   [ T < y ] || [ x < y ]
 Util.reduce_check ch (Exile.Term.bounded a b c) e = 
+  
   (Exile.CheckResult.or
-    (Exile.Checker.reduce_instance_strict ch c (Exile.Term.larger e))
+    (Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.larger e)) v => 
+      (Exile.Checker.reduce_instance_strict ch c v)
+      )
     (Exile.Checker.reduce_instance_strict ch b e)
   )
 Util.reduce_check ch e (Exile.Term.bounded a b c) = 
@@ -280,6 +309,23 @@ Util.reduce_check ch e (Exile.Term.bounded a b c) =
     (Exile.Checker.reduce_instance_strict ch e b)
   )
   
+// TODO these rules cause ambiguity - reordering them shouldn't change meaning!
+Util.reduce_check ch sub (Exile.Term.recursive type body) =
+  let v = (Exile.Term.var (Exile.Util.find_free (Exile.TermBody.get_var_set body)))
+  //let v = (Exile.Term.bounded (Exile.Term.smaller (Exile.Term.recursive type body)) v Exile.Term.no_bound)
+  let v = (Exile.Term.recursive type body)
+  let body = (Exile.TermBody.replace body v)
+  (Exile.Checker.reduce_instance ch sub body)
+
+Util.reduce_check ch (Exile.Term.self type body) sup =
+  let v = (Exile.Term.var (Exile.Util.find_free (Exile.TermBody.get_var_set body)))
+  let v = (HVM.log v v)
+  //let v = (Exile.Term.bounded Exile.Term.no_bound v (Exile.Term.larger (Exile.Term.self type body)))
+  let v = (Exile.Term.self type body)
+  let body = (Exile.TermBody.replace body v)
+  (Exile.Checker.reduce_instance ch body sup)
+
+
 // [ c < a b ]
 //   [ @(b- < x < b+) c < a ]
 Util.reduce_check ch c (Exile.Term.apply a b)  =
@@ -315,23 +361,6 @@ Util.reduce_check ch (Exile.Term.apply a b) c =
   naive_result
   
   
-// TODO these rules cause ambiguity - reordering them shouldn't change meaning!
-Util.reduce_check ch sub (Exile.Term.recursive type body) =
-  let v = (Exile.Term.var (Exile.Util.find_free (Exile.TermBody.get_var_set body)))
-  //let v = (Exile.Term.bounded (Exile.Term.smaller (Exile.Term.recursive type body)) v Exile.Term.no_bound)
-  let v = (Exile.Term.recursive type body)
-  let body = (Exile.TermBody.replace body v)
-  (Exile.Checker.reduce_instance ch sub body)
-
-Util.reduce_check ch (Exile.Term.self type body) sup =
-  let v = (Exile.Term.var (Exile.Util.find_free (Exile.TermBody.get_var_set body)))
-  let v = (HVM.log v v)
-  //let v = (Exile.Term.bounded Exile.Term.no_bound v (Exile.Term.larger (Exile.Term.self type body)))
-  let v = (Exile.Term.self type body)
-  let body = (Exile.TermBody.replace body v)
-  (Exile.Checker.reduce_instance ch body sup)
-
-
   
 Util.reduce_check ch term type = 
   (Exile.CheckResult.with_comment Exile.CheckResult.err

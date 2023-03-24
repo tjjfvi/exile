@@ -64,7 +64,7 @@ Exile.HSyntax.output_with_name st (Exile.Term.recursive lt body) name =
 	String.flatten [ (State.color_string st "µ") (Exile.HSyntax.output_bound st Exile.Term.no_bound (Util.get_var_term body name) lt)  " " (Util.output_body st body name) ]
 Exile.HSyntax.output_with_name st (Exile.Term.self gt body) name = 
 	String.flatten [ (State.color_string st "ξ") (Exile.HSyntax.output_bound st gt (Util.get_var_term body name) Exile.Term.no_bound)  " " (Util.output_body st body name) ]
-Exile.HSyntax.output_with_name st x name = String.flatten ["'"  (Exile.HSyntax.show.go st x)]
+Exile.HSyntax.output_with_name st x name = String.flatten ["'" (Exile.HSyntax.show.go st x)]
 
 State { U60 }
 State.get_depth (a: State): U60 { a } 
@@ -81,8 +81,8 @@ Exile.HSyntax.show (term: Exile.Term) {
 	Exile.HSyntax.show.go State.empty term
 }
 Exile.HSyntax.show.go (st: State) (term: Exile.Term): String
-Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s]
-// Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
+// Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s]
+Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
 Exile.HSyntax.show.go st (Exile.Term.attach String Exile.Term.unbound name) = String.flatten [
 	"?" name "?"
 ]
