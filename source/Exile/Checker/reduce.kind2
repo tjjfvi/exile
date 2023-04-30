@@ -3,6 +3,7 @@ Exile.Checker.reduce (checker: Exile.Checker) (term: Exile.Term): Exile.CheckRes
   let judgement = (Exile.Judgement.reduce term)
   // For logging
   let l = (String.concat (String.repeat " " (U60.to_nat (Exile.Checker.get_depth checker))) (Exile.Judgement.show judgement))
+  let term = (Util.double_reduce_attach term)
   let term = (HVM.log l term)
 	Exile.CheckResult.with_entry (Exile.Checker.reduce.go checker term) (Exile.TracebackEntry.judgement judgement)
 }
@@ -15,14 +16,17 @@ Exile.Checker.try_reduce (checker: Exile.Checker) (term: Exile.Term): Exile.Chec
   )
 }
 
+Util.double_reduce_attach (term: Exile.Term): Exile.Term
+Util.double_reduce_attach term = Exile.Term.apply_subterm (Util.reduce_attach term) x => (Util.reduce_attach x)
+
+
+Util.reduce_attach (term: Exile.Term): Exile.Term
+Util.reduce_attach (Exile.Term.attach t term meta) = term
+Util.reduce_attach a = a
+
 Exile.Checker.reduce.go (checker: Exile.Checker) (term: Exile.Term): Exile.CheckResult
 
 Exile.Checker.reduce.go ch (Exile.Term.apply (Exile.Term.bounded function.sub function.val function.sup) argument) =
-  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sub argument)) sub =>
-  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.val argument)) val =>
-  Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sup argument)) sup =>
-  (Exile.CheckResult.ok (Exile.Term.bounded sub val sup))
-Exile.Checker.reduce.go ch (Exile.Term.apply (Exile.Term.attach (Exile.Term.bounded function.sub function.val function.sup) m) argument) =
   Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sub argument)) sub =>
   Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.val argument)) val =>
   Exile.CheckResult.and_then (Exile.Checker.try_reduce ch (Exile.Term.apply function.sup argument)) sup =>
@@ -68,9 +72,6 @@ Exile.Checker.reduce.go ch (Exile.Term.larger (Exile.Term.bounded a b c)) =
   Exile.CheckResult.and_then (Exile.Checker.reduce ch (Exile.Term.larger b)) b =>
   Exile.CheckResult.and_then (Exile.Checker.reduce ch (Exile.Term.larger c)) c =>
   Exile.CheckResult.ok (Exile.Term.bounded a b c)
-
-Exile.Checker.reduce.go ch (Exile.Term.larger (Exile.Term.attach k term m)) = Exile.Checker.reduce.go ch (Exile.Term.larger term)
-Exile.Checker.reduce.go ch (Exile.Term.smaller (Exile.Term.attach k term m)) = Exile.Checker.reduce.go ch (Exile.Term.smaller term)
   
 Exile.Checker.reduce.go ch (Exile.Term.bounded Exile.Term.no_bound term Exile.Term.no_bound) =
   Exile.Checker.reduce ch term
@@ -84,7 +85,8 @@ Exile.Checker.reduce.go ch (Exile.Term.bounded sub term sup) =
     (Util.pre_reduce_check ch term sup)
   )
 
-Exile.Checker.reduce.go ch (Exile.Term.attach t term m) = Exile.Checker.reduce.go ch term
+Exile.Checker.reduce.go ch (Exile.Term.attach t term m) = 
+  (Exile.Term.attach t (Exile.Checker.reduce.go (Exile.Checker.unrolled_name ch) term) m)
 Exile.Checker.reduce.go ch term = (Exile.CheckResult.ok term)
 
 Util.reduce_app (ch: Exile.Checker) (function: Exile.Term) (argument: Exile.Term): Exile.CheckResult
@@ -273,10 +275,20 @@ Util.reduce_check ch (Exile.Term.lambda sub.sub sub.sup sub.body) (Exile.Term.la
         (Exile.TermBody.get_var_set sup.body)
       ]
       let free_var = Exile.Util.find_free used_vars
+
+      // This is a bit complex, because we must make sub.sub, free_var, sup.sup, sup.body, sub.body  
+      let used_vars = (List.cons free_var used_vars)
+      let sub.sub = (Exile.Term.replace_set sub.sub (Exile.Term.get_var_set sub.sub) used_vars)
+      
+      let used_vars = (List.concat used_vars (Exile.Term.get_var_set sub.sub))
+      let sup.sup = (Exile.Term.replace_set sup.sup (Exile.Term.get_var_set sup.sup) used_vars)
+      
       let free_var = (Exile.Term.var free_var)
+      
       let bounded = (Exile.Term.bounded sub.sub free_var sup.sup)
-      (Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.TermBody.replace sub.body bounded)) "sub_reduce"))
-        sub => (Exile.CheckResult.and_then (Exile.CheckResult.erase_tb (Exile.CheckResult.with_comment (Exile.Checker.try_reduce ch (Exile.TermBody.replace sup.body bounded)) "sup_reduce"))
+      
+      (Exile.CheckResult.and_then (Exile.CheckResult.with_comment (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.TermBody.replace sub.body bounded))) "sub_reduce")
+        sub => (Exile.CheckResult.and_then (Exile.CheckResult.with_comment (Exile.CheckResult.erase_tb (Exile.Checker.try_reduce ch (Exile.TermBody.replace sup.body bounded))) "sup_reduce")
           sup =>
           (Exile.CheckResult.with_comment 
           (Exile.Checker.reduce_instance ch sub sup)

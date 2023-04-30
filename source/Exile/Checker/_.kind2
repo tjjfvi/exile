@@ -1,16 +1,22 @@
 Exile.Checker: Type
-Exile.Checker.new (a: U60) (used_counter: UsedMap): Exile.Checker
+Exile.Checker.new (a: U60) (used_counter: UsedMap) (unroll_name: U60): Exile.Checker
 Exile.Checker.empty: Exile.Checker {
-  Exile.Checker.new 0 List.nil
+  Exile.Checker.new 0 List.nil 0
 }
 Exile.Checker.deeper <t> (ch: Exile.Checker) (a: Exile.Checker -> t): t
-Exile.Checker.deeper t (Exile.Checker.new n m) a = (a (Exile.Checker.new (+ n 1) m))
+Exile.Checker.deeper t (Exile.Checker.new n m u) a = (a (Exile.Checker.new (+ n 1) m u))
 
 Exile.Checker.get_depth (ch: Exile.Checker): U60
-Exile.Checker.get_depth (Exile.Checker.new n m) = n
+Exile.Checker.get_depth (Exile.Checker.new n m u) = n
+
+Exile.Checker.get_unroll (ch: Exile.Checker): U60
+Exile.Checker.get_unroll (Exile.Checker.new n m u) = u
+
+Exile.Checker.unrolled_name (ch: Exile.Checker): Exile.Checker
+Exile.Checker.unrolled_name (Exile.Checker.new n m u) = (Exile.Checker.new n m n)
 
 Exile.Checker.with_term (ch: Exile.Checker) (term: Exile.Term) (a: Exile.Checker -> Exile.CheckResult): Exile.CheckResult
-Exile.Checker.with_term (Exile.Checker.new n m) term a =
+Exile.Checker.with_term (Exile.Checker.new n m u) term a =
   let v = (UsedMap.get m term)
 
   (U60.if 
@@ -18,7 +24,7 @@ Exile.Checker.with_term (Exile.Checker.new n m) term a =
     (Exile.CheckResult.with_comment (Exile.CheckResult.with_comment (Exile.CheckResult.err) (Exile.HSyntax.show term)) "Checking loop detected. Term:")
     (
       let m = UsedMap.increase m term
-      (a (Exile.Checker.new (+ n 1) m))
+      (a (Exile.Checker.new (+ n 1) m u))
     )
   )
 

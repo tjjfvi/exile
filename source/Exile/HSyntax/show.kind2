@@ -82,11 +82,13 @@ Exile.HSyntax.show (term: Exile.Term) {
 }
 Exile.HSyntax.show.go (st: State) (term: Exile.Term): String
 // Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s]
+Exile.HSyntax.show.go st (Exile.Term.attach Exile.Term.NameHidden t (Exile.Term.NameHidden.new name)) = String.flatten ["[" name "]"]
 Exile.HSyntax.show.go st (Exile.Term.attach String (Exile.Term.var a) s) = String.flatten [s "x" (U60.to_string a)]
 Exile.HSyntax.show.go st (Exile.Term.attach String Exile.Term.unbound name) = String.flatten [
 	"?" name "?"
 ]
-Exile.HSyntax.show.go st (Exile.Term.attach String term name) = (Exile.HSyntax.output_with_name st term name)
+Exile.HSyntax.show.go st (Exile.Term.attach String term (String.cons a b)) = (Exile.HSyntax.output_with_name st term (String.cons a b))
+Exile.HSyntax.show.go st (Exile.Term.attach a term name) = Exile.HSyntax.show.go st term
 Exile.HSyntax.show.go st (Exile.Term.lambda sub type body) = Exile.HSyntax.output_with_name st (Exile.Term.lambda sub type body) (Util.get_var_name body)
 Exile.HSyntax.show.go st (Exile.Term.infer_lambda body) = Exile.HSyntax.output_with_name st (Exile.Term.infer_lambda body) (Util.get_var_name body)
 Exile.HSyntax.show.go st (Exile.Term.self type body) = Exile.HSyntax.output_with_name st (Exile.Term.self type body) (Util.get_var_name body)

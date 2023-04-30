@@ -33,3 +33,7 @@ Exile.Term.smaller (term: Exile.Term): Exile.Term
 
 // Checker result terms
 Exile.Term.error: Exile.Term
+
+Exile.Term.NameHidden: Type
+Exile.Term.NameHidden.new (a: String): Exile.Term.NameHidden
+

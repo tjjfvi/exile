@@ -5,6 +5,8 @@ Unit.new = λp λnew new
 Unit.identity = λ(a: Unit) ((a (λx Unit)) Unit.new)
 Unit.identity.type = λ(w:Unit) Unit
 
-CheckTerm = Unit.identity
+W = λ(a: Unit) ((a (λx Unit)) Unit.new)
+
+CheckTerm = W
 CheckType = Unit.identity.type
 

@@ -21,8 +21,22 @@ you might imagine a function that takes in either a generator or a normal functi
 
 the solution??
 
-implicit inherited monadic parameter!
+implicit inherited parameter!
 
 monads do bubbling n stuff natively
 
-fn inherit(x: Monad, a: Value): a
+Monad has:
+new: T -> (W T)
+bind: (W A) -> (a -> (W B)) -> (W B)
+
+Effect   		new						bind								resolve
+Fallibility		Some					x.map().flatten()
+Asynchronicity	Future::new_ready()		async { let x = a.await?; f(x) }	executor.run
+Iteration		Iterator::single()		iterator.map().flatten()			.fold
+Non-const		{ x }					{ let a = b; f(a) }					N/A
+Allocator		with_allocator()											allocator.run
+
+
+Main = (a: T) (b: T) 
+	
+	
