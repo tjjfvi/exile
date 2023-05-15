@@ -1,3 +1,0 @@
-type Exile.TermBody {
-	new (id: U60) (body: Exile.Term)
-}

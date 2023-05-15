@@ -1,0 +1,5 @@
+Exile.Term.alpha (term: Exile.Term) (index: U60): Exile.Term
+Exile.Term.alpha (Exile.Term.var x) index = (U60.if (>= x index) (Exile.Term.var (+ x 1)) (Exile.Term.var x))
+Exile.Term.alpha term index = (Exile.Term.apply_subterm_with_vars term subterm => vars => 
+  (Exile.Term.alpha subterm (+ index (Nat.to_u60 (List.length vars))))
+)

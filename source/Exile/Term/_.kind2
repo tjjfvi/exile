@@ -11,9 +11,10 @@ Exile.Term.apply (fn: Exile.Term) (argument: Exile.Term): Exile.Term
 Exile.Term.var (id: U60): Exile.Term
 
 // "Alias" terms
-Exile.Term.top: Exile.Term { Exile.Term.self Exile.Term.no_bound (Exile.TermBody.new 0 (Exile.Term.larger (Exile.Term.var 0))) } 
-Exile.Term.bot: Exile.Term { Exile.Term.recursive Exile.Term.no_bound (Exile.TermBody.new 0 (Exile.Term.smaller (Exile.Term.var 0))) } 
-Exile.Term.empty: Exile.Term { Exile.Term.infer_lambda (Exile.TermBody.new 0 (Exile.Term.var 0)) } 
+Exile.Term.top: Exile.Term { Exile.Term.self Exile.Term.no_bound (Exile.Term.larger (Exile.Term.var 0)) } 
+Exile.Term.bot: Exile.Term { Exile.Term.recursive Exile.Term.no_bound (Exile.Term.smaller (Exile.Term.var 0)) } 
+Exile.Term.empty: Exile.Term { Exile.Term.infer_lambda (Exile.Term.var 0) } 
+Exile.Term.new_free_var { Exile.Term.var 0 }
 
 Exile.Term.infer: Exile.Term
 Exile.Term.no_bound: Exile.Term
@@ -33,6 +34,7 @@ Exile.Term.smaller (term: Exile.Term): Exile.Term
 
 // Checker result terms
 Exile.Term.error: Exile.Term
+Exile.Term.binding (id: U60): Exile.Term
 
 Exile.Term.NameHidden: Type
 Exile.Term.NameHidden.new (a: String): Exile.Term.NameHidden

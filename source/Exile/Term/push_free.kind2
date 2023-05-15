@@ -1,0 +1,3 @@
+/// Increments all unbound variable indexes by one, to make space for a new free variable
+Exile.Term.push_free (term: Exile.Term): Exile.Term
+Exile.Term.push_free term = Exile.Term.alpha term 1

@@ -1,0 +1,10 @@
+
+
+Exile.Term.is_recursive (x: Exile.Term): Bool
+Exile.Term.is_recursive (Exile.Term.recursive a b) = Bool.true
+Exile.Term.is_recursive (Exile.Term.self a b) = Bool.true
+Exile.Term.is_recursive x = Bool.False
+
+Exile.Term.is_looping (term: Exile.Term): Bool
+Exile.Term.is_looping Exile.Term.no_bound = Bool.true
+Exile.Term.is_looping term = Bool.false

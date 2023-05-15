@@ -1,9 +1,9 @@
 
 Exile.Term.apply_subterm_with_vars (term: Exile.Term) (f: Exile.Term -> (List U60) -> Exile.Term): Exile.Term
-Exile.Term.apply_subterm_with_vars (Exile.Term.lambda type sup_type (Exile.TermBody.new id body)) f = (Exile.Term.lambda (f type []) (f sup_type [])  (Exile.TermBody.new id (f body [id])))
-Exile.Term.apply_subterm_with_vars (Exile.Term.infer_lambda (Exile.TermBody.new id body)) f = (Exile.Term.infer_lambda (Exile.TermBody.new id (f body [id])))
-Exile.Term.apply_subterm_with_vars (Exile.Term.recursive type (Exile.TermBody.new id body)) f = (Exile.Term.recursive (f type []) (Exile.TermBody.new id (f body [id])))
-Exile.Term.apply_subterm_with_vars (Exile.Term.self type (Exile.TermBody.new id body)) f = (Exile.Term.self (f type []) (Exile.TermBody.new id (f body [id])))
+Exile.Term.apply_subterm_with_vars (Exile.Term.lambda type sup_type body) f = (Exile.Term.lambda (f type []) (f sup_type []) (f body [0]))
+Exile.Term.apply_subterm_with_vars (Exile.Term.infer_lambda body) f = (Exile.Term.infer_lambda (f body [0]))
+Exile.Term.apply_subterm_with_vars (Exile.Term.recursive type body) f = (Exile.Term.recursive (f type []) (f body [0]))
+Exile.Term.apply_subterm_with_vars (Exile.Term.self type body) f = (Exile.Term.self (f type []) (f body [0]))
 Exile.Term.apply_subterm_with_vars (Exile.Term.apply a b) f = (Exile.Term.apply (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.subtype a b) f = (Exile.Term.subtype (f a []) (f b []))
 Exile.Term.apply_subterm_with_vars (Exile.Term.bounded a b c) f = (Exile.Term.bounded (f a []) (f b []) (f c []))

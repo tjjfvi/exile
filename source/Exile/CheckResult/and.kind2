@@ -1,4 +1,4 @@
-Exile.CheckResult.and (l: Exile.CheckResult) (r: Exile.CheckResult) {
+Exile.CheckResult.and (l: Exile.CheckResult) (r: Exile.CheckResult): Exile.CheckResult {
 	let r_term = (Exile.CheckResult.get_term l)
 	let r_tb = (Exile.CheckResult.get_tb l)
 	let s_term = (Exile.CheckResult.get_term r)

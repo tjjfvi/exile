@@ -1,3 +1,3 @@
 Exile.TermBody.get_term (body: Exile.TermBody): Exile.Term {
-	Exile.TermBody.match body (_ => Exile.Term) (idx => body => body)
+	body
 }

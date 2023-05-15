@@ -8,7 +8,7 @@ Exile.HSyntax.parse.term.variable (table: Exile.DepthTable) {
       Exile.Term.top
       (Bool.if (String.equal name "!")
         Exile.Term.bot
-        (Exile.Term.attach (Maybe.default (Maybe.map (x => (Exile.Term.var x)) (Exile.DepthTable.get table name)) Exile.Term.unbound) name)
+        (Exile.Term.attach (Maybe.default (Maybe.map (x => (Exile.Term.var (- (Nat.to_u60 (List.length table)) x))) (Exile.DepthTable.get table name)) Exile.Term.unbound) name)
     ))
   }
 }
@@ -79,7 +79,6 @@ Exile.HSyntax.parse.term.bound (table: Exile.DepthTable): Parser (Pair Exile.Ter
 
 Exile.HSyntax.parse.term.typed_lambda (table: Exile.DepthTable): Parser Exile.Term {
   do Parser {
-  	let next_idx = (+ (Nat.to_u60 (List.length table)) 1)
     ask _ = Parser.skip_whitespace
     ask _ = Parser.first_of (List.map ['@', 'λ'] (char => Parser.char char))
     ask _ = Parser.skip_whitespace
@@ -95,7 +94,7 @@ Exile.HSyntax.parse.term.typed_lambda (table: Exile.DepthTable): Parser Exile.Te
     ask _ = Parser.skip_whitespace
     ask _ = Parser.char ')'
     ask body = Exile.HSyntax.parse.term (Exile.DepthTable.set table var_name)
-    return (Exile.Term.attach (Exile.Term.lambda Exile.Term.no_bound type (Exile.TermBody.new next_idx body)) var_name)
+    return (Exile.Term.attach (Exile.Term.lambda Exile.Term.no_bound type body) var_name)
   }
 }
 Exile.HSyntax.parse.term.top (table: Exile.DepthTable): Parser Exile.Term {
@@ -118,17 +117,16 @@ Exile.HSyntax.parse.with_paren <w> (parser: (Parser w)) {
 }
 
 Exile.HSyntax.parse.term (table: Exile.DepthTable) {
-  let next_idx = (+ (Nat.to_u60 (List.length table)) 1)
   Parser.first_of [
     (Exile.HSyntax.parse.with_paren (Exile.HSyntax.parse.term.apply table))
     (Exile.HSyntax.parse.term.container table ['@', 'λ'] (var_name => body => sub => term => sup => 
-      (Exile.Term.attach (Exile.Term.lambda sub sup (Exile.TermBody.new next_idx body)) var_name)))
+      (Exile.Term.attach (Exile.Term.lambda sub sup body) var_name)))
     (Exile.HSyntax.parse.term.container table ['@', 'λ'] (var_name => body => sub => term => sup => 
-      (Exile.Term.attach (Exile.Term.infer_lambda (Exile.TermBody.new next_idx body)) var_name)))
+      (Exile.Term.attach (Exile.Term.infer_lambda body) var_name)))
     (Exile.HSyntax.parse.term.container table ['$', 'ξ'] (var_name => body => sub => term => sup => 
-      (Exile.Term.attach (Exile.Term.self sub (Exile.TermBody.new next_idx body)) var_name)))
+      (Exile.Term.attach (Exile.Term.self sub body) var_name)))
     (Exile.HSyntax.parse.term.container table ['&', '%', 'μ', 181] (var_name => body => sub => term => sup => 
-      (Exile.Term.attach (Exile.Term.recursive sup (Exile.TermBody.new next_idx body)) var_name)))
+      (Exile.Term.attach (Exile.Term.recursive sup body) var_name)))
     (Exile.HSyntax.parse.term.variable table)
     (Exile.HSyntax.parse.term.top table)
     (Exile.HSyntax.parse.with_paren (Exile.HSyntax.parse.term table))
@@ -136,7 +134,6 @@ Exile.HSyntax.parse.term (table: Exile.DepthTable) {
 }
 
 Exile.HSyntax.parse.term_noparen (table: Exile.DepthTable) {
-  let next_idx = (+ (Nat.to_u60 (List.length table)) 1)
   Parser.first_of [
     (Exile.HSyntax.parse.term.apply table)
     (Exile.HSyntax.parse.term table)

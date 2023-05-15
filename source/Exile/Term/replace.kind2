@@ -1,0 +1,17 @@
+Exile.Term.replace.go (term: Exile.Term) (index: U60) (to: Exile.Term) : Exile.Term
+Exile.Term.replace.go (Exile.Term.var x) index to = 
+    (U60.if (== index x) to 
+        (U60.if (> x index) (Exile.Term.var (- x 1))
+            (Exile.Term.var x)
+        )
+    )
+Exile.Term.replace.go term index to = (Exile.Term.apply_subterm_with_vars term subterm => vars => 
+  (Exile.Term.replace.go
+    subterm 
+    (+ index (Nat.to_u60 (List.length vars))) 
+    (Nat.apply (List.length vars) (x => Exile.Term.alpha x index) to)
+)
+)
+
+Exile.Term.replace (term: Exile.Term) (to: Exile.Term): Exile.Term
+Exile.Term.replace term to = Exile.Term.replace.go term 0 to

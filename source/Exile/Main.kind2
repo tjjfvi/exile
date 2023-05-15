@@ -69,24 +69,11 @@ Main3 {
 
 
 Main4 { (Exile.HSyntax.show (Exile.HSyntax.parse Code.Bool)) }
-Main12 { (Exile.HSyntax.show (Exile.HSyntax.parse "@p @t @f p")) }
 
-Main5 {
-	let a = (Exile.Term.var 0)
-	let b = (Exile.Term.var 1)
-	let term = (Exile.Term.subtype a b)
-	let type = b
-	let term = (Exile.Term.infer_lambda (Exile.TermBody.new 10 term))
-	let type = (Exile.Term.infer_lambda (Exile.TermBody.new 10 type))
-	let res = (Exile.Checker.reduce Exile.Checker.empty (Exile.Term.subtype term type))
-	(Exile.CheckResult.show res)
-}
 
-Main6 {
-	let a = (Exile.Term.infer_lambda (Exile.TermBody.new 1 (Exile.Term.var 1)))
-	let a = (Exile.Term.replace_var a 1 3)
-	a
-}
+Main12 { Exile.CheckResult.show (Exile.Checker.reduce Exile.Checker.empty (Exile.HSyntax.parse "((@p @t @f (p t)) @x x)")) }
+Main13 { Exile.CheckResult.show (Exile.Checker.reduce Exile.Checker.empty (Exile.HSyntax.parse "(µ Bool ξ self λ(P: λ(b: Bool) *) λ(t: (P Bool.true)) λ(f: (P Bool.false)) (P self) (x)")) }
+Main14 { Exile.HSyntax.show (Exile.Term.alpha (Exile.HSyntax.parse "@x x") 3) } 
 
 Main { Main2 } 
 

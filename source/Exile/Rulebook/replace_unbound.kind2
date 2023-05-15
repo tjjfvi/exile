@@ -1,6 +1,5 @@
 // This is the function that replaces unbound variables in all rules by their definitions.
 // It should also handle mutually recursive definitions
-// Unimplemented.
 Exile.Rulebook.replace_unbound.go (rb: Exile.Rulebook) (term: Exile.Term) (unbound_map: Exile.DepthTable) (used_vars: List U60): Exile.Term
 Exile.Rulebook.replace_unbound.go rb (Exile.Term.attach String Exile.Term.unbound name) map used_vars =
     (Maybe.match
@@ -13,15 +12,18 @@ Exile.Rulebook.replace_unbound.go rb (Exile.Term.attach String Exile.Term.unboun
             (Exile.Term.attach String Exile.Term.unbound name)
             // If some
             definition =>
-            let recursive_index = (Exile.Util.find_free (Exile.Term.get_var_set definition))
-            let definition = (Exile.Term.recursive Exile.Term.no_bound (Exile.TermBody.new recursive_index definition))
-            let definition = (Exile.Term.attach definition (Exile.Term.NameHidden.new name))
-            let definition = (Exile.Term.replace_set definition (Exile.Term.get_var_set definition) (List.cons recursive_index used_vars))
-            let definition = (Exile.Rulebook.replace_unbound.go rb definition (Exile.DepthTable.set_value map name recursive_index) (List.cons recursive_index used_vars))
+            
+            //let recursive_index = Exile.Term.new_free_var
+            let definition = (Exile.Term.recursive Exile.Term.no_bound (Exile.Term.push_vars definition))
+            //let definition = (Exile.Term.attach definition (Exile.Term.NameHidden.new name))
+            //let definition = (Exile.Term.replace_set definition (Exile.Term.get_var_set definition) (List.cons recursive_index used_vars))
+            let definition = (Exile.Rulebook.replace_unbound.go rb definition (Exile.DepthTable.set_value map name (Nat.to_u60 (List.length used_vars))) used_vars)
             definition
         )
         // If we've already bound this unbound in a recursive term, then use it
-        index => (Exile.Term.var index)
+        depth => 
+            let delta_depth = (- (- (Nat.to_u60 (List.length used_vars)) depth ) 1)
+            (Exile.Term.var delta_depth)
     )
 Exile.Rulebook.replace_unbound.go rb term unbound_map used_vars = (Exile.Term.apply_subterm_with_vars term (st => new_vars => (Exile.Rulebook.replace_unbound.go rb st unbound_map (List.concat new_vars used_vars))))
 
