@@ -52,3 +52,5 @@ Unit.id < Unit.id.type
 ∀u (((u < Unit) (@_ Unit)) @p @n n) < &Unit $unit @(P: @(:Unit) *) @(:P @p @n n) (P unit)
 ∀u (((u < Unit) (@_ Unit)) @p @n n) < $unit @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P unit)
 ∀u (((u < Unit) (@_ Unit)) @p @n n) < @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P (((u < Unit) (@_ Unit)) @p @n n))
+(((Unit) (@_ Unit)) @p @n n) <= @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P (((u < Unit) (@_ Unit)) @p @n n))
+Unit <= @(P: @(:(x >= Unit)) *) @(:P @p @n n) (P (((u < Unit) (@_ Unit)) @p @n n))

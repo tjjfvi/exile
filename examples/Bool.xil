@@ -12,3 +12,5 @@ Bool.or = λ(x: Bool) λ(y: Bool) (x (λ(_:Bool) Bool) Bool.true y)
 
 Bool.not.type = λ(x: Bool) (Bool)
 
+Bool.identity = @(x: Bool) (((x (@_ Bool)) (Bool.true)) (Bool.false))
+Bool.identity.type = @(x: Bool) Bool

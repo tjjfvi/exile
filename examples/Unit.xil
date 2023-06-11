@@ -8,6 +8,6 @@ Unit.identity.type = λ(w:Unit) Unit
 
 W = λ(a: Unit) ((a (λx Unit)) Unit.new)
 
-CheckTerm = @x Bool.true
-CheckType = @x Bool
+CheckTerm = Bool.identity
+CheckType = Bool.identity.type
 

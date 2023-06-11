@@ -93,8 +93,13 @@ Util.reduce_app ch (Exile.Term.lambda a type body) argument =
 
 Util.reduce_app ch (Exile.Term.attach function m) argument = 
   Util.reduce_app ch function argument
-//Util.reduce_app ch (Exile.Term.recursive type term.body) argument = 
-//  (Util.reduce_app ch (Exile.Term.replace term.body (Exile.Term.recursive type term.body)) argument)
+
+Util.reduce_app ch (Exile.Term.recursive type term.body) argument = 
+  (Exile.CheckResult.if
+    (Exile.Checker.equal ch (Exile.Term.recursive type term.body) Exile.Term.bot) 
+    (Exile.CheckResult.ok (Exile.Term.recursive type term.body))
+    (Util.reduce_app ch (Exile.Term.replace term.body (Exile.Term.recursive type term.body)) argument)
+  )
     
 Util.reduce_app ch (Exile.Term.self type term.body) argument = 
   (Exile.CheckResult.if
@@ -155,6 +160,7 @@ Util.pre_reduce_check ch (Exile.Term.attach a b c) d =
   Util.pre_reduce_check ch b d
 Util.pre_reduce_check ch d (Exile.Term.attach a b c)  = 
   Util.pre_reduce_check ch d b
+Util.pre_reduce_check ch (Exile.Term.larger sub) (Exile.Term.larger sup) = Util.reduce_check ch sub sup
 Util.pre_reduce_check ch (Exile.Term.smaller sub) sup = 
   let a = (Exile.Checker.equal ch sub sup) 
   (Exile.CheckResult.if
@@ -249,7 +255,7 @@ Util.reduce_check ch (Exile.Term.lambda sub.sub sub.sup sub.body) (Exile.Term.la
   (Exile.CheckResult.and
     (Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sub.sub sup.sub_plus) "greater-than bound check")
     (Exile.CheckResult.and
-      (Exile.CheckResult.ok Exile.Term.top)//((Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sup.sup sub.sup_plus) "less-than bound check"))
+      ((Exile.CheckResult.with_comment (Exile.Checker.reduce_instance ch sup.sup sub.sup_plus) "less-than bound check"))
     
       let free_var = Exile.Term.new_free_var
       let bounded = (Exile.Term.bounded sub.sub free_var sup.sup)
