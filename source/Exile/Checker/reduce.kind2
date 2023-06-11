@@ -73,6 +73,9 @@ Exile.Checker.reduce.go ch (Exile.Term.bounded sub term sup) =
     (Util.pre_reduce_check ch term sup)
   )
 
+Exile.Checker.reduce.go ch (Exile.Term.recursive type body) = (Exile.CheckResult.and_then (Exile.Checker.reduce ch body) body => 
+  (Exile.CheckResult.ok (Exile.Term.recursive type body))
+)
 //Exile.Checker.reduce.go ch (Exile.Term.attach t term m) = 
   //(Exile.CheckResult.ok (Exile.Term.attach t (Exile.Checker.reduce.go (Exile.Checker.unrolled_name ch) term) m))
 Exile.Checker.reduce.go ch term = (Exile.CheckResult.ok term)

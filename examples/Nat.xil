@@ -1,41 +1,18 @@
 Nat = µ Nat ξ self
   λ(P: λ(n: Nat) *)
-  λ(s: λ(n: Nat) λ(p: P n) P (
-    (µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n p s z))
-    n
-  ))
-  λ(z: P (λp λs λz z))
+  λ(s: λ(n: Nat) (P (Nat.succ n)))
+  λ(z: P (Nat.zero))
   (P self)
-
-Nat.succ = µ Nat.succ λ(n: Nat) λ(P: λ(n: Nat) *) λ(s: λ(n: Nat) λ(p: P n) P (Nat.succ n)) λ(z: P (λp λs λz z)) s n (n P s z)
+  
+Nat.succ = λn λp λs λz (s n)
 
 Nat.zero = λp λs λz z
 
-Nat.add = λ(x: Nat) λ(y: Nat) x (λ_ Nat) (λ_ Nat.succ) y
+Nat.add = λ(x: Nat) λ(y: Nat) (((x (λ_ Nat)) (λ_ Nat.succ)) y)
 
-Nat.add_zero
-: λ(x: Nat) Equal Nat (Nat.add x Nat.zero) x
-= λ(x: Nat) x
-  (λ(x: Nat) Equal Nat (Nat.add x Nat.zero) x)
-  (λ(x: Nat) λ(h: Equal Nat (Nat.add x Nat.zero) x)
-    h (λ(n: Nat) Equal Nat (Nat.add (Nat.succ x) Nat.zero) (Nat.succ n)) (Equal.refl Nat (Nat.add (Nat.succ x) Nat.zero))
-  )
-  (Equal.refl Nat Nat.zero)
+Nat.identity = @(x: Nat) (((x (@_ Nat)) Nat.zero) @w (Nat.succ w))
+Nat.identity.type = @(x: Nat) Nat
 
-Nat.add_succ
-: λ(x: Nat) λ(y: Nat) Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y))
-= λ(x: Nat) λ(y: Nat) x
-  (λ(x: Nat) Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y)))
-  (λ(x: Nat) λ(h: Equal Nat (Nat.add x (Nat.succ y)) (Nat.succ (Nat.add x y)))
-    h (λ(n: Nat) Equal Nat (Nat.add (Nat.succ x) (Nat.succ y)) (Nat.succ n)) (Equal.refl Nat (Nat.succ (Nat.add x (Nat.succ y))))
-  )
-  (Equal.refl Nat (Nat.succ y))
+CheckTerm = @p @s @z (((((Nat.succ (((Nat.zero p) s) z))) p) s) z)
+CheckType = Nat
 
-Nat.add_comm
-: λ(x: Nat) λ(y: Nat) Equal Nat (Nat.add y x) (Nat.add x y)
-= λ(x: Nat) λ(y: Nat) x
-  (λ(x: Nat) Equal Nat (Nat.add y x) (Nat.add x y))
-  (λ(x: Nat) λ(h: Equal Nat (Nat.add y x) (Nat.add x y))
-    h (λ(n: Nat) Equal Nat (Nat.add y (Nat.succ x)) (Nat.succ n)) (Nat.add_succ y x)
-  )
-  (Nat.add_zero y)

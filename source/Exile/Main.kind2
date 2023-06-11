@@ -26,8 +26,10 @@ Main2 {
 		let bool_code = (String.trim bool_code)
 		ask unit_code = IO.load "../examples/Unit.xil"
 		let unit_code = (String.trim unit_code)
+		ask nat_code = IO.load "../examples/Nat.xil"
+		let nat_code = (String.trim nat_code)
 		let term_parser = (Exile.HSyntax.parse.term Exile.DepthTable.new)
-		let code = (String.concat bool_code (String.cons 10 unit_code))
+		let code = (String.concat nat_code (String.cons 10 (String.concat bool_code (String.cons 10 unit_code))))
 		ask parsed_bool_code = (Either.match (Parser.run (Exile.Rulebook.parse term_parser) code)
 			p => (IO Exile.Rulebook)
 			(result => IO.pure result)
@@ -48,7 +50,10 @@ Main2 {
 		let bool_true = (Maybe.default (Exile.Rulebook.get_definition rulebook "CheckTerm") Exile.Term.unbound)
 		//let bool_true = (HVM.log (Exile.HSyntax.show bool_true) bool_true)
 		//let bool = (HVM.log (Exile.HSyntax.show bool) bool)
-		let cresult = (Exile.Checker.reduce_instance Exile.Checker.empty bool_true bool)
+		let cresult = (Exile.CheckResult.and_then 
+			(Exile.Checker.reduce Exile.Checker.empty bool_true) bool_true => (Exile.CheckResult.and_then 
+			(Exile.Checker.reduce Exile.Checker.empty bool) bool => (Exile.Checker.reduce_instance Exile.Checker.empty bool_true bool)
+			))
 		ask IO.output (Exile.CheckResult.show cresult)
 		return Unit.new
 	}
